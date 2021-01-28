@@ -24,15 +24,15 @@ Introduction of different technologies and their papers in chronological order. 
 
 **2008** - First Brain RNAseq paper according to the [Hitzeman et al, 2013](https://www.semanticscholar.org/paper/Genes%2C-behavior-and-next-generation-RNA-sequencing.-Hitzemann-Bottomly/9c05cc4538a272adc0006a2d3e1967b34ce6d1c8) review paper
 
-* Mortazavi, A., Williams, B.A., McCue, K., Schaeffer, L. and Wold, B., 2008. Mapping and quantifying mammalian transcriptomes by RNA-Seq. Nature methods, 5(7), pp.621-628.
+* Mortazavi, A., Williams, B.A., McCue, K., Schaeffer, L. and Wold, B., 2008. [Mapping and quantifying mammalian transcriptomes by RNA-Seq](https://www.semanticscholar.org/paper/Mapping-and-quantifying-mammalian-transcriptomes-by-Mortazavi-Williams/ef117c95b92b68b751143155022a5c1a600afe5c). Nature methods, 5(7), pp.621-628.
 
 **2008** - Introducing Illumina Sequencing
 
 * Bentley, D.R., Balasubramanian, S., Swerdlow, H.P., Smith, G.P., Milton, J., Brown, C.G., Hall, K.P., Evers, D.J., Barnes, C.L., Bignell, H.R. and Boutell, J.M., 2008. [Accurate whole human genome sequencing using reversible terminator chemistry](https://www.semanticscholar.org/paper/Accurate-Whole-Human-Genome-Sequencing-using-Bentley-Balasubramanian/6dad16a6941b204c2f5f95d9cda6d0124d5a1a7b). nature, 456(7218), pp.53-59.
 
-**2009** - PacBio single molecule real-time (SMRT)
+**2009** - Introducing PacBio single molecule real-time (SMRT)
 
-* Eid, J., Fehr, A., Gray, J., Luong, K., Lyle, J., Otto, G., Peluso, P., Rank, D., Baybayan, P., Bettman, B. and Bibillo, A., 2009. Real-time DNA sequencing from single polymerase molecules. Science, 323(5910), pp.133-138.
+* Eid, J., Fehr, A., Gray, J., Luong, K., Lyle, J., Otto, G., Peluso, P., Rank, D., Baybayan, P., Bettman, B. and Bibillo, A., 2009. [Real-time DNA sequencing from single polymerase molecules](https://www.semanticscholar.org/paper/Real-Time-DNA-Sequencing-from-Single-Polymerase-Eid-Fehr/b0588d6e0753e7e3f82c4aa4f1609764179b12de). Science, 323(5910), pp.133-138.
 
 **2010** - EdgeR, usually cited with their 2012 paper
 
