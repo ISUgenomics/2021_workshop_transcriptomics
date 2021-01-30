@@ -4,7 +4,7 @@ Week of	Topic	Reading ideas (open to suggestion)!
 
 Kukurba, K.R. and Montgomery, S.B., 2015. RNA sequencing and analysis. Cold Spring Harbor Protocols, 2015(11), pp.pdb-top084970.
 
-<span style="color:Blue">1-Feb</span>	Overview of a standard pipeline for RNA-seq sequencing and analysis	Conesa, A., Madrigal, P., Tarazona, S., Gomez-Cabrero, D., Cervera, A., McPherson, A., Szcześniak, M.W., Gaffney, D.J., Elo, L.L., Zhang, X. and Mortazavi, A., 2016. A survey of best practices for RNA-seq data analysis. Genome biology, 17(1), p.13.
+<span style="color:Blue">**1-Feb**</span>	Overview of a standard pipeline for RNA-seq sequencing and analysis	Conesa, A., Madrigal, P., Tarazona, S., Gomez-Cabrero, D., Cervera, A., McPherson, A., Szcześniak, M.W., Gaffney, D.J., Elo, L.L., Zhang, X. and Mortazavi, A., 2016. A survey of best practices for RNA-seq data analysis. Genome biology, 17(1), p.13.
 
 Costa-Silva, J., Domingues, D. and Lopes, F.M., 2017. RNA-Seq differential expression analysis: An extended review and a software tool. PloS one, 12(12), p.e0190152.
 
