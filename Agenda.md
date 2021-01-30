@@ -1,16 +1,19 @@
 
 Week of	Topic	Reading ideas (open to suggestion)!
-**25-Jan**	History of sequencing and analysis 	Hitzemann, R., Bottomly, D., Darakjian, P., Walter, N., Iancu, O., Searles, R., Wilmot, B. and McWeeney, S., 2013. Genes, behavior and next‐generation RNA sequencing. Genes, Brain and Behavior, 12(1), pp.1-12.
+**27-Jan**	
+History of sequencing and analysis 	Hitzemann, R., Bottomly, D., Darakjian, P., Walter, N., Iancu, O., Searles, R., Wilmot, B. and McWeeney, S., 2013. Genes, behavior and next‐generation RNA sequencing. Genes, Brain and Behavior, 12(1), pp.1-12.
 
 Kukurba, K.R. and Montgomery, S.B., 2015. RNA sequencing and analysis. Cold Spring Harbor Protocols, 2015(11), pp.pdb-top084970.
 
-<span style="color:Blue">**1-Feb**</span>	Overview of a standard pipeline for RNA-seq sequencing and analysis	Conesa, A., Madrigal, P., Tarazona, S., Gomez-Cabrero, D., Cervera, A., McPherson, A., Szcześniak, M.W., Gaffney, D.J., Elo, L.L., Zhang, X. and Mortazavi, A., 2016. A survey of best practices for RNA-seq data analysis. Genome biology, 17(1), p.13.
-
+<span style="color:Blue">**3-Feb**</span>	
 Costa-Silva, J., Domingues, D. and Lopes, F.M., 2017. RNA-Seq differential expression analysis: An extended review and a software tool. PloS one, 12(12), p.e0190152.
 
-Hrdlickova, R., Toloue, M. and Tian, B., 2017. RNA‐Seq methods for transcriptome analysis. Wiley Interdisciplinary Reviews: RNA, 8(1), p.e1364.
+Raplee, I.D., Evsikov, A.V. and Marín de Evsikova, C., 2019. Aligning the Aligners: Comparison of RNA sequencing data alignment and gene expression quantification tools for clinical breast cancer research. Journal of personalized medicine, 9(2), p.18.
 
-<span style="color:Green">8-Feb</span>	Networks part I	Iancu, O.D., Kawane, S., Bottomly, D., Searles, R., Hitzemann, R. and McWeeney, S., 2012. Utilizing RNA-Seq data for de novo coexpression network inference. Bioinformatics, 28(12), pp.1592-1597.
+Alshehri, H. and Alkharouf, N., 2018, December. Compare and contrast of differential gene expression software packages of RNA-Seq. In 2018 International Conference on Computational Science and Computational Intelligence (CSCI) (pp. 1374-1379). IEEE.
+
+
+<span style="color:Green">**10-Feb**</span>	Networks part I	Iancu, O.D., Kawane, S., Bottomly, D., Searles, R., Hitzemann, R. and McWeeney, S., 2012. Utilizing RNA-Seq data for de novo coexpression network inference. Bioinformatics, 28(12), pp.1592-1597.
 
 Sinha, S., Jones, B.M., Traniello, I.M., Bukhari, S.A., Halfon, M.S., Hofmann, H.A., Huang, S., Katz, P.S., Keagy, J., Lynch, V.J. and Sokolowski, M.B., 2020. Behavior-related gene regulatory networks: A new level of organization in the brain. Proceedings of the National Academy of Sciences, 117(38), pp.23270-23279.
 
