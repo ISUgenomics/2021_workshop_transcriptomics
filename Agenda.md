@@ -11,9 +11,9 @@ Week of	Topic	Reading ideas (open to suggestion)!
 
 * Costa-Silva, J., Domingues, D. and Lopes, F.M., 2017. [RNA-Seq differential expression analysis: An extended review and a software tool](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0190152). PloS one, 12(12), p.e0190152.
 
-* Raplee, I.D., Evsikov, A.V. and Marín de Evsikova, C., 2019. [Aligning the Aligners: Comparison of RNA sequencing data alignment and gene expression quantification tools for clinical breast cancer research](https://ieeexplore.ieee.org/abstract/document/8947662). Journal of personalized medicine, 9(2), p.18.
+* Raplee, I.D., Evsikov, A.V. and Marín de Evsikova, C., 2019. [Aligning the Aligners: Comparison of RNA sequencing data alignment and gene expression quantification tools for clinical breast cancer research](https://www.semanticscholar.org/paper/Aligning-the-Aligners%3A-Comparison-of-RNA-Sequencing-Raplee-Evsikov/e386e5a5fb7094fed2ad0f7491b8292130f098d1). Journal of personalized medicine, 9(2), p.18.
 
-* Alshehri, H. and Alkharouf, N., 2018, December. [Compare and contrast of differential gene expression software packages of RNA-Seq.](https://ieeexplore.ieee.org/document/8947662) In 2018 International Conference on Computational Science and Computational Intelligence (CSCI) (pp. 1374-1379). IEEE.
+* Alshehri, H. and Alkharouf, N., 2018, December. [Compare and contrast of differential gene expression software packages of RNA-Seq.](https://www.semanticscholar.org/paper/Compare-and-Contrast-of-Differential-Gene-Software-Alshehri-Alkharouf/dc076180c9ffb6da5ac862c8f57b421b0af42f27) In 2018 International Conference on Computational Science and Computational Intelligence (CSCI) (pp. 1374-1379). IEEE.
 
 
 <span style="color:Green">**10-Feb**</span>	Networks part I	
