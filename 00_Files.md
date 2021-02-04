@@ -13,6 +13,7 @@ cut -f 7 tsv | more | perl -pe 's/;/\n/g' | xargs -I xx echo "wget http://xx"
 ```
 Download on Nova must be performed on Novadtn
 
+* Nova: /work/gif/TranscriptomicsWorkshop/severin/Maize
 ```
 wget http://ftp.sra.ebi.ac.uk/vol1/fastq/SRR157/004/SRR1573504/SRR1573504_1.fastq.gz
 wget http://ftp.sra.ebi.ac.uk/vol1/fastq/SRR157/004/SRR1573504/SRR1573504_2.fastq.gz
@@ -64,6 +65,9 @@ wget http://ftp.sra.ebi.ac.uk/vol1/fastq/SRR157/007/SRR1573527/SRR1573527_1.fast
 wget http://ftp.sra.ebi.ac.uk/vol1/fastq/SRR157/007/SRR1573527/SRR1573527_2.fastq.gz
 
 ```
+
+
+
 #### Illumina Reads
 
 ### BumbleBee dataset
