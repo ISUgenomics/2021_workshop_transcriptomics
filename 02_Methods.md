@@ -18,5 +18,5 @@ Written summary of methods performed in this repo. This is the methods write up 
 | Maize/Bee | Star | EdgeR | Sathesh and Katie |
 | Maize/Bee | Hisat2 | EdgeR | Ryan and Siva|
 |Maize/Bee| Hisat2|Stringtie/Ballgown | Siva and Jennifer  |
-|Maize/Bee| Kallisto| Severin |
-|Maize/Bee| Salmon| Jennifer|
+|Maize/Bee| Kallisto|  | Severin
+|Maize/Bee| Salmon| | Jennifer
