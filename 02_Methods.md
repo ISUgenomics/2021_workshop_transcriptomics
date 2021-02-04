@@ -15,6 +15,6 @@ Written summary of methods performed in this repo. This is the methods write up 
 | Maize | Hisat2 | DESeq2 | |
 | Maize | BWA | DESeq2 | |  
 | Bee | Star | DESeq2 | |
-| Bee | Hisat2 | DESeq2 | |
+| Bee | Hisat2 | DESeq2 | Ryan|
 | Bee | BWA | DESeq2 | |
 |Maize/Bee| Hisat2|Stringtie/Ballgown | Siva|
