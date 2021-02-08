@@ -4,7 +4,9 @@
 
 | File Name | Description |
 | -- | -- |
-|00_rawdata.md | Getting the raw data |
+|[0_data.md](0_data.md) | Getting the raw data |
+|[1_align.md](1_align.md) | GSNAP alignment... in progress |
+|[2_DE_analysis.md](2_DE_analysis.md) | Getting the raw data |
 
 ## Timeline
 
