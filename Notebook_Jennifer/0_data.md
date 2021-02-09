@@ -10,12 +10,19 @@ ssh username@atlas-login.hpc.msstate.edu
 
 ```
 sinfo
+
+#> PARTITION AVAIL  TIMELIMIT  NODES  STATE NODELIST 
+#> atlas*       up 14-00:00:0      1    mix Atlas-0001 
+#> atlas*       up 14-00:00:0    227   idle Atlas-[0002-0228] 
+#> bigmem       up 14-00:00:0      8   idle Atlas-[0229-0236] 
+#> gpu          up 14-00:00:0      4   idle Atlas-[0237-0240] 
+#> service      up 14-00:00:0      2   idle Atlas-dtn-[1-2] 
 ```
 
-* Log onto the dtn (data transfer node) node, faster speed at transferring data onto the HPC
+* Log onto the dtn (data transfer node) node, faster speed at transferring data onto the HPC. Notice how the last partition `service` in the last column, has `Atlas-dtn-[1-2]`. This is our DTN node, the rest are compute nodes.
 
 ```
-ssh atlas-dtn
+ssh atlas-dtn     #<= will prompt you for password again
 ```
 
 * Either fetch Maize Data/Bee Data using `wget` or wrap it into a Slurm Script:
@@ -57,3 +64,25 @@ wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR157/005/SRR1573505/SRR1573505_2.fastq
 
 </details>
 
+To verify it's running, look at the slurm queue 
+
+```
+squeue
+
+#> JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON) 
+#> 130138_[1-13]     atlas maker-it joshua.u PD       0:00      1 (Dependency) 
+#> 130140     atlas    busco joshua.u PD       0:00      1 (Dependency) 
+#> 130142     atlas    blast joshua.u PD       0:00      1 (Dependency) 
+#> 130143     atlas  iprscan joshua.u PD       0:00      1 (Dependency) 
+#> 130137     atlas maker-it joshua.u PD       0:00      1 (DependencyNeverSatisfied) 
+#> 130139     atlas maker-it joshua.u PD       0:00      1 (Dependency) 
+#> 130141     atlas   filter joshua.u PD       0:00      1 (Dependency) 
+#> 130120     atlas     bash brian.na  R      29:55      1 Atlas-0001 
+```
+
+Which lists all jobs no the queue. It's fun to see what other people are running. Your user name should be there. If `squeue` provides a list too long to read, I grep out my username.
+
+```
+# Only see my jobs on the queue
+squeue | grep jennifer
+```
