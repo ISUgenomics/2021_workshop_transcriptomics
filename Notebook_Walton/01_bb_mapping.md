@@ -29,38 +29,32 @@ scontrol show job $SLURM_JOB_ID
 
 ```
 HiSat2 mapping script
-file name  = hisatmap
 
 ```
 #!/bin/bash
-set -o xtrace
-# set the reference index:
-GENOME="work/LAS/amytoth-lab/bumblebee/genome/Bombus_impatiens_GCF_000188095.3_BIMP_2.2_genomic.fa"
-# make an output directory to store the output aligned files
-mkdir -p hisatOut
-# set that as the output directory
-ODIR="hisatOut"
+
+# Copy/paste this job script into a text file and submit with the command:
+#    sbatch thefilename
+# job standard output will go to the file slurm-%j.out (where %j is the job ID)
+
+#SBATCH --time=4:00:00   # walltime limit (HH:MM:SS)
+#SBATCH --nodes=1   # number of nodes
+#SBATCH --ntasks-per-node=16   # 16 processor core(s) per node
+#SBATCH --job-name="hisatloop"
+#SBATCH --mail-user=rfortune@iastate.edu   # email address
+#SBATCH --mail-type=BEGIN
+#SBATCH --mail-type=END
+#SBATCH --mail-type=FAIL
 
 
-p=8 # use 8 threads
-R1_FQ="$1" # first argument
-R2_FQ="$2" # second argument
 
-# purge and load relevant modules.
 module purge
+module load hisat2/2.2.0-5kvb7f2
+module load samtools/1.10-py3-xuj7ylj
+cd /work/LAS/amytoth-lab/awalton/transciptomics_class/01_bumble_HiSat2/bumblebee
 
-module load hisat2
-module load samtools
-
-OUTPUT=$(basename ${R1_FQ} |cut -f 1,2 -d "_");
-
-hisat2 \
-  -p ${p} \
-  -x ${GENOME} \
-  -1 ${R1_FQ} \
-  -2 ${R2_FQ} \
-  -S $ODIR\/${OUTPUT}.sam &> ${OUTPUT}.log
-samtools view --threads 8 -bS -o $ODIR\/${OUTPUT}.bam $ODIR\/${OUTPUT}.sam
-
-rm $ODIR\/${OUTPUT}.sam
+for i in $(ls reads/*_L002_R1_001.fastq | uniq)
+do
+	hisat2   -p 16 -x genome/Bombus_impatiens_GCF_000188095.3_BIMP_2.2_genomic -U ${i} -S "SAMs${i}.sam";
+done >& hisatloop.log
 ```
