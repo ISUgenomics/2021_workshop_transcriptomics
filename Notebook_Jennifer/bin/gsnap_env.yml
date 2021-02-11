@@ -1,4 +1,4 @@
-name: samtools_env
+name: gsnapxc_env
 channels:
   - conda-forge
   - bioconda

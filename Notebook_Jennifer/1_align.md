@@ -189,3 +189,171 @@ GMAP_BIN=/project/project_name/software/gmap-2020-12-17/bin
 ${GMAP_BIN}/gmap_build -d <genome name> <path to genome fasta file>
 ```
 
+Fetch Maize Reference (B73)
+
+* NCBI Entry for Maize - [https://www.ncbi.nlm.nih.gov/assembly/GCF_902167145.1/](https://www.ncbi.nlm.nih.gov/assembly/GCF_902167145.1/)
+
+Fetch the fna (fasta nucleotide) and the gff (general feature format) files.
+
+Need to unzip the fasta file before `gmap_build` can use it. 
+
+```
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/902/167/145/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.fna.gz
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/902/167/145/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.gff.gz
+```
+
+Index reference file. You may need to edit paths. 
+
+```
+GMAP_BIN=/project/project_name/software/gmap-2020-12-17/bin
+${GMAP_BIN}/gmap_build \
+ -d b73 \
+ data_maize/ref/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.fna
+```
+
+* [gsnap_indexgenome.slurm](bin/gsnap_indexgenome.slurm)
+
+# (2) map reads to index
+
+Paired end reads must be fed into gsnap
+
+```
+ls data_maize/reads/* |\
+  tr '\n' '\t'|\
+  sed 's/_2.fastq.gz/_2.fastq.gz|/g'|\
+  tr '|' '\n'|\
+  awk '{print $1,$2}' > input.txt
+```
+
+Let's look at input.txt
+
+```
+data_maize/reads/SRR1573504_1.fastq.gz data_maize/reads/SRR1573504_2.fastq.gz
+data_maize/reads/SRR1573505_1.fastq.gz data_maize/reads/SRR1573505_2.fastq.gz
+data_maize/reads/SRR1573506_1.fastq.gz data_maize/reads/SRR1573506_2.fastq.gz
+data_maize/reads/SRR1573507_1.fastq.gz data_maize/reads/SRR1573507_2.fastq.gz
+data_maize/reads/SRR1573508_1.fastq.gz data_maize/reads/SRR1573508_2.fastq.gz
+data_maize/reads/SRR1573509_1.fastq.gz data_maize/reads/SRR1573509_2.fastq.gz
+data_maize/reads/SRR1573510_1.fastq.gz data_maize/reads/SRR1573510_2.fastq.gz
+data_maize/reads/SRR1573511_1.fastq.gz data_maize/reads/SRR1573511_2.fastq.gz
+data_maize/reads/SRR1573512_1.fastq.gz data_maize/reads/SRR1573512_2.fastq.gz
+data_maize/reads/SRR1573513_1.fastq.gz data_maize/reads/SRR1573513_2.fastq.gz
+data_maize/reads/SRR1573514_1.fastq.gz data_maize/reads/SRR1573514_2.fastq.gz
+data_maize/reads/SRR1573515_1.fastq.gz data_maize/reads/SRR1573515_2.fastq.gz
+data_maize/reads/SRR1573516_1.fastq.gz data_maize/reads/SRR1573516_2.fastq.gz
+data_maize/reads/SRR1573517_1.fastq.gz data_maize/reads/SRR1573517_2.fastq.gz
+data_maize/reads/SRR1573518_1.fastq.gz data_maize/reads/SRR1573518_2.fastq.gz
+data_maize/reads/SRR1573519_1.fastq.gz data_maize/reads/SRR1573519_2.fastq.gz
+data_maize/reads/SRR1573520_1.fastq.gz data_maize/reads/SRR1573520_2.fastq.gz
+data_maize/reads/SRR1573521_1.fastq.gz data_maize/reads/SRR1573521_2.fastq.gz
+data_maize/reads/SRR1573522_1.fastq.gz data_maize/reads/SRR1573522_2.fastq.gz
+data_maize/reads/SRR1573523_1.fastq.gz data_maize/reads/SRR1573523_2.fastq.gz
+data_maize/reads/SRR1573524_1.fastq.gz data_maize/reads/SRR1573524_2.fastq.gz
+data_maize/reads/SRR1573525_1.fastq.gz data_maize/reads/SRR1573525_2.fastq.gz
+data_maize/reads/SRR1573526_1.fastq.gz data_maize/reads/SRR1573526_2.fastq.gz
+data_maize/reads/SRR1573527_1.fastq.gz data_maize/reads/SRR1573527_2.fastq.gz
+```
+
+# (3) get counts
+
+## Install featureCount
+
+Heh, this one was missing too.
+
+* Install Instructions - [http://bioinf.wehi.edu.au/subread-package/](http://bioinf.wehi.edu.au/subread-package/)
+
+Thankfully this is an already compiled binary. Ergo:
+
+1. Download the `subread-2.0.1-Linux-x86_64.tar.gz` from sourceforge - [https://sourceforge.net/projects/subread/files/subread-2.0.1/](https://sourceforge.net/projects/subread/files/subread-2.0.1/)
+2. scp file to Atlas
+
+  ```
+  # from local laptop, move file to Atlas
+  scp subread-2.0.1-Linux-x86_64.tar.gz atlas:inbox/.
+  ```
+  
+3. Move to software folder
+
+  ```
+  # From Atlas HPC
+  mv ~/inbox/subread-2.0.1-Linux-x86_64.tar.gz /project/project_name/software/.
+  cd /project/project_name/software
+  tar -xzvf subread-2.0.1-Linux-x86_64.tar.gz
+  cd subread-2.0.1-Linux-x86_64
+  ls bin/*
+  
+  #> bin/exactSNP  bin/featureCounts  bin/subindel  bin/subjunc  bin/sublong  bin/subread-align  bin/subread-buildindex
+  #> bin/utilities:
+  #> detectionCall  flattenGTF  genRandomReads  propmapped  qualityScores  removeDup  repair  subread-fullscan  txUnique
+  ```
+  
+4. Make sure program runs: `./bin/featureCounts`
+
+Geh... samtools is missing, which requires two difficult to install libraries... the benefits of installing natively has gone down.
+
+# Alternative: install everything in miniconda
+
+Samtools required a few specific C libraries, ergo I gave up natively install and switched to miniconda.
+
+## Install miniconda
+
+Based on [https://conda.io/projects/conda/en/latest/user-guide/install/linux.html], install locally to Atlas HPC.
+
+```
+# Fetch the install script
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+
+# Run the fetched script
+bash Miniconda3-latest-Linux-x86_64.sh
+
+# By default it places miniconda3 in home folder (remember 5gb limit)
+# Ergo we move this to the project folder and link to home
+mv ~/miniconda3 /project/project_folder/software/.
+ln -s /project/project_folder/software/miniconda3 ~/.
+```
+
+Create an environment file, save it as `gsnap_env.yml`.
+
+```
+name: gsnap_env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.8
+  - gmap
+  - samtools      #<= notice you could probably list all tools
+  - subread
+```
+
+And from the command line create the miniconda environment:
+
+```
+conda env create -f gsnap_env.yml
+```
+
+And enjoy the ease with which miniconda installs all dependencies for gsnap (`gmap`), samtools (`samtools`) and featureCounts (`featureCounts`). 
+
+Then the tools are available when you activate the environment.
+
+```
+conda activate gsnap_env
+samtools -v
+gmap -v
+featureCounts -v
+```
+
+The top of the slurm script will require a few extra lines before `conda activate` will work.
+
+```
+USER=jennifer.chang
+source /home/${USER}/.bashrc
+conda activate gsnap_env
+
+## gsnap/samtools/featureCount commands here
+```
+
+
+
+
