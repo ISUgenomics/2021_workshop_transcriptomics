@@ -112,7 +112,8 @@ tar -zcvf bee.tar.gz bee/
 
 ## File and software tool locations on Atlas
 ```
-project/
+ProjectDirectory/
+  |_MyDirectory/
       |_bee/
           |_raw_data/
           |_meta/
@@ -122,6 +123,7 @@ project/
           |_logs/
       |_maize/
           |_raw_data/
+          |_reference_genome/
           |_meta/
           |_results/
           |_gsnap/
@@ -191,7 +193,7 @@ squeue | grep UserNameHere
 4. Created `inbox` and `outbox` so that we can do ssh mylocalfile.tar.gz UserName@atlas:inbox/. and don't have to think about 5gb home directory limit
 
 ## Alignment with gsnap
-### Maize
+### About gsnap
 1. Workflow with gsnap: https://hbctraining.github.io/Intro-to-rnaseq-hpc-gt/lessons/08_rnaseq_workflow.html
 * Set up directory tree like one below
 ```
@@ -206,23 +208,81 @@ rnaseq/
 
 2. Literature about gsnap: https://link.springer.com/protocol/10.1007%2F978-1-4939-3578-9_15
 
-3. Pre-process a genome to create a genome index.
+3. The general format of the pipeline is:
+```
+(1) index genome -> (2) map reads to genome -> (3) get counts
+```
+* The counts will be sent to Diffential Expression analysis programs.
+
+4. First step: Pre-process reference genome to create a genome index.
 ```
 gmap_build -d <genome name> <path to genome fasta file>
 ```
+* default value for -k is 15 (from https://github.com/juliangehring/GMAP-GSNAP/blob/master/README)
 
-4. Map reads to genome
+5. Second step: Map reads to genome
 ```
 gsnap -d <genome> <read1_file> <read2_file>
 ```
 * <genome> is the name of the genome database created by gmap_build
 
+### Maize
+1. Pre-process Zea mays B73 reference genome to create a genome index.
+```
+/project/projectdirectory/mydirectory/dot_files/software/gmap-2020-12-17/bin/gmap_build -d b73 /project/projectdirectory/mydirectory/rnaseq/maize/reference_genome/Zea_mays.B73_RefGen_v4.dna.toplevel.fa
+```
+```
+Submitted batch job 130262
+```
+
+2. Seems the command worked, but `b73/` ended up in `/project/projectdirectory/mydirectory/dot_files/software/gmapdb`. I looked at stderr file and noticed these two error messages found at the beginning and end of file
+```
+#lines 3-4
+Destination directory not defined with -D flag, so writing files under /project/projectdirectory/mydirectory/dot_files/software/gmapdb
+#line 338
+/var/spool/slurmd/job130262/slurm_script: line 33: Wed: unbound variable
+```
+* Jennifer pointed out that when we did `./configure --something_gmapdb=/project/.../software` it set the `-D` to be in `software/gmapdb`
+* `-d` is the genome name and `-D`  is where to store it
+* in the future, also make sure to add a `-D desired/directory/` to command
+* ignore error message on line 33 of stderr file.
+
 #### Output files
+```
+b73.chromosome	    b73.contig.iit     b73.ref061regiondb	b73.version
+b73.chromosome.iit  b73.genomebits128  b73.ref153offsets64meta
+b73.chrsubset	    b73.genomecomp     b73.ref153offsets64strm
+b73.contig	    b73.maps	       b73.ref153positions
+```
+
+3. Map reads to genome
+```
+gsnap -d <genome> <read1_file> <read2_file>
+```
+Parameters to add
+* -D genome directory
+* -d genome database (is it `b73/`?)
+* what else?
+
+```
+gsnap -d /project/projectdirectory/mydirectory/dot_files/software/gmapdb/b73/ -D /project/projectdirectory/mydirectory/rnaseq/maize/gsnap/ /project/projectdirectory/mydirectory/rnaseq/maize/raw_data/*_1.fastq.gz /project/projectdirectory/mydirectory/rnaseq/maize/raw_data/*_2.fastq.gz
+```
+
+Example command for gsnap:
+```
+gsnap -d grch38_chr1 -D /gstore/scratch/hpctrain/chr1_reference_gsnap \
+-t 6 -M 2 -n 10 -N 1 \
+--quality-protocol=sanger -w 200000 --pairmax-rna=200000 \
+-E 1 -B 2 \
+-A sam raw_data/Mov10_oe_1.subset.fq | \
+samtools view -bS - | \
+samtools sort - \
+ > results/gsnap/Mov10_oe_1.Aligned.sortedByCoord.out.bam
+```
 
 
 ### Bee
-
-1.
+1. Pre-process ... reference genome to create a genome index.
 
 #### Output files
 
