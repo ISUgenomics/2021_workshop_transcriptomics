@@ -11,9 +11,12 @@ Written summary of methods performed in this repo. This is the methods write up 
 
 | dataset | Alignment method | DEG identifying method | Who is working on this problem |
 | --- | --- | --- | --- |
-| Maize | Star | DESeq2 | |
-| Maize | Hisat2 | DESeq2 | |
-| Maize | BWA | DESeq2 | |  
-| Bee | Star | DESeq2 | |
-| Bee | Hisat2 | DESeq2 | |
-| Bee | BWA | DESeq2 | |
+| Maize/Bee | Star | DESeq2 |Maryam and Ambi  |
+| Maize/Bee | Hisat2 | DESeq2 | Rick and Alex|
+| Maize/Bee | gsnap | DESeq2 |Jennifer and Kathy |  
+|Maize/Bee| gsnap | EdgeR| Severin
+| Maize/Bee | Star | EdgeR | Sathesh and Katie |
+| Maize/Bee | Hisat2 | EdgeR | Ryan and Siva|
+|Maize/Bee| Hisat2|Stringtie/Ballgown | Siva and Jennifer  |
+|Maize/Bee| Kallisto|  | Severin
+|Maize/Bee| Salmon| | Jennifer
