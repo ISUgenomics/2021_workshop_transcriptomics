@@ -2,9 +2,13 @@
 
 Authors: Mou & Jennifer
 
-Okay so we are looking at **gsnap** alignment. However is this even installed on Atlas? If not, either install natively / via miniconda / via singularity containers.
+Log onto Atlas HPC and check if the following programs are installed
 
-# Is GSNAP installed?
+* **GSNAP** - for indexing the reference and alignment
+* **samtools** - for `*.sam` to `*.bam` file conversion (smaller intermediate files)
+* **featureCounts** - for getting counts. 
+
+## Check Atlas HPC Modules
 
 The usual way to check if a program is installed is using:
 
@@ -76,9 +80,11 @@ module load singularity/3.5.2      #<= recommended to keep version number, for a
 module load singularity            #<= will load 3.7.1, since that has a "D" = default next to it in list
 ```
 
-I'm not seeing GSNAP on the list...hmm, but there's `singularity` so we could install it via a singularity image. I'm surprised there isn't `miniconda` so we could install the python libraries. Mou and I worked on installing miniconda and GSNAP.
+I'm not seeing GSNAP, samtools or featureCounts on the list...hmm, but there's `singularity` so we could install it via a singularity image. I'm surprised there isn't `miniconda` so we could install the python libraries. Mou and I worked on installing miniconda and GSNAP.
 
-## Install GSNAP locally
+---
+
+## Install Programs
 
 Before we get into installing your own programs in the HPC. We need to touch on file organization on an HPC.
 
@@ -90,7 +96,7 @@ This is my general template for organizing folders and files on an HPC. Since th
 
 ```
 /project/projectname/
-           |_ software/              #<= soft link to home (shared programs across a research group)
+           |_ software/              #<= soft link to home (shared programs across a research group, local installs here)
            |_ Jennifer/
                 |_ inbox/            #<= softlink to home
                 |_ outbox/           #<= softlink to home
@@ -99,12 +105,19 @@ This is my general template for organizing folders and files on an HPC. Since th
                     |_ .conda/       #<= softlink to home
                     |_ .nextflow/    #<= softlink to home
                     |_ R/            #<= softlink to home
+                    |_ miniconda3/   #<= will eventually add this... do not add this yet, could also put this in software
 ```
 
 * `inbox` and `outbox`  are nice b.c. I can do ssh mylocalfile.tar.gz jenchang@atlas:inbox/.  and don't have to think about 5gb limit
 * dotfiles (`.singularity`, `.conda`) are usually invisible folders that get large as you install conda packages, or singularity images. These can eat up your home folder ~5GB memory limit if they're not softlinked
 
 ---
+
+Initially we tried to install the programs natively, but eventually switched to `miniconda`
+
+<details><summary>Notes from a local **GSNAP** install</summary>
+
+## Local install of GSNAP
 
 Initially, I was indecisive on compiling GSNAP from source or installing via miniconda. Compiling from source is always going to run faster (more natively) then installing via miniconda/singularity/other containerization program. Installing from a miniconda/singularity/etc will tend to be easier. In the end, we were able to get it installed from source.
 
@@ -162,10 +175,148 @@ ls bin/
 #> gff3_splicesites  gsnap		iit_dump		    vcf_iit
 #> gmap		  gsnap.avx2	iit_get
 ```
+----
+
+</details>
+
+<details><summary>Notes from local install of **featureCounts**</summary>
+
+## Local install of featureCounts
+
+Heh, this one was missing too.
+
+* Install Instructions - [http://bioinf.wehi.edu.au/subread-package/](http://bioinf.wehi.edu.au/subread-package/)
+
+Thankfully this is an already compiled binary. Ergo:
+
+1. Download the `subread-2.0.1-Linux-x86_64.tar.gz` from sourceforge - [https://sourceforge.net/projects/subread/files/subread-2.0.1/](https://sourceforge.net/projects/subread/files/subread-2.0.1/)
+2. scp file to Atlas
+
+  ```
+  # from local laptop, move file to Atlas
+  scp subread-2.0.1-Linux-x86_64.tar.gz atlas:inbox/.
+  ```
+  
+3. Move to software folder
+
+  ```
+  # From Atlas HPC
+  mv ~/inbox/subread-2.0.1-Linux-x86_64.tar.gz /project/project_name/software/.
+  cd /project/project_name/software
+  tar -xzvf subread-2.0.1-Linux-x86_64.tar.gz
+  cd subread-2.0.1-Linux-x86_64
+  ls bin/*
+  
+  #> bin/exactSNP  bin/featureCounts  bin/subindel  bin/subjunc  bin/sublong  bin/subread-align  bin/subread-buildindex
+  #> bin/utilities:
+  #> detectionCall  flattenGTF  genRandomReads  propmapped  qualityScores  removeDup  repair  subread-fullscan  txUnique
+  ```
+  
+4. Make sure program runs: `./bin/featureCounts`
+
+</details>
+
+<details><summary>Notes from a local install of **samtools** - c library linking errors, did not finish</summary>
+
+## Local install of samtools
+
+Geh... samtools is missing, which requires two difficult to install libraries... the benefits of installing natively has gone down. Decided to switch to miniconda. Samtools required a few specific C libraries, ergo I gave up natively install and switched to miniconda.
+
+</details>
+
+
+# Restart: install everything in miniconda
+
+## Install miniconda
+
+Based on [https://conda.io/projects/conda/en/latest/user-guide/install/linux.html](https://conda.io/projects/conda/en/latest/user-guide/install/linux.html), install locally to Atlas HPC.
+
+```
+# Fetch the install script
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+
+# Run the fetched script
+bash Miniconda3-latest-Linux-x86_64.sh
+# acceept all defaults (press enter/yes through entire download process)
+
+# By default it places miniconda3 in home folder (remember 5gb limit)
+# Ergo we move this to the project folder and link to home
+mv ~/miniconda3 /project/project_folder/software/.
+ln -s /project/project_folder/software/miniconda3 ~/.
+
+# Check if miniconda is installed and working
+source ~/.bashrc
+conda -version
+```
+
+## Install samtools, gmap, subread (featureCounts)
+
+1. Create an environment file, save it as `gsnap_env.yml`.
+
+  ```
+  name: gsnap_env
+  channels:
+    - conda-forge
+    - bioconda
+    - defaults
+  dependencies:
+    - python=3.8
+    - gmap 
+    - samtools
+    - subread
+  ```
+
+2. From the command line create the miniconda environment:
+
+  ```
+  conda env create -f gsnap_env.yml
+  ```
+
+  And enjoy the ease with which miniconda installs all dependencies for gsnap (`gmap`), samtools (`samtools`) and featureCounts (`featureCounts`). 
+  
+3. Check if environment was created:
+
+  ```
+  conda env list          #<= list all environments
+  
+  #> conda environments:
+  #> base                  *  /home/jennifer.chang/miniconda3
+  #> gsnap_env                /home/jennifer.chang/miniconda3/envs/gsnap_env
+  ```
+  
+  Notice how a new folder is created in `miniconda` which contains all the python executables and python packages.
+  
+  ```
+  ls /home/jennifer.chang/miniconda3/envs/gsnap_env/
+  ```
+  
+4. Then the tools are available when you activate the environment.
+
+  ```
+  conda activate gsnap_env
+  samtools --version        # check samtools version...
+  gmap --version
+  featureCounts -v
+  ```
+
+5. In order to use a miniconda environment in a slurm script, you'll need to activate yoru local miniconda, then the `gsnap_env`. Place the following after your `SBATCH` lines and before the `gsnap` / `samtools` / `featureCounts` calls.
+
+  The top of the slurm script will require a few extra lines before `conda activate` will work.
+
+  ```
+  set +eu
+  USER=jennifer.chang
+  source /home/${USER}/miniconda3/etc/profile.d/conda.sh
+  conda activate gsnap_env
+
+  ## gsnap/samtools/featureCount commands here
+  ```
+
+-----
 
 # Start GSNAP alignment
 
-Hahaha, well we've finally made it (after ~2 days of searching and installing). 
+Hahaha, well we've finally made it (after a week of trying installation methods). 
 
 Mou found a tutorial link on GSNAP:
 
@@ -173,21 +324,17 @@ Mou found a tutorial link on GSNAP:
 
 The general format of the pipeline is:
 
-```
-(1) index genome -> (2) map reads to genome -> (3) get counts
-```
+  ```
+  (1) index genome -> (2) map reads to genome -> (3) get counts
+  ```
 
 The counts will be sent to Diffential Expression analysis programs.
 
-## (1) Build index
+## (1) Build reference genome index with `gmap_build`
 
-This portion is still in progress...
+1. Index the reference genome
 
-```
-GMAP_BIN=/project/project_name/software/gmap-2020-12-17/bin
-
-${GMAP_BIN}/gmap_build -d <genome name> <path to genome fasta file>
-```
+<details><summary>More info on Maize Reference</summary>
 
 Fetch Maize Reference (B73)
 
@@ -202,20 +349,77 @@ wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/902/167/145/GCF_902167145.1_Zm
 wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/902/167/145/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.gff.gz
 ```
 
-Index reference file. You may need to edit paths. 
+</details>
 
 ```
-GMAP_BIN=/project/project_name/software/gmap-2020-12-17/bin
-${GMAP_BIN}/gmap_build \
- -d b73 \
- data_maize/ref/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.fna
+# ==== Activate miniconda
+set +eu
+USER=jennifer.chang
+source /home/${USER}/miniconda3/etc/profile.d/conda.sh
+conda activate gsnap_env
+
+# ==== Connect the executable (either local or miniconda)
+# GMAP_BUILD=/project/project_name/software/gmap-2020-12-17/bin/gmap_build
+GMAP_BUILD=gmap_build
+
+# ==== Define input/output variables
+GENOME_NAME=b73
+GENOME_FASTA=data_maize/ref/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.fna.gz
+GMAPDB=/project/project_name/software/gmapdb
+
+# ==== Main Run
+${GMAP_BUILD} -d ${GENOME_NAME} -D ${GMAPDB} ${GENOME_FASTA}
 ```
 
-* [gsnap_indexgenome.slurm](bin/gsnap_indexgenome.slurm)
+* [gsnap_indexgenome.slurm](bin/gsnap_indexgenome.slurm) - needs to be updated...
 
-# (2) map reads to index
+Notice how we can split the `gmap_build` command in 3 sections. 
 
-Paired end reads must be fed into gsnap
+|flag | value | reason |
+|:-:|:-:|:-:|
+| -d | b73 | arbitrary name of the reference genome |
+| -D | /project/project_name/software/gmapdb | directory where indexed genome will be saved |
+
+How might you change the above command to run bumblebee data?
+
+# (2) map RNAseq reads to reference with `gsnap`
+
+```
+# ==== Activate miniconda
+set +eu
+USER=jennifer.chang
+source /home/${USER}/miniconda3/etc/profile.d/conda.sh
+conda activate gsnap_env
+
+# ==== Link executables (local or miniconda)
+# GSNAP=/project/project_name/software/gmap-2020-12-17/bin/gsnap
+GSNAP=gsnap
+SAMTOOLS=samtools
+
+# ==== Define input/output variables
+GENOME_NAME=b73
+GMAPDB=/project/project_name/software/gmapdb
+READNAME="Treatment_r1"
+READONE=  # Path to left reads
+READTWO=  # Path to right reads
+OUTBAM=${READNAME}.Aligned.sortedByCoord.out.bam
+
+# ==== Main Run
+${GSNAP} \
+ -d ${GENOME_NAME} -D ${GMAPDB} \
+ -t 16 -M 2 -n 10 -N 1 \
+ --quality-protocol=sanger -w 200000 --pairmax-rna=200000 \
+ -E 1 -B 2 \
+ -A sam \
+ ${READONE} ${READTWO} | \
+ ${SAMTOOLS} view -bS - | \
+ ${SAMTOOLS} sort - \
+ > ${OUTBAM}
+```
+
+... In progress... preparing input files ...
+
+Paired end reads must be fed into gsnap in order
 
 ```
 ls data_maize/reads/* |\
@@ -254,106 +458,7 @@ data_maize/reads/SRR1573526_1.fastq.gz data_maize/reads/SRR1573526_2.fastq.gz
 data_maize/reads/SRR1573527_1.fastq.gz data_maize/reads/SRR1573527_2.fastq.gz
 ```
 
-# (3) get counts
-
-## Install featureCount
-
-Heh, this one was missing too.
-
-* Install Instructions - [http://bioinf.wehi.edu.au/subread-package/](http://bioinf.wehi.edu.au/subread-package/)
-
-Thankfully this is an already compiled binary. Ergo:
-
-1. Download the `subread-2.0.1-Linux-x86_64.tar.gz` from sourceforge - [https://sourceforge.net/projects/subread/files/subread-2.0.1/](https://sourceforge.net/projects/subread/files/subread-2.0.1/)
-2. scp file to Atlas
-
-  ```
-  # from local laptop, move file to Atlas
-  scp subread-2.0.1-Linux-x86_64.tar.gz atlas:inbox/.
-  ```
-  
-3. Move to software folder
-
-  ```
-  # From Atlas HPC
-  mv ~/inbox/subread-2.0.1-Linux-x86_64.tar.gz /project/project_name/software/.
-  cd /project/project_name/software
-  tar -xzvf subread-2.0.1-Linux-x86_64.tar.gz
-  cd subread-2.0.1-Linux-x86_64
-  ls bin/*
-  
-  #> bin/exactSNP  bin/featureCounts  bin/subindel  bin/subjunc  bin/sublong  bin/subread-align  bin/subread-buildindex
-  #> bin/utilities:
-  #> detectionCall  flattenGTF  genRandomReads  propmapped  qualityScores  removeDup  repair  subread-fullscan  txUnique
-  ```
-  
-4. Make sure program runs: `./bin/featureCounts`
-
-Geh... samtools is missing, which requires two difficult to install libraries... the benefits of installing natively has gone down.
-
-# Alternative: install everything in miniconda
-
-Samtools required a few specific C libraries, ergo I gave up natively install and switched to miniconda.
-
-## Install miniconda
-
-Based on [https://conda.io/projects/conda/en/latest/user-guide/install/linux.html], install locally to Atlas HPC.
-
-```
-# Fetch the install script
-wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-
-# Run the fetched script
-bash Miniconda3-latest-Linux-x86_64.sh
-
-# By default it places miniconda3 in home folder (remember 5gb limit)
-# Ergo we move this to the project folder and link to home
-mv ~/miniconda3 /project/project_folder/software/.
-ln -s /project/project_folder/software/miniconda3 ~/.
-```
-
-Create an environment file, save it as `gsnap_env.yml`.
-
-```
-name: gsnap_env
-channels:
-  - conda-forge
-  - bioconda
-  - defaults
-dependencies:
-  - python=3.8
-  - gmap
-  - samtools      #<= notice you could probably list all tools
-  - subread
-```
-
-And from the command line create the miniconda environment:
-
-```
-conda env create -f gsnap_env.yml
-```
-
-And enjoy the ease with which miniconda installs all dependencies for gsnap (`gmap`), samtools (`samtools`) and featureCounts (`featureCounts`). 
-
-Then the tools are available when you activate the environment.
-
-```
-conda activate gsnap_env
-samtools -v
-gmap -v
-featureCounts -v
-```
-
-The top of the slurm script will require a few extra lines before `conda activate` will work.
-
-```
-USER=jennifer.chang
-source /home/${USER}/.bashrc
-conda activate gsnap_env
-
-## gsnap/samtools/featureCount commands here
-```
-
+# (3) get counts with `featureCounts`
 
 
 

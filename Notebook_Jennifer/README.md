@@ -12,11 +12,15 @@
 
 Introduction of different technologies and their papers in chronological order. I'm probably missing a paper / technology somewhere, so feel free to send suggestions.
 
-**1975** - Sanger Sequencing
+**1975** - Sanger Sequencing - type:seqtech
 
 * Sanger, F. and Coulson, A.R., 1975. [A rapid method for determining sequences in DNA by primed synthesis with DNA polymerase](https://www.semanticscholar.org/paper/A-rapid-method-for-determining-sequences-in-DNA-by-Sanger-Coulson/8ae9a57dbb5c0a7bbaa13f0ef3fde7a5cd027cd1). Journal of molecular biology, 94(3), pp.441-448.
 
-**1996** - Usually cited as the first mention of nanopore for DNA and RNA seq
+**1991** - Introducing microarrays - type:expressiontech
+
+* Fodor, S.P., Read, J.L., Pirrung, M.C., Stryer, L., Lu, A.T. and Solas, D., 1991. [Light-directed, spatially addressable parallel chemical synthesis](https://www.semanticscholar.org/paper/Light-directed%2C-spatially-addressable-parallel-Fodor-Read/000ea56b86d49b727aab244cc812973f2df15d70). science, 251(4995), pp.767-773.
+
+**1996** - Usually cited as the first mention of nanopore for DNA and RNA seq - type:seqtech
 
 * Kasianowicz, J.J., Brandin, E., Branton, D. and Deamer, D.W., 1996. [Characterization of individual polynucleotide molecules using a membrane channel](https://www.semanticscholar.org/paper/Characterization-of-individual-polynucleotide-using-Kasianowicz-Brandin/4f05f0170b5ca6caabd351e2f6f2b1ec10d8a4a8). Proceedings of the National Academy of Sciences, 93(24), pp.13770-13773.
 
@@ -28,11 +32,16 @@ Introduction of different technologies and their papers in chronological order. 
 
 * Mortazavi, A., Williams, B.A., McCue, K., Schaeffer, L. and Wold, B., 2008. [Mapping and quantifying mammalian transcriptomes by RNA-Seq](https://www.semanticscholar.org/paper/Mapping-and-quantifying-mammalian-transcriptomes-by-Mortazavi-Williams/ef117c95b92b68b751143155022a5c1a600afe5c). Nature methods, 5(7), pp.621-628.
 
-**2008** - Introducing Illumina Sequencing
+**2008** - WGCNA, theory paper from 2005 - type:networks
+
+* Langfelder, P. and Horvath, S., 2008. [WGCNA: an R package for weighted correlation network analysis](https://www.semanticscholar.org/paper/WGCNA%3A-an-R-package-for-weighted-correlation-Langfelder-Horvath/39dae53515afb42664369c291ec6d1ce34d778bd). BMC bioinformatics, 9(1), pp.1-13.
+* Zhang, B. and Horvath, S., 2005. [A general framework for weighted gene co-expression network analysis](https://www.semanticscholar.org/paper/A-General-Framework-for-Weighted-Gene-Co-Expression-Zhang-Horvath/00ae5e12df354c4c70b7d51863c6f9f15e44a46a). Statistical applications in genetics and molecular biology, 4(1).
+
+**2008** - Introducing Illumina Sequencing - type:seqtech
 
 * Bentley, D.R., Balasubramanian, S., Swerdlow, H.P., Smith, G.P., Milton, J., Brown, C.G., Hall, K.P., Evers, D.J., Barnes, C.L., Bignell, H.R. and Boutell, J.M., 2008. [Accurate whole human genome sequencing using reversible terminator chemistry](https://www.semanticscholar.org/paper/Accurate-Whole-Human-Genome-Sequencing-using-Bentley-Balasubramanian/6dad16a6941b204c2f5f95d9cda6d0124d5a1a7b). nature, 456(7218), pp.53-59.
 
-**2009** - Introducing PacBio single molecule real-time (SMRT)
+**2009** - Introducing PacBio single molecule real-time (SMRT) - type:seqtech
 
 * Eid, J., Fehr, A., Gray, J., Luong, K., Lyle, J., Otto, G., Peluso, P., Rank, D., Baybayan, P., Bettman, B. and Bibillo, A., 2009. [Real-time DNA sequencing from single polymerase molecules](https://www.semanticscholar.org/paper/Real-Time-DNA-Sequencing-from-Single-Polymerase-Eid-Fehr/b0588d6e0753e7e3f82c4aa4f1609764179b12de). Science, 323(5910), pp.133-138.
 
