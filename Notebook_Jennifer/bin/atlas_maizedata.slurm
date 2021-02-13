@@ -1,20 +1,23 @@
-# Files generate for this project and their location
+#! /usr/bin/env bash
+#SBATCH --nodes=1
+#SBATCH -p service
+#SBATCH --ntasks-per-node=2
+#SBATCH --time=24:00:00
+#SBATCH --job-name=Maize
+#SBATCH --output=R-%x.%J.out
+#SBATCH --error=R-%x.%J.err
+# --mail-user=username@email.com
+# --mail-type=begin
+# --mail-type=end
+# --account=projectname
 
+set -e
+set -u
 
-## Raw data location
+# === Set working directory and in/out variables
+cd ${SLURM_SUBMIT_DIR}
 
-### Maize Dataset
-
-[ENA dataset](https://www.ebi.ac.uk/ena/browser/view/PRJNA260793)
-Grab the tsv file from this website and then execute the following command to generate the wget commands
-
-```
-cut -f 7 tsv | more | perl -pe 's/;/\n/g' | xargs -I xx echo "wget ftp://xx"
-```
-Download on Nova must be performed on Novadtn
-
-* Nova: /work/gif/TranscriptomicsWorkshop/severin/Maize
-```
+# === Main Program
 wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR157/004/SRR1573504/SRR1573504_1.fastq.gz
 wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR157/004/SRR1573504/SRR1573504_2.fastq.gz
 wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR157/005/SRR1573505/SRR1573505_1.fastq.gz
@@ -63,19 +66,3 @@ wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR157/006/SRR1573526/SRR1573526_1.fastq
 wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR157/006/SRR1573526/SRR1573526_2.fastq.gz
 wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR157/007/SRR1573527/SRR1573527_1.fastq.gz
 wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR157/007/SRR1573527/SRR1573527_2.fastq.gz
-
-```
-
-
-
-#### Illumina Reads
-
-### BumbleBee dataset
-https://drive.google.com/drive/folders/1B8tHao1s_8LLR730iXr1JyQcm0kBm7uL?usp=sharing
-### Illumina Reads
-
-### RNA-Seq data
-
-## Genome Assembly
-
-## Genome Annotation
