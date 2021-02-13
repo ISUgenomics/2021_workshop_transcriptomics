@@ -46,4 +46,4 @@ The SRX vs sample relation is given here broadly captured from the full metadata
 |SRX699527      |SRR1573526|B73           |wild-type|adaxial L1 tissue was captured.  sheath; Repeat:2                  |S_L1.2      |
 |SRX699528      |SRR1573527|B73           |wild-type|adaxial L1 tissue was captured.  sheath; Repeat:3                  |S_L1.3      |
 
-[Figure](Figures/LCM_maize_samples.png) showing how samples were captured, modified from original Fig2 in [Johnston et al. 2014](http://www.plantcell.org/content/26/12/4718#sec-9) 
+[Figure](/Users/Lab/GitBook/Library/isugenomics/2021_workshop_transcriptomics/Figures/LCM_maize_samples.png) showing how samples were captured, modified from original Fig2 in [Johnston et al. 2014](http://www.plantcell.org/content/26/12/4718#sec-9) 
