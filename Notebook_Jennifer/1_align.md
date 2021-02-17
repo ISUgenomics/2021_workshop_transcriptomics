@@ -82,6 +82,50 @@ module load singularity            #<= will load 3.7.1, since that has a "D" = d
 
 I'm not seeing GSNAP, samtools or featureCounts on the list...hmm, but there's `singularity` so we could install it via a singularity image. I'm surprised there isn't `miniconda` so we could install the python libraries. Mou and I worked on installing miniconda and GSNAP.
 
+<details><summary><b>Nova HPC</b> contained gsnap, samtools, and featureCounts</summary>
+
+* [Nova\_module\_list.txt](bin/nova_module_list.txt)
+
+Since Nova had many more modules, I used `grep` to pull out lines that contained "gsnap", "samtools" or "subread"
+
+```
+grep -e "gsnap" -e "samtools" -e "subread" nova_module_list.txt
+```
+
+Which gave me: 
+
+```
+   gmap-gsnap/2017-06-16-4oy56bt                        py-fastaindex/0.11rc7-py2-ilmrpiz                              r-rcpparmadillo/0.8.100.1.0-py2-m4g5gmx
+   gmap-gsnap/2018-03-25-qa3kh3t                        py-fastaindex/0.11rc7-py2-sj3lhkk                       (D)    r-rcpparmadillo/0.8.100.1.0-py2-r3.5-6vrcyra
+   gmap-gsnap/2018-07-04-gtu46xu                        py-faststructure/1.0-py2-k4vsldn                               r-rcpparmadillo/0.8.100.1.0-py2-r3.5-65z3l3h               (D)
+   gmap-gsnap/2019-05-12-zjqshxf                 (D)    py-funcsigs/0.4-py2-prasuhx                                    r-rcppblaze/0.2.2-py2-r3.4-xd6bcfz
+   help2man/1.47.4-phopsy7                              py-networkx/2.1-py2-fbsf2d3                                    r-rsamtools/1.28.0-py2-r3.4-cuda9-openmpi3-7qj6enh
+   help2man/1.47.8-7sce2nu                              py-networkx/2.1-py3-mfsvnsu                                    r-rsamtools/1.32.2-py2-r3.5-mpich-hq3t6jr                  (D)
+   libxml2/2.9.9-oqe2ao3                                r-a4reporting/1.24.0-py2-r3.4-wwnambt                          samtools/1.6-lyscjka
+   libxml2/2.9.10-i7eqked                        (D)    r-acepack/1.4.1-py2-r3.4-7r7e46i                               samtools/1.7-kglvk7q
+   libxmu/1.1.2-weujutd                                 r-acepack/1.4.1-py2-r3.5-3gq5fnp                               samtools/1.8-r54nmop
+   libxmu/1.1.2-y6lkbh2                                 r-acepack/1.4.1-py2-r3.5-zmdesfl                        (D)    samtools/1.9-k6deoga
+   libxmu/1.1.2-6zjibzx                          (D)    r-ade4/1.7-16-py3-pfdviww                                      samtools/1.10-py3-xuj7ylj                                  (D)
+   meson/0.55.1-py3-wqljrz5                      (D)    r-blob/1.1.0-py2-r3.5-s7q5xdw                                  subread/1.6.0-ak6vxhs
+   allinea/19.0.3    (D)    cplex/12.8-py2                   gmap-gsnap-legacy/2018.07.04        libs/fftw/3.3.4              perf-reports/6.0          starccm/13.04.010
+```
+
+Ergo, we only had to add the following to the top of slurm scripts:
+
+```
+# === Load Nova Modules
+module load gmap-gsnap
+module load samtools
+module load subread
+
+# === Can check the help documentation for each tool
+gmap_build --help > gmap_build_help.txt
+samtools view --help > samtools_help.txt
+featureCounts --help > featureCounts_help.txt
+```
+
+</details>
+
 ---
 
 ## Install Programs
@@ -368,7 +412,7 @@ GENOME_FASTA=data_maize/ref/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.fna
 GMAPDB=/project/project_name/software/gmapdb
 
 # ==== Main Run
-${GMAP_BUILD} -d ${GENOME_NAME} -D ${GMAPDB} ${GENOME_FASTA}
+${GMAP_BUILD} --gunzip -d ${GENOME_NAME} -D ${GMAPDB} ${GENOME_FASTA}
 ```
 
 * [gsnap_indexgenome.slurm](bin/gsnap_indexgenome.slurm) - needs to be updated...
@@ -379,12 +423,15 @@ Notice how we can split the `gmap_build` command in 3 sections.
 |:-:|:-:|:-:|
 | -d | b73 | arbitrary name of the reference genome |
 | -D | /project/project_name/software/gmapdb | directory where indexed genome will be saved |
+|--gunzip| | input file is a compressed gz file |
 
 How might you change the above command to run bumblebee data?
 
 # (2) map RNAseq reads to reference with `gsnap`
 
 ```
+#SBATCH --mem 300000
+
 # ==== Activate miniconda
 set +eu
 USER=jennifer.chang
@@ -412,14 +459,57 @@ ${GSNAP} \
  -E 1 -B 2 \
  -A sam \
  ${READONE} ${READTWO} | \
- ${SAMTOOLS} view -bS - | \
- ${SAMTOOLS} sort - \
- > ${OUTBAM}
+ ${SAMTOOLS} view -bS - > ${OUTBAM}
+ 
+# ${SAMTOOLS} sort -m 3G - > ${OUTBAM} <= The sort statement keeps running out of memory and quitting, commenting out for now
 ```
 
-... In progress... preparing input files ...
+**gsnap parameters**
 
-Paired end reads must be fed into gsnap in order
+|flag | value | reason |
+|:-:|:-:|:-:|
+| -d | b73 | arbitrary name of the reference genome |
+| -D | /project/project_name/software/gmapdb | directory where indexed genome will be saved |
+| -t | 16 | number of threads to use |
+| -M | 2 | |
+| -n | 10 | |
+| -N | 1 | |
+|--quality-protocol | sanger | use sanger (vs illumina) quality scores |
+| -w | 200000 | window? |
+| --pairmax-rna | 200000 | |
+| -E | 1 | | 
+| -B | 2 | |
+| -A | sam | output a sam file? |
+
+**samtools view parameters**
+
+|flag | value | reason |
+|:-:|:-:|:-:|
+| -b | | output file as a bam file |
+| -S | | auto detect if input is bam or sam |
+
+The purpose of `samtools view -bS` is basically to convert a large sam file into a smaller bam file (binary)
+
+* see explaination on SAM vs BAM here - [wikilink](https://en.wikipedia.org/wiki/SAMtools#:~:text=SAM%20files%20are%20human%2Dreadable,to%20work%20with%20than%20SAM.) - lol, whoever is updating the wiki is also using `[todo: ...]` statements :)
+
+[todo: add shortened view of SAM file or example SAM file here ]
+
+To determine amount of memory per node, use `sinfo`.
+
+```
+sinfo -O partition,allocnodes,memory
+#         |          |           |_ size of memory per node in megabytes
+#         |          |_ allowed allocating nodes
+#         |_ name of partition (#SBATCH -p partitionNameHere)
+```
+
+For more information on `sinfo`, see [this link](http://manpages.ubuntu.com/manpages/cosmic/man1/sinfo.1.html)
+
+### In progress, preparing input files
+
+... In progress... preparing input files ... wasn't sure if `gsnap` automatically detects paired read data if I pass in a glob `*_1.fastq.gz` and `*_2.fastq.gz` or if it would do an all `_1` vs all `_2` comparison. Check this first before scaling up. I could hard code the command (make sure it's not being inefficient) but the developers of `gsnap` hopefully have fixed this potential issue in the design of the software (test and check).
+
+Paired end reads must be fed into gsnap in order, basically print out the paired end reads.
 
 ```
 ls data_maize/reads/* |\
@@ -430,6 +520,8 @@ ls data_maize/reads/* |\
 ```
 
 Let's look at input.txt
+
+<details><summary>input.txt</summary>
 
 ```
 data_maize/reads/SRR1573504_1.fastq.gz data_maize/reads/SRR1573504_2.fastq.gz
@@ -458,7 +550,27 @@ data_maize/reads/SRR1573526_1.fastq.gz data_maize/reads/SRR1573526_2.fastq.gz
 data_maize/reads/SRR1573527_1.fastq.gz data_maize/reads/SRR1573527_2.fastq.gz
 ```
 
+</details>
+
 # (3) get counts with `featureCounts`
 
+Posted by Rick in Slack Channel, will need to modify for gsnap output.
 
+```
+featureCounts -T 16 -p -t gene -g ID -a augustus.gff3 -o filtered_1703-TM102_sorted_counts_genes.txt filtered_1703-TM102_sorted.bam
+```
 
+**featureCounts parameters**
+
+|flag | value | reason |
+|:-:|:-:|:-:|
+| -T | | threads?|
+| -p | | |
+| -t | gene| |
+| -g | | |
+| -a | augustus.gff3 | annotation?|
+| -o | | output file name?|
+
+# Counts
+
+todo: describe final output here. Report basic stats, number of rows, etc. Do certain read pairs have more rows than others? Anything concerning about the data? Etc, etc.

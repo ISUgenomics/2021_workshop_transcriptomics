@@ -1,0 +1,952 @@
+
+------------------------------------------------------------------------------ /opt/rit/singularity/modules ------------------------------------------------------------------------------
+   amber/amber16-tool17-cuda9.0-cpu-mpi                                          ml-gpu/20200902
+   apsim/7.9                                                                     ml-gpu/20200915
+   apsim/7.10                                                             (D)    ml-gpu/20210202                                                (D)
+   asreml/3.0                                                                    monocle3/0.2.0
+   asreml/4.1                                                             (D)    mopex/20201102
+   bambam/1.3                                                                    mysql-server/8
+   blobtools2/2.2.0                                                              namd/2.13-singlenode
+   cactus/1.0                                                                    nextstrain/augur10.1.1-auspices2.20.1
+   centos/cent7                                                                  nmrpipe/20200609
+   chroma/0.5                                                                    nwchem/6.6
+   cm1/20.2/mpich                                                                octoFLU/03162020
+   cm1/20.2/openmp                                                               pacbio-bioconda/4.2.0
+   cm1/20.2/serial                                                        (D)    picrust2/2.3.0
+   cnvnator/2.2.1                                                                pkiss/2.2.12
+   comparative-annotation-toolkit/20180926                                       plasmidfinder/2.1
+   crispr-dav/2.2.4                                                              prokka/1.14.5
+   dfam/3.2                                                                      psims/2.0
+   diffbind/3.0                                                                  qiime/2-2017.11
+   diffbind/3.0.12                                                        (D)    qiime/2-2018.6
+   edta/1.8.3                                                                    qiime/2-2019.4
+   edta/1.9.4                                                             (D)    qiime/2-2019.10                                                (D)
+   eman2/2.3                                                                     rdptools/20200409
+   eman2/2.31                                                             (D)    repet/2.5
+   ete3/3.1.1                                                                    rsat/2019.03.08
+   freesurfer/6.0                                                                scanindel/20181008
+   gromacs-plumed/gcc-4.8.5_gromacs2018.8-nogpu-plumed2.5.5-mpich3.2.1           scipion/1.1
+   gromacs-plumed/gcc-4.8.5_gromacs2019.4-cuda10.2-plumed2.5.5-mpich3.2.1        scipion/1.2-cuda
+   gromacs-plumed/gcc-4.8.5_gromacs2019.4-nogpu-plumed2.5.5-mpich3.2.1           scipion/1.2
+   gromacs-plumed/gcc-4.8.5_plumed2.5.5-mpich3.2.1                               scipion/2.0-cuda
+   gromacs-plumed/gcc-4.8.5_plumed2.5.5-serial                                   scipion/2.0                                                    (D)
+   gromacs-plumed/gcc-4.8.5_plumed2.6.1-mpich3.2.1                               scipion/3.0-cuda
+   gromacs-plumed/gcc-4.8.5_plumed2.6.1-serial                                   simnibs/2.1.2
+   gromacs-plumed/gcc-7.3.0_gromacs2020.2-cuda10.2-plumed2.6.1-mpich3.2.1        simpson/4.2.1
+   gromacs-plumed/gcc-7.3.0_gromacs2020.2-nogpu-plumed2.6.1-mpich3.2.1           squat/09202018
+   gromacs-plumed/gcc-7.3.0_plumed2.6.1-mpich3.2.1                               tensorflow/1.8.0
+   gromacs-plumed/gcc-7.3.0_plumed2.6.1-serial                            (D)    tofu2/v17
+   gromacs/gmx2019.4-cuda10.2-gcc7.3-cpu-mpich3.2                                uppasd/5.1.0
+   gromacs/gmx2020.1-cuda10.2-gcc7.3-cpu-mpich3.2                                vampire/5.0.1
+   gromacs/gmx2020.2-cuda10.2-gcc7.3-cpu-mpich3.2                                vmd/1.9.4a17                                                   (D)
+   iseg/1.3.0                                                                    wrf-wps/4.2.2-4.2/wps/mpich_no_grib2
+   itasser/5.0                                                                   wrf-wps/4.2.2-4.2/wps/mpich
+   keras/1.1                                                                     wrf-wps/4.2.2-4.2/wps/serial_no_grib2
+   keras/1.2                                                              (D)    wrf-wps/4.2.2-4.2/wps/serial                                   (D)
+   longranger/2.2.1                                                              wrf-wps/4.2.2-4.2/wrf/em_real/mpich/nesting_basic
+   maker/2.31.10_3.1                                                             wrf-wps/4.2.2-4.2/wrf/em_real/serial/nesting_basic
+   masurca/4.0.1                                                          (D)    wrf-wps/4.2.2-4.2/wrf/em_real/serial/nesting_no                (D)
+   meshroom/2019.2.0                                                             wrf-wps/4.2.2-4.2/wrf/em_tropical_cyclone/mpich/nesting_basic
+   ml-gpu/20190305                                                               wrf-wps/4.2.2-4.2/wrf/em_tropical_cyclone/serial/nesting_basic
+   ml-gpu/20190715                                                               wrf-wps/4.2.2-4.2/wrf/em_tropical_cyclone/serial/nesting_no    (D)
+   ml-gpu/20200210
+
+------------------------------------------------------------------ /opt/rit/spack-modules/lmod/linux-rhel7-x86_64/Core -------------------------------------------------------------------
+   abyss/2.0.2-py2-cuda9-openmpi3-o6zuizq               openmpi/3.1.0-athyebf                                          r-farver/2.0.3-py3-p7gkan3
+   abyss/2.0.2-py2-openmpi3-4ty5r7a                     openmpi/3.1.0-eqdedkj                                          r-fastcluster/1.1.25-py2-r3.5-wtafi3w
+   abyss/2.1.4-py2-openmpi3-ik5lxeh              (D)    openmpi/3.1.0-py2-p5js4kp                                      r-fastmap/1.0.1-py3-pabotzw
+   adol-c/develop-nj4qnbz                               openmpi/3.1.0-x3bo3bg                                          r-fastmatch/1.1-0-py2-r3.4-l7jos6a
+   aegean/0.15.2-py2-dwjwigu                            openmpi/3.1.3-py2-dfskvlw                                      r-fastmatch/1.1-0-py2-r3.5-sszqwfp                         (D)
+   albert/4.0a-boshkvk                                  openmpi/3.1.6-nt33sde/meme/5.3.0-py3-openmpi3-o74k6we          r-ff/2.2-13-py2-r3.5-yi2css4
+   alglib/3.11.0-bwjpfri                                openmpi/3.1.6-py3-nt33sde                                      r-findpython/1.0.3-py2-r3.5-bmc2lja
+   allpaths-lg/52488-fsijitr                            openssl/1.0.2n-c7yx5vj                                         r-fit-models/0.5-14-py2-r3.5-z3qprw2
+   alsa-lib/1.1.4.1-v2bwapp                             openssl/1.0.2n-ycmyhhj                                         r-flexclust/1.3-5-py2-r3.4-tjnam64
+   ampliconnoise/1.29-cuda9-openmpi3-mz7mcjh            openssl/1.0.2o-qfrwdna                                         r-flexmix/2.3-14-py2-r3.4-ko3376b
+   andi/0.10-2j5dav4                                    openssl/1.1.1c-otnl3ib                                         r-forcats/0.2.0-py2-r3.4-itxuef2
+   angsd/0.921-nsiu7xt                                  openssl/1.1.1d-n7cifrc                                         r-forcats/0.2.0-py2-r3.5-y466lx7                           (D)
+   ant/1.9.9-rqp6g4o                                    openssl/1.1.1f-dljuelf                                         r-foreach/1.4.3-py2-r3.4-wbywhl5
+   ant/1.10.0-tn77skf                            (D)    openssl/1.1.1g-3xz3lmv                                         r-foreach/1.4.3-py2-r3.5-2obkniw                           (D)
+   aperture-photometry/2.7.2-76qjls5                    openssl/1.1.1-up53rzd                                   (D)    r-forecast/8.2-py2-r3.5-rtjk2zb
+   applewmproto/1.4.2-56mzxya                           orca/4.0.1.2-openmpi2-ouxmcmx                                  r-foreign/0.8-66-py2-r3.4-ddxteqn
+   apr-util/1.6.0-r4lavb2                               orfm/0.7.1-au5fpme                                             r-foreign/0.8-66-py2-r3.5-pqjzmef                          (D)
+   apr-util/1.6.0-3fl7sz3                        (D)    orthofinder/2.2.0-py2-tf3rsoz                                  r-formatr/1.5-py2-r3.4-kkx3fdk
+   apr/1.6.2-cxtxt3s                                    p4est/2.0-openmpi3-yvutwkv                                     r-formatr/1.5-py2-r3.5-anqxvlb
+   apr/1.6.2-7t44yum                             (D)    pacbio-daligner/2017-08-05-3lb6sak                             r-formatr/1.5-py2-r3.5-2jbykcf                             (D)
+   argtable/2-13-5o3zxlu                                pacbio-damasker/2017-02-11-vjyauu5                             r-formula/1.2-2-py2-r3.4-htbba7g
+   arlecore/3.5.2.2-py2-r3.4-3sj7c3f                    pacbio-dazz-db/2017-04-10-2sdncjq                              r-formula/1.2-2-py2-r3.5-z4pkurb
+   arpack-ng/3.6.3-openmpi3-ky4zgph                     pacbio-dextractor/2016-08-09-cuda9-openmpi3-vv666vc            r-formula/1.2-2-py2-r3.5-7ifdpau                           (D)
+   aspera-cli/3.7.7-obk7bte                             pagit/1.01-tegxoa5                                             r-fpc/2.1-10-py2-r3.4-rw46oqc
+   assimp/4.0.1-py2-openmpi3-hzshzbz                    paml/4.9e-hdo4agd                                              r-fracdiff/1.4-2-py2-r3.5-yqn7svb
+   astral/4.10.7-bvfo56u                                paml/4.9h-m5kkb2e                                       (D)    r-futile-logger/1.4.3-py2-r3.4-tifuqek
+   astral/5.6.1-qr3d6y4                          (D)    panda/2016-03-07-cuda9-openmpi3-v3jujed                        r-futile-logger/1.4.3-py2-r3.5-oprat6w
+   at-spi2-atk/2.34.2-py3-pz7oedq                       pandaseq/2.11-mbti7oc                                          r-futile-logger/1.4.3-py2-r3.5-p7ewxni                     (D)
+   at-spi2-core/2.36.0-py3-zws4ptk                      pango/1.41.0-py2-b4qityd                                       r-futile-options/1.0.0-py2-r3.4-zoimwel
+   atk/2.20.0-py2-hizfbx7                               pango/1.41.0-py2-c3ff72u                                       r-futile-options/1.0.0-py2-r3.5-kzkjwrm
+   atk/2.20.0-py2-6vpvgxg                               pango/1.41.0-py2-cfdmm6c                                       r-futile-options/1.0.0-py2-r3.5-3cvufse                    (D)
+   atk/2.36.0-py3-3rbotoz                        (D)    pango/1.41.0-py2-dbqtnbz                                       r-gbm/2.1.3-py2-r3.4-y3tjlvb
+   atlas/3.10.2-ij5pbzq                                 pango/1.41.0-py2-rvdf3i4                                       r-gdalutils/2.0.1.14-py2-r3.5-jj3jrw2
+   augustus/3.2.3-py2-openmpi3-3wqxb3k                  pango/1.41.0-py2-t4zg3vi                                       r-gdata/2.18.0-py2-r3.4-pe55cjz
+   augustus/3.3-py2-cuda9-openmpi3-fimdyeu              pango/1.41.0-py2-wd6kfzp                                       r-gdata/2.18.0-py2-r3.5-oxukfko
+   augustus/3.3-py2-openmpi3-zcz36sp                    pango/1.41.0-py2-zokkobg                                       r-gdata/2.18.0-py3-ssliaj6                                 (D)
+   augustus/3.3.1-py2-openmpi3-42pjmh2                  pango/1.41.0-py3-j73ahxe                                       r-gdsfmt/1.14.1-py2-r3.4-s3s72d7
+   augustus/3.3.2-py2-openmpi3-rtcnsef                  pango/1.41.0-py3-xpk43qb                                (D)    r-geiger/2.0.6-py2-r3.5-wuil5in
+   augustus/3.3.2-py3-openmpi3-gee2bjt           (D)    parallel-netcdf/1.8.0-cuda9-openmpi3-rmpfqhk                   r-genefilter/1.58.1-py2-r3.4-pic5aut
+   autoconf-archive/2019.01.06-lmijom4                  parallel/20170322-nct4iah                                      r-genefilter/1.62.0-py2-r3.5-ejtd4ux
+   autoconf/2.69-aix4dgi                                parallel/20170322-36gxsog                               (D)    r-genefilter/1.62.0-py2-r3.5-euq24wi                       (D)
+   autoconf/2.69-i7h6nqy                                parmetis/4.0.3-cuda9-openmpi3-es6re2i                          r-genelendatabase/1.16.0-py2-r3.5-mpich-r4t4ewx
+   autoconf/2.69-ikkondw                                parmetis/4.0.3-openmpi3-lumijav                                r-geneplotter/1.58.0-py2-r3.5-ghvy7k7
+   autoconf/2.69-l5dj3ei                                parmetis/4.0.3-openmpi3-3nwmysv                                r-geneplotter/1.58.0-py2-r3.5-zfac7iw                      (D)
+   autoconf/2.69-l24ipaw                                parmetis/4.0.3-openmpi3-6jmxcez                         (D)    r-generics/0.1.0-py3-ovvvoyc
+   autoconf/2.69-nuuejdm                                parsimonator/1.0.2-ccura4v                                     r-genie3/1.2.0-py2-r3.5-3bytjgj
+   autoconf/2.69-nzvios5                                parsimonator/1.0.2-js2rr26                              (D)    r-genie3/1.2.0-py2-3bytjgj                                 (D)
+   autoconf/2.69-stukejj                                partitionfinder/2.1.1-py2-cuda9-openmpi3-p2qwj5o               r-genomeinfodb/1.12.3-py2-r3.4-vsyed4e
+   autoconf/2.69-vylshbn                                pasta/1.8.3-py2-alcbobp                                        r-genomeinfodb/1.16.0-py2-r3.5-rzmeov3
+   autoconf/2.69-z77nkue                                pbmpi/partition-cuda9-openmpi3-scux24n                         r-genomeinfodb/1.16.0-py2-r3.5-y4clpat                     (D)
+   autoconf/2.69-32qdtjg                         (D)    pcma/2.0-aftl4j6                                               r-genomeinfodbdata/0.99.0-py2-r3.4-7pirgso
+   autofact/3_4-glgi34m                                 pcre/8.41-x7snv4h                                              r-genomeinfodbdata/1.1.0-py2-r3.5-ibv4tpi
+   autofact/3_4-py2-fnlbrqw                      (D)    pcre/8.42-vwvgnbn                                              r-genomeinfodbdata/1.1.0-py2-r3.5-md2onri                  (D)
+   automake/1.15.1-fgbbula                              pcre/8.42-py2bqlz                                              r-genomicalignments/1.12.2-py2-r3.4-cuda9-openmpi3-pluxk7w
+   automake/1.16.1-dbpjkte                              pcre/8.42-2qvwrmv                                              r-genomicalignments/1.16.0-py2-r3.5-mpich-6xcvxvd          (D)
+   automake/1.16.1-dlvdprq                              pcre/8.43-elag3cv                                              r-genomicfeatures/1.28.5-py2-r3.4-cuda9-openmpi3-ckr4le4
+   automake/1.16.1-fnwdxjq                              pcre/8.44-p32xhip                                       (D)    r-genomicfeatures/1.32.2-py2-r3.5-mpich-yzgeax3            (D)
+   automake/1.16.1-4u4ep7e                              pcre2/10.31-tsy2jmv                                            r-genomicranges/1.28.6-py2-r3.4-fweh7oy
+   automake/1.16.1-zmbrd3u                              perl-algorithm-diff/1.1903-zoirqxo                             r-genomicranges/1.32.6-py2-r3.5-k3im6jr
+   automake/1.16.2-rxsimdm                              perl-bio-perl/1.007002-gww4jo2                                 r-genomicranges/1.32.6-py2-r3.5-l22pruf                    (D)
+   automake/1.16.2-2v5yvc5                              perl-bit-vector/7.4-sor6kar                                    r-gensa/1.1.7-py2-r3.5-c33g37b
+   automake/1.16.3-grj5pgj                       (D)    perl-capture-tiny/0.46-q3omm4d                                 r-geomorph/3.0.5-py2-r3.5-lulkfdy
+   bambam/1.3-3u4zcom                            (D)    perl-carp-clan/6.06-2qooupj                                    r-geomorph/3.0.7-py2-r3.5-nvekbsb                          (D)
+   bamtools/2.3.0-bb3dran                               perl-cgi/4.40-kw2thqa                                          r-geonames/0.999-py2-r3.5-anxyrrz
+   bamtools/2.5.1-mgm42ro                        (D)    perl-class-data-inheritable/0.08-j4tqbcv                       r-geoquery/2.42.0-py2-r3.4-zzm73ah
+   bamutil/1.0.13-d532l65                               perl-class-data-inheritable/0.08-omsgjfi                (D)    r-geosphere/1.5-5-py2-r3.4-6iobg7s
+   bash/5.0-wtzul5h                                     perl-class-inspector/1.32-rlxgpox                              r-getopt/1.20.1-py2-r3.4-ntghfis
+   bazel/0.17.2-koqjou5                                 perl-clone-choose/0.010-hlljbk3                                r-getopt/1.20.1-py2-r3.5-srhd3pd                           (D)
+   bbmap/37.36-jek2yfi                                  perl-clone/0.41-zznmcmt                                        r-ggdendro/0.1-20-py2-r3.5-sz3cndi
+   bcftools/1.6-pecw57e                                 perl-config-general/2.63-ovdqpfz                               r-ggmap/2.6.1-py2-r3.4-6orxi4k
+   bcftools/1.7-3xrfhvl                                 perl-data-dumper/2.173-ifdy7iu                                 r-ggplot2/2.2.1-py2-r3.4-l3jmw7u
+   bcftools/1.8-tkhms5r                                 perl-data-dumper/2.173-x4cvqsm                          (D)    r-ggplot2/2.2.1-py2-r3.5-axd52bx
+   bcftools/1.9-womp5fh                                 perl-data-stag/0.14-rhxdfz7                                    r-ggplot2/2.2.1-py2-r3.5-yvouwlq
+   bcftools/1.10.2-py3-thr4ev4                   (D)    perl-dbd-mysql/4.043-py2-mpich-gizr456                         r-ggplot2/3.3.3-py3-hfkxemd                                (D)
+   bcl2fastq2/2.20.0.422-py2-bpx6pnb                    perl-dbd-sqlite/1.59_01-pff7oas                                r-ggvis/0.4.3-py2-r3.4-nmoawnt
+   bdftopcf/1.0.5-my25ndk                               perl-dbd-sqlite/1.59_01-jwah6lw                         (D)    r-git2r/0.18.0-py2-r3.4-sa2m6cf
+   bdftopcf/1.0.5-ytitabs                               perl-dbfile/1.840-fuirmo2                                      r-git2r/0.18.0-py2-r3.5-az63gji                            (D)
+   bdftopcf/1.0.5-5ay2tud                        (D)    perl-dbfile/1.840-wjmqp3o                               (D)    r-glimma/1.8.2-py2-r3.5-sf5gleo
+   bdw-gc/8.0.0-ioabqol                                 perl-dbi/1.636-kvj7kuy                                         r-glmnet/2.0-13-py2-r3.4-bp7kpkx
+   beagle/5.1-jxyhbfo                                   perl-dbi/1.636-wrqjjzc                                  (D)    r-glue/1.2.0-py2-r3.4-yovs67x
+   beast-tracer/1.7.1-jap7z62                           perl-devel-cycle/1.12-liqnh2y                                  r-glue/1.2.0-py2-r3.5-ictqq23
+   beast1/1.8.4-xik6gpf                                 perl-devel-stacktrace/2.02-cqg27hv                             r-glue/1.4.2-py3-4dwkd35                                   (D)
+   beast1/1.8.4-6ijrcgn                                 perl-devel-stacktrace/2.02-jiadeeu                      (D)    r-gmodels/2.18.1-py3-ahosiqk
+   beast1/1.10.0-amdr3hn                                perl-encode-locale/1.05-czzw2yx                                r-gmp/0.5-13.1-py2-r3.5-v4x233g
+   beast1/1.10.4-6a3w2gi                         (D)    perl-encode-locale/1.05-uey5vga                                r-go-db/3.4.1-py2-r3.4-bgd4hey
+   beast2/2.4.6-v42lzno                                 perl-encode-locale/1.05-zsjrbh2                         (D)    r-go-db/3.4.1-py2-r3.5-ysusxez                             (D)
+   beast2/2.5.2-kfp4pck                          (D)    perl-exception-class/1.43-dicdhfo                              r-goplot/1.0.2-py2-r3.5-o2aqc4c
+   bedops/2.4.35-gl7y6z6                                perl-exception-class/1.43-7mia4dm                       (D)    r-goseq/1.32.0-py2-r3.5-mpich-aknted7
+   bedtools2/2.27.1-s2mtpsu                             perl-exporter-tiny/1.000000-id7qict                            r-gplots/3.0.1-py2-r3.4-2aynnbz
+   berkeley-db/18.1.40-e3ezi3z                          perl-extutils-config/0.008-aetgqi7                             r-gplots/3.0.1-py2-r3.5-aa5ipdq                            (D)
+   binutils/2.29.1-py2-ckso36v                          perl-extutils-config/0.008-ftjru5v                             r-graph/1.54.0-py2-wnmkshj
+   binutils/2.29.1-yw4ktf7                              perl-extutils-config/0.008-4xwbbpw                      (D)    r-grbase/1.8-3.4-py2-m6ty4wo
+   binutils/2.31.1-4r2a5rq                              perl-extutils-helpers/0.026-ie5cv53                            r-gridextra/2.3-py2-r3.4-utawj6x
+   binutils/2.35.1-woigoja                       (D)    perl-extutils-helpers/0.026-nsxjv7l                            r-gridextra/2.3-py2-r3.5-i5yyqko
+   bioawk/1.0-3f2ahpq                                   perl-extutils-helpers/0.026-p4zrlyw                     (D)    r-gridextra/2.3-py2-r3.5-vp66nw5                           (D)
+   bison/3.0.4-d6dcwuu                                  perl-extutils-installpaths/0.012-makunux                       r-gss/2.1-7-py2-r3.4-rnmdqgp
+   bison/3.0.5-ymeihvr                                  perl-extutils-installpaths/0.012-7mmrtp4                       r-gtable/0.2.0-py2-r3.4-5xct37i
+   bison/3.0.5-5ulkfws                                  perl-extutils-installpaths/0.012-64lklhv                (D)    r-gtable/0.2.0-py2-r3.5-oux6ywu
+   bison/3.0.5-6ji7zg7                                  perl-extutils-makemaker/7.24-h2cvdrm                           r-gtable/0.2.0-py2-r3.5-4ii6jud
+   bison/3.4.2-ay72g67                                  perl-extutils-makemaker/7.24-uwzxfi2                    (D)    r-gtable/0.3.0-py3-spsbfej                                 (D)
+   bison/3.4.2-4s2yuj4                                  perl-extutils-pkgconfig/1.16-45bwpck                           r-gtools/3.5.0-py2-r3.4-wb3bjx5
+   bison/3.6.4-hvzlug3                           (D)    perl-file-copy-recursive/0.40-rk7c27h                          r-gtools/3.5.0-py2-r3.5-blyzz5n
+   blast-legacy/2.2.26-d2blzkd                          perl-file-homedir/1.004-gyhgkuq                                r-gtools/3.8.2-py3-jfi2fg2                                 (D)
+   blast-plus/2.6.0-py2-n35bbsh                         perl-file-listing/6.04-tc7p4vh                                 r-haven/1.1.0-py2-r3.4-z3agfrm
+   blast-plus/2.7.1-py2-vvbzyor                  (D)    perl-file-listing/6.04-u6hob7d                                 r-haven/1.1.0-py2-r3.5-qbsb7yk                             (D)
+   blast2go/5.2.5-py2-wicknvz                           perl-file-listing/6.04-uq2mwzd                          (D)    r-highr/0.6-py2-r3.4-tggv75n
+   blat/35-bti4hwv                                      perl-file-sharedir-install/0.11-qcdgchr                        r-highr/0.6-py2-r3.5-c45qqzl
+   boost/1.54.0-py2-cwsdddr                             perl-file-which/1.22-keevsjn                                   r-highr/0.6-py2-r3.5-i6yd3kt                               (D)
+   boost/1.59.0-py2-cuda9-openmpi3-wqcrgwj              perl-file-which/1.22-zir5xln                            (D)    r-hmisc/4.1-1-py2-r3.5-alal2w4
+   boost/1.66.0-py2-cuda9-openmpi3-7trvicg              perl-font-ttf/1.06-btsddqe                                     r-hmisc/4.1-1-py2-r3.5-upjxpag
+   boost/1.66.0-py2-mpich-iyf5op3                       perl-gd-graph/1.4308-3szipve                                   r-hmisc/4.1-1-py2-r3.5-2wm5k3n                             (D)
+   boost/1.67.0-py2-openmpi3-pdy2xxo                    perl-gd-text/0.86-r3uwuzk                                      r-hms/0.3-py2-r3.4-ofgv6vp
+   boost/1.67.0-py2-wfpogr2                             perl-gd/2.53-s52vgqo                                           r-hms/0.3-py2-r3.5-nnn6z2c
+   boost/1.69.0-py2-openmpi3-lsaupic                    perl-gdgraph-histogram/1.1-niyjtpr                             r-hms/1.0.0-py3-4ahy55h                                    (D)
+   boost/1.69.0-py2-openmpi3-qvhdbuf                    perl-graph/0.9704-ew2ranh                                      r-hoardr/0.5.2-py2-r3.5-a5pszbs
+   boost/1.69.0-py2-openmpi3-qzo3fpw                    perl-graph/0.9704-u5heztl                               (D)    r-htmltable/1.9-py2-r3.4-zgy43a4
+   boost/1.69.0-py3-openmpi3-yc4whx2                    perl-hash-merge/0.300-rmd6lrv                                  r-htmltable/1.11.2-py2-r3.5-bxsj2gn
+   boost/1.70.0-py3-ea2hpzw                      (D)    perl-hash-merge/0.300-32rgdus                                  r-htmltable/1.11.2-py2-r3.5-5ads6xg                        (D)
+   bowtie/1.2-26wthei                                   perl-hash-merge/0.300-43wnycr                           (D)    r-htmltools/0.3.6-py2-r3.4-5a23dd5
+   bowtie2/2.3.1-py2-vvx3ktr                            perl-html-parser/3.72-g6lt7hp                                  r-htmltools/0.3.6-py2-r3.5-dbz56af
+   bowtie2/2.3.1-py3-ge4lv4s                            perl-html-parser/3.72-7d6je7y                                  r-htmltools/0.3.6-py2-r3.5-6vurkuh
+   bowtie2/2.3.4.1-py2-jl5zqym                   (D)    perl-html-parser/3.72-7fduopo                                  r-htmltools/0.5.1-py3-ih4eaac                              (D)
+   bpp-core/2.2.0-m4bc4vh                               perl-html-parser/3.72-67rhckk                           (D)    r-htmlwidgets/0.9-py2-r3.4-6mvizwq
+   bpp-phyl/2.2.0-xo6sy5r                               perl-html-tagset/3.20-fqtw4ie                                  r-htmlwidgets/0.9-py2-r3.5-7cy3rq5
+   bpp-seq/2.2.0-7itsd6n                                perl-html-tagset/3.20-kazvic5                                  r-htmlwidgets/0.9-py2-r3.5-63rojex                         (D)
+   bpp-suite/2.2.0-ubxhkob                              perl-html-tagset/3.20-mxrkg2y                                  r-httpcode/0.2.0-py2-r3.5-jbxf7qb
+   braker/1.11-py2-cuda9-openmpi3-5mjauzu               perl-html-tagset/3.20-oam76sx                           (D)    r-httpuv/1.3.5-py2-r3.4-uzqop3r
+   braker/2.1.0-py2-openmpi3-i5mjgyc                    perl-http-cookies/6.04-z2pqu3x                                 r-httpuv/1.3.5-py2-r3.5-tpaytvb
+   braker/2.1.2-py3-openmpi3-75wblif             (D)    perl-http-cookies/6.04-3ckdjdf                                 r-httpuv/1.3.5-py2-r3.5-ubalsv2
+   breakdancer/master-whyosbu                           perl-http-cookies/6.04-4qwrih7                          (D)    r-httpuv/1.5.5-py3-u2qqhll                                 (D)
+   bridger/2014-12-01-py3-openmpi3-faiqque              perl-http-daemon/6.01-hsqnphm                                  r-httr/1.3.1-py2-r3.4-6vmmmsr
+   bsseeker2/2.1.2-py2-aruli76                          perl-http-daemon/6.01-nvlwkar                                  r-httr/1.3.1-py2-r3.5-ic5stqs                              (D)
+   bucky/1.4.4-wjm3ryx                                  perl-http-daemon/6.01-zbaqu2l                           (D)    r-hwriter/1.3.2-py2-r3.4-g2k745d
+   busco/3.0.1-py2-cuda9-openmpi3-ze7lkie               perl-http-date/6.02-fe6gqs7                                    r-igraph/1.1.2-py2-gqsasio
+   butter/0.3.3-2tqbkix                                 perl-http-date/6.02-t6fyj2b                                    r-igraph/1.1.2-py2-r3.4-aaglleo
+   bwa/0.7.17-zhcbtza                            (D)    perl-http-date/6.02-ttadhhb                             (D)    r-igraph/1.1.2-py2-r3.5-qlcf7ul
+   bzip2/1.0.6-qrd3gzl                                  perl-http-message/6.13-bsoquds                                 r-igraph/1.2.6-py3-ley4ryd                                 (D)
+   bzip2/1.0.8-etzfbao                                  perl-http-message/6.13-qj5t4il                                 r-illuminaio/0.18.0-py2-r3.4-ojo5mhy
+   bzip2/1.0.8-fslu4ek                           (D)    perl-http-message/6.13-4x6ouui                          (D)    r-impute/1.56.0-py2-r3.5-hkqrvah
+   cairo/1.14.12-py2-fkrbyr4                            perl-http-negotiate/6.01-k4xsbte                               r-inline/0.3.14-py2-r3.4-z6tqoym
+   cairo/1.14.12-py2-n6tw2vl                            perl-http-negotiate/6.01-sn7xrul                               r-inline/0.3.14-py2-r3.5-xbxcvsf                           (D)
+   cairo/1.14.12-py2-qlztsrl                            perl-http-negotiate/6.01-tum63sz                        (D)    r-interactivedisplaybase/1.14.0-py2-r3.4-fmpyo2s
+   cairo/1.14.12-py2-qrui7x5                            perl-inline-c/0.78-27szvpu                                     r-iranges/2.10.5-py2-r3.4-pkelhnf
+   cairo/1.14.12-py2-4ip3ovo                            perl-inline/0.80-xiwputq                                       r-iranges/2.14.10-py2-r3.5-q5bexer
+   cairo/1.16.0-py2-rf5pupg                             perl-io-html/1.001-gbyuogm                                     r-iranges/2.14.10-py2-r3.5-4yw64pp                         (D)
+   cairo/1.16.0-py2-rnmuguf                             perl-io-html/1.001-va6y6xj                                     r-irlba/2.1.2-py2-lxscb35
+   cairo/1.16.0-py2-2gbcrc3                             perl-io-html/1.001-5njsjuw                              (D)    r-irlba/2.1.2-py2-r3.4-dm53a7g
+   cairo/1.16.0-py2-57w6jyt                             perl-io-string/1.08-5nqxtep                                    r-irlba/2.1.2-py2-r3.5-7h2k4tv                             (D)
+   cairo/1.16.0-py3-js6xv4w                             perl-json/2.97001-qzf3ipd                                      r-isdparser/0.3.0-py2-r3.5-cpnn7df
+   cairo/1.16.0-py3-6xbatr7                      (D)    perl-libwww-perl/6.33-d2m5ykz                                  r-isoband/0.2.3-py3-qve7zxy
+   canu/1.5-py2-z4bptl3                                 perl-libwww-perl/6.33-rqg2qxg                                  r-iterators/1.0.8-py2-r3.4-6nl42m6
+   canu/1.7.1-py2-dcqxssk                        (D)    perl-libwww-perl/6.33-ykrcvom                           (D)    r-iterators/1.0.8-py2-r3.5-wqyfegd                         (D)
+   cap3/2015-02-11-2jwa5sb                              perl-list-moreutils/0.428-bzoqvm5                              r-jaspar2018/1.0.0-py2-r3.4-cigfcht
+   casper/0.8.2-py2-cuda9-openmpi3-m4fyph2              perl-log-log4perl/146-f3mduvt                                  r-jomo/2.6-2-py2-r3.4-wvjyjpq
+   cdbfasta/2017-03-16-aoamvh2                          perl-logger-simple/2.0-5jqdzag                                 r-jpeg/0.1-8-py2-r3.4-slaqs26
+   cdhit/4.6.8-4gdfjl5                                  perl-lwp-mediatypes/6.02-lfaiqdj                               r-jpeg/0.1-8-py2-r3.5-z6uupzx                              (D)
+   cdo/1.9.5-openmpi3-54es2e2                           perl-lwp-mediatypes/6.02-uj6oarm                               r-jsonlite/1.5-py2-r3.4-5yz7qzs
+   cfitsio/3.450-sctyfmp                                perl-lwp-mediatypes/6.02-z2db76e                        (D)    r-jsonlite/1.5-py2-r3.5-kkw4mr3
+   cgal/4.12-py2-openmpi3-2sx3nsw                (D)    perl-lwp/6.29-6tprlvr                                          r-jsonlite/1.5-py2-r3.5-zhknmrg
+   charm/6.7.1-cuda9-openmpi3-kzeydqq                   perl-math-bezier/0.01-tlzamts                                  r-jsonlite/1.7.2-py3-2jx2kr4                               (D)
+   charmpp/6.9.0-ds2bz4y                                perl-math-cdf/0.1-t76bkjg                                      r-kegg-db/3.2.3-py2-r3.4-7vtf5f7
+   charmpp/6.9.0-mknfvgv                                perl-math-cephes/0.5305-cte6cg5                                r-keggrest/1.18.1-py2-r3.4-czsqvxi
+   charmpp/6.9.0-qyjvptw                         (D)    perl-math-cephes/0.5305-kjaqrlv                         (D)    r-kernlab/0.9-25-py2-r3.4-ysvtrws
+   chlorop/1.1-avmmd2v                                  perl-math-round/0.07-ch3yv6b                                   r-kernsmooth/2.23-15-py2-r3.4-5uklbdl
+   circos/0.69-6-fejhzgj                                perl-math-vecstat/0.08-h7zttw6                                 r-kernsmooth/2.23-15-py2-r3.5-iv4pvfv
+   cistem/1.0.0-py2-cuda9-openmpi3-u5khgec              perl-module-build-tiny/0.039-g4vcltt                           r-kernsmooth/2.23-18-py3-fxom5s7                           (D)
+   cleaveland4/4.4-py2-r3.4-kqvlyvt                     perl-module-build-tiny/0.039-in6j4yy                           r-knitr/1.17-py2-r3.4-gz2b4bx
+   clhep/2.4.0.0-rifxt7z                                perl-module-build-tiny/0.039-2epns3y                    (D)    r-knitr/1.17-py2-r3.5-d5nuyv7
+   clp/1.16.11-ezo2fp4                                  perl-module-build/0.4220-iejwdag                               r-knitr/1.17-py2-r3.5-3rsykew                              (D)
+   clustalo/1.2.4-iy2mf6y                               perl-module-build/0.4220-uvlinkl                               r-labeling/0.3-py2-r3.4-csf67vq
+   clustalw/2.1-sbpjdtf                                 perl-module-build/0.4224-iumvmaq                               r-labeling/0.3-py2-r3.5-6rxn6tt
+   cmake/3.9.6-sjsxldd                                  perl-module-build/0.4224-jxxuvhu                               r-labeling/0.3-py2-r3.5-36xw5ig
+   cmake/3.9.6-ye6iadm                                  perl-module-build/0.4224-xkxs6b6                        (D)    r-labeling/0.4.2-py3-crqxnse                               (D)
+   cmake/3.10.1-7pqxpco                                 perl-module-implementation/0.09-3u5kcho                        r-lambda-r/1.2-py2-r3.4-zkcs2c3
+   cmake/3.11.0-oxgb6lw                                 perl-module-runtime/0.016-obrcz6t                              r-lambda-r/1.2-py2-r3.5-dmkxnu5
+   cmake/3.12.1-p4dex76                                 perl-net-http/6.17-irim5jk                                     r-lambda-r/1.2-py2-r3.5-vo5ppyw                            (D)
+   cmake/3.12.2-nyr66ui                                 perl-net-http/6.17-vxuyc5h                                     r-later/1.1.0.1-py3-rzk7eet
+   cmake/3.12.3-sowlbxe                                 perl-net-http/6.17-p5xmprq                              (D)    r-lattice/0.20-35-py2-dhzbane
+   cmake/3.13.2-lsrl3ut                                 perl-number-format/1.75-qaaptz2                                r-lattice/0.20-35-py2-r3.4-e5sbgxc
+   cmake/3.13.2-m7yo3ts                                 perl-object-insideout/4.05-r5low6b                             r-lattice/0.20-35-py2-r3.5-l7ap5jq
+   cmake/3.16.2-ssuyq25                                 perl-padwalker/2.2-3dnywl2                                     r-lattice/0.20-35-py2-r3.5-lnok7an
+   cmake/3.17.1-7v7uq7s                                 perl-parallel-forkmanager/1.19-jy2cjes                         r-lattice/0.20-41-py3-py4fxua                              (D)
+   cmake/3.18.1-j52h3yu                                 perl-parallel-forkmanager/1.19-tdl5ix6                  (D)    r-latticeextra/0.6-28-py2-r3.4-kutu5uj
+   cmake/3.19.1-uuzcdbk                                 perl-params-validate/1.29-kn4e3mt                              r-latticeextra/0.6-28-py2-r3.5-aikw273
+   cmake/3.19.2-yfiwhhe                          (D)    perl-parse-recdescent/1.967015-so63lep                         r-latticeextra/0.6-28-py2-r3.5-cf2lt5n                     (D)
+   compositeproto/0.4.2-vp5udtk                         perl-pdf-api2/2.033-gy42mkq                                    r-lazyeval/0.2.0-py2-r3.4-3heetd3
+   corset/1.06-7cktywh                                  perl-pegex/0.64-otinmpn                                        r-lazyeval/0.2.0-py2-r3.5-5kdng7u
+   cryptsetup/2.2.1-py2-dbcc2eo                         perl-perl6-slurp/0.051005-negoaqs                              r-lazyeval/0.2.0-py2-r3.5-5njqpcc                          (D)
+   cub/1.7.1-3mzep6j                                    perl-perl6-slurp/0.051005-zmu3yph                       (D)    r-learnbayes/2.15.1-py3-yvnzyvw
+   cuda/8.0.61-4boigic                                  perl-readonly/2.05-5g5zrw7                                     r-lifecycle/0.2.0-py3-dpm7nkx
+   cuda/9.1.85-dli2pwj                                  perl-regexp-common/2017060201-722423p                          r-limma/3.32.10-py2-r3.4-f654cck
+   cuda/9.2.88-ytn5jg2                                  perl-scalar-list-utils/1.50-rv2javt                            r-limma/3.36.2-py2-r3.5-6zwltxa                            (D)
+   cuda/10.0.130-y22r6sc                         (D)    perl-scalar-list-utils/1.50-zao3wda                     (D)    r-lme4/1.1-12-py2-r3.4-mssxwdc
+   cudnn/6.0-cuda9-4ohe22n                              perl-scalar-util-numeric/0.40-asxgoet                          r-lmtest/0.9-34-py2-r3.4-qgbocqk
+   cufflinks/2.2.1-63gfrmo                              perl-scalar-util-numeric/0.40-ooulh34                   (D)    r-lmtest/0.9-34-py2-r3.5-73jdcr2                           (D)
+   cups/2.2.3-3w25hjj                                   perl-set-intspan/1.19-3q24u3t                                  r-locfit/1.5-9.1-py2-r3.4-g444f4r
+   curl/7.56.0-afi32fv                                  perl-statistics-basic/1.6611-j7azi5c                           r-locfit/1.5-9.1-py2-r3.5-tzszchl
+   curl/7.60.0-hmfnmen                                  perl-statistics-descriptive/3.0612-kbraf6l                     r-locfit/1.5-9.1-py2-r3.5-4edbmxj                          (D)
+   curl/7.60.0-mqqh3ym                                  perl-sub-uplevel/0.2800-2yzr6xj                                r-lpsolve/5.6.13-py2-r3.5-xixkoa5
+   curl/7.60.0-3jignlp                                  perl-svg/2.78-p6fnkz3                                          r-lubridate/1.5.6-py2-r3.4-6f6uop6
+   curl/7.60.0-4wxypys                                  perl-test-deep/1.127-ayi7a53                                   r-lubridate/1.7.1-py2-r3.5-7zljkrl                         (D)
+   curl/7.63.0-7aylsen                                  perl-test-deep/1.127-gsyln2c                            (D)    r-magrittr/1.5-py2-j5opg2y
+   curl/7.68.0-d6mhnlb                                  perl-test-differences/0.64-lmdjn4r                             r-magrittr/1.5-py2-lys2ves
+   curl/7.68.0-eueyndm                                  perl-test-exception/0.43-pvz2blo                               r-magrittr/1.5-py2-r3.4-bofkp7c
+   curl/7.68.0-lwd43bk                           (D)    perl-test-fatal/0.014-gljfp4e                                  r-magrittr/1.5-py2-r3.5-lys2ves
+   damageproto/1.2.1-ucofz5d                            perl-test-memory-cycle/1.06-jinogaa                            r-magrittr/1.5-py2-r3.5-2eyihq2
+   dbus/1.11.2-xq4xyge                                  perl-test-most/0.35-n5t75jh                                    r-magrittr/2.0.1-py3-4xuaedo                               (D)
+   dbus/1.12.8-py3-c6uqdbs                       (D)    perl-test-needs/0.002005-jg47esy                               r-manipulatewidget/0.10.0-py2-r3.5-im3rupp
+   dealii/9.0.1-py2-openmpi3-yfoaq2q             (D)    perl-test-needs/0.002005-xkmpzyc                               r-mapproj/1.2-4-py2-r3.4-oizc7iv
+   delly2/2017-08-03-py2-cuda9-openmpi3-djh2ofx         perl-test-needs/0.002005-6axm63r                        (D)    r-maps/3.1.1-py2-r3.4-s2s6spt
+   dialign-tx/1.0.2-iy24kyg                             perl-test-requires/0.10-qk3svfp                                r-maps/3.1.1-py2-r3.5-ra5ziqv                              (D)
+   diamond/0.9.23-xqnzcyt                               perl-test-requiresinternet/0.05-frqnhmu                        r-maptools/0.8-39-py2-r3.4-bk6m4dk
+   diffutils/3.6-bjpz3oe                                perl-test-warn/0.30-bijskxj                                    r-markdown/0.8-py2-r3.4-27yhhrd
+   diffutils/3.7-jthvt3v                                perl-test-warn/0.30-qgdwq3v                             (D)    r-markdown/0.8-py2-r3.5-dnwdbys
+   diffutils/3.7-lz7lfdh                                perl-text-diff/1.45-z27ehds                                    r-markdown/0.8-py2-r3.5-z3p4ip4                            (D)
+   diffutils/3.7-q6kg3el                         (D)    perl-text-format/0.61-xt4puht                                  r-mass/7.3-47-py2-r3.4-wbqrnhi
+   discovar/52488-dygeh5s                               perl-text-soundex/3.05-wtbtxaz                                 r-mass/7.3-47-py2-r3.5-h3jecsp
+   discovardenovo/52488-t3f3khb                         perl-try-tiny/0.28-enri3w2                                     r-mass/7.3-47-py2-r3.5-xtsjvcy
+   dmlc-core/20170508-5q6qsyq                           perl-try-tiny/0.28-qc5aggr                                     r-mass/7.3-53-py3-sh2z7yk                                  (D)
+   dock/6.9-openmpi3-py3-ubza3xh                        perl-try-tiny/0.28-pzj4w5l                              (D)    r-matr/0.9-py2-r3.4-gw2r72c
+   ea-utils/1.04.807-n3rmuxs                            perl-uri-escape/1.71-c2m6kwy                                   r-matrix/1.2-12-py2-r3.4-uholx3p
+   eagle/1.1.2-p7r36uk                                  perl-uri-escape/1.71-62ifylz                            (D)    r-matrix/1.2-14-py2-r3.5-tdth2id
+   eccodes/2.5.0-4r3hwab                                perl-uri/1.72-aycizkv                                          r-matrix/1.2-14-py2-r3.5-z5lhv3t
+   eigen/3.3.3-cuda9-openmpi3-tlfqbiw                   perl-uri/1.72-e72wuo7                                          r-matrix/1.2-14-py2-soxi5f3
+   eigen/3.3.3-openmpi3-dm7b3ng                         perl-uri/1.72-qy2u4su                                   (D)    r-matrix/1.3-2-py3-n5wpsw5                                 (D)
+   eigen/3.3.3-openmpi3-yqurdka                  (D)    perl-www-robotrules/6.02-cevi7rt                               r-matrixmodels/0.4-1-py2-r3.4-blq2xpw
+   elmerfem/8.4-openmpi3-wiap7zj                        perl-www-robotrules/6.02-goszobg                               r-matrixstats/0.52.2-py2-r3.4-utilaaj
+   emboss/6.6.0-wxinx4h                                 perl-www-robotrules/6.02-od7yn65                        (D)    r-matrixstats/0.52.2-py2-r3.5-lbi4j76
+   energyplus/8.9.0-cd2akxg                             perl-xml-parser/2.44-dlowsvo                                   r-matrixstats/0.52.2-py2-r3.5-o3e7vt2                      (D)
+   energyplus/9.1.0-rwdun46                             perl-xml-parser/2.44-h7jxmux                                   r-mclust/5.3-py2-r3.4-fhrqivt
+   energyplus/9.3.0-qc5w3ub                      (D)    perl-xml-parser/2.44-ow5otff                                   r-memoise/1.1.0-py2-r3.4-ca2gimy
+   esmf/7.0.1-cuda9-openmpi3-ziehubx                    perl-xml-parser/2.44-54dqlql                            (D)    r-memoise/1.1.0-py2-r3.5-djhmpwv
+   exabayes/1.5-cuda9-openmpi3-o45p6q7                  perl-xml-simple/2.24-lsuzupt                                   r-memoise/1.1.0-py2-r3.5-wzn6qgx                           (D)
+   exabayes/1.5-openmpi3-qcriori                 (D)    perl-yaml-libyaml/0.67-hgebkha                                 r-methodss3/1.7.1-py2-r3.4-stjmt2w
+   exonerate/2.4.0-py2-ddwi7zh                          perl-yaml/1.27-fm3gmzq                                         r-methodss3/1.7.1-py2-r3.5-xdfizzo                         (D)
+   expat/2.2.2-jsg2oey                                  perl/5.24.1-ei7q6gg                                            r-mgcv/1.8-22-py2-r3.4-h4xbx2z
+   expat/2.2.5-om6ee3r                                  perl/5.24.1-hflj7qf                                            r-mgcv/1.8-22-py2-r3.5-kwe2qgc
+   expat/2.2.5-7wtpegy                                  perl/5.24.1-yuxpqbr                                            r-mgcv/1.8-33-py3-4m5xqkh                                  (D)
+   expat/2.2.9-ihwvsxo                                  perl/5.24.1-zeggbms                                            r-mgraster/0.9-py2-r3.4-32hpn4z
+   expat/2.2.9-unfjpwb                                  perl/5.24.1-4qh5wcp                                            r-mice/3.0.0-py2-r3.4-qztzns5
+   expat/2.2.10-d7otgrw                                 perl/5.30.1-zgdsz5f                                            r-mime/0.5-py2-r3.4-mgk6dfi
+   expat/2.2.10-emyio76                          (D)    perl/5.30.2-kk2ocxa                                            r-mime/0.5-py2-r3.5-lxwalrr
+   express/2015-11-29-py2-mpich-ofibkdc                 perl/5.30.3-wtxzqtq                                            r-mime/0.5-py2-r3.5-m6oceqe
+   express/2015-11-29-py2-7673jtu                (D)    perl/5.32.1-zhzrldu                                     (D)    r-mime/0.9-py3-7vqtb4v                                     (D)
+   fabtests/1.6.0-fugr7by                               petsc/3.10.2-openmpi3-bml3nup                                  r-minfi/1.22.1-py2-r3.4-cuda9-openmpi3-iv5c4v5
+   falcon/2017-05-30-py2-cuda9-openmpi3-3zov3j5         petsc/3.10.2-openmpi3-ztmvuvz                                  r-miniui/0.1.1.1-py2-r3.5-sdme6eq
+   fast-gbs/2017-01-25-py2-hkzg5qq                      petsc/3.10.2-py2-openmpi3-bml3nup                              r-minqa/1.2.4-py2-r3.4-n6uzwk7
+   fastme/2.1.5.1-hmi7het                               petsc/3.10.2-py2-openmpi3-ztmvuvz                       (D)    r-mitml/0.3-5-py2-r3.4-jufzbo3
+   fastphase/2016-03-30-pqj6c2c                         pgdspider/2.1.1.2-x2gcel2                                      r-mlbench/2.1-1-py2-r3.4-klop6dd
+   fastq-screen/0.11.2-py2-zepiryu                      phrap-crossmatch-swat/1.090518-uelfuzc                         r-mlinterfaces/1.56.0-py2-r3.4-ypqf5gi
+   fastqc/0.11.5-yvp2ycc                                phred/071220-z75znfn                                           r-mmwrweek/0.1.1-py2-r3.4-vqrucjc
+   fastqc/0.11.7-d5mgqc7                                phylip/3.697-qfb5fex                                           r-mnormt/1.5-5-py2-r3.4-3wlwy5k
+   fastqc/0.11.7-3flwcvl                         (D)    picard/2.17.0-ft5qztz                                   (D)    r-mnormt/1.5-5-py2-r3.5-44wq25a                            (D)
+   fastqvalidator/2017-01-10-6vg4zdr                    pilon/1.22-s7zrot6                                             r-modelmetrics/1.1.0-py2-r3.4-l7xnxcz
+   fasttree/2.1.10-ljljrgj                              pindel/0.2.5b8-2nixvko                                         r-modelr/0.1.1-py2-r3.5-iw727fh
+   fastx-toolkit/0.0.14-mvf5jde                         pixman/0.34.0-bao4kki                                          r-modeltools/0.2-21-py2-r3.4-n5xbd72
+   fermi/1.1-wxerboq                                    pixman/0.38.0-ilq54xd                                          r-mpm/1.0-22-py2-r3.4-pyb6s7k
+   fermikit/2017-11-7-6gf3fmc                           pixman/0.38.4-zkavn52                                          r-multcomp/1.4-6-py2-r3.4-byms2hq
+   fermisciencetools/11r5p3-xo2euut                     pixman/0.40.0-3yi3rxk                                   (D)    r-multtest/2.32.0-py2-r3.4-3zsbth2
+   ffmpeg/3.2.4-n6ulc43                                 pkg-config/0.29.2-ovuu7cu                                      r-munsell/0.4.3-py2-r3.4-7ap35h4
+   fftw/3.3.7-cuda9-openmpi3-4ttzyit                    pkg-config/0.29.2-4jnspfk                                      r-munsell/0.4.3-py2-r3.5-iqqjngo
+   fftw/3.3.7-openmpi3-rugrk4a                          pkg-config/0.29.2-p25dqxn                               (D)    r-munsell/0.4.3-py2-r3.5-yrfd4kl
+   fftw/3.3.7-py2-openmpi3-jksy7gx                      pkgconf/1.6.3-oqak6dh                                          r-munsell/0.5.0-py3-r4vsfzm                                (D)
+   fftw/3.3.8-epvswa4                                   pkgconf/1.6.3-2o5cmgg                                          r-mvtnorm/1.0-6-py2-r3.4-77dm7h2
+   fftw/3.3.8-openmpi3-q3keb6l                          pkgconf/1.7.3-okmk4ms                                   (D)    r-mvtnorm/1.0-6-py2-r3.5-l64k4o4                           (D)
+   fftw/3.3.8-openmpi3-rnox2cg                          platypus/0.8.1-py2-abyaube                                     r-ncbit/2013.03.29-py2-r3.5-jofzedr
+   fftw/3.3.8-uhytdq5                                   plink/1.9-jawpy46                                              r-ncdf4/1.15-py2-r3.5-openmpi3-z6hhtyj
+   fftw/3.3.8-uzgdtyh                                   plumed/2.4.1-openmpi3-jzfj5mw                                  r-nleqslv/3.3.2-py2-r3.5-zytowew
+   fftw/3.3.8-z5yxrw4                            (D)    plumed/2.4.1-openmpi3-nil6q6v                                  r-nlme/3.1-131-py2-r3.4-gowbz2k
+   figtree/1.4.3-ytnzlq6                                plumed/2.4.2-openmpi3-2gsxcye                                  r-nlme/3.1-131-py2-r3.5-bntyix6
+   fimpute/2014-01-dmbi3b7                              plumed/2.4.2-py2-openmpi3-6xtych7                       (D)    r-nlme/3.1-151-py3-jvy7qql                                 (D)
+   findutils/4.6.0-e5ivmnl                              pmix/3.1.2-lgyxlzw                                             r-nloptr/1.0.4-py2-r3.4-2kaqjwr
+   findutils/4.6.0-jth4oy3                              pmix/3.1.3-qfmaini                                      (D)    r-nloptr/1.0.4-py2-r3.5-bwqgl6w                            (D)
+   findutils/4.6.0-r625ohd                       (D)    poamsa/2.0-k2xvpxn                                             r-nnet/7.3-12-py2-r3.4-u2t3usz
+   fixesproto/5.0-234ased                               popt/1.16-5vlyock                                              r-nnet/7.3-12-py2-r3.5-lutbvkb                             (D)
+   flex/2.6.4-lc73pql                                   portcullis/1.1.2-py3-tgfkday                                   r-nor1mix/1.2-3-py2-r3.4-hhdcgx5
+   flex/2.6.4-tk7vefy                                   postgresql/10.2-3zpqil5                                        r-nortest/1.0-4-py2-r3.5-mzkjurg
+   flex/2.6.4-uvey755                            (D)    postgresql/10.3-4ng4gz4                                 (D)    r-numderiv/2016.8-1-py2-r3.5-5pb7s6o
+   fltk/1.3.3-roqdukb                                   pplacer/1.1.alpha19-tzjkrx2                                    r-oo/1.21.0-py2-r3.4-cu5g4pq
+   fltk/1.3.3-uiijf6c                            (D)    presentproto/1.0-xq5a2b7                                       r-oo/1.21.0-py2-r3.5-vkyqqpa                               (D)
+   font-util/1.3.1-ftmvg2y                              preseq/2.0.2-wr2lff2                                           r-openssl/0.9.7-py2-r3.4-nu7p3h7
+   font-util/1.3.1-3rftdha                              price/140408-ooha2qw                                           r-openssl/0.9.7-py2-r3.5-273t5jx                           (D)
+   font-util/1.3.2-wjsiiqk                              probconsrna/2005-6-7-hiemrmw                                   r-paleotree/3.1.3-py2-r3.5-c3fcpez
+   font-util/1.3.2-5lxajlz                       (D)    prodigal/2.6.3-4f2hjop                                         r-pamr/1.55-py2-r3.4-x2u2vwb
+   fontconfig/2.12.3-e77hly4                            proj/4.9.2-hlurdtv                                             r-pan/1.4-py2-r3.4-6rfcgzw
+   fontconfig/2.12.3-qxpwvie                            proj/6.3.2-lqcplzy                                      (D)    r-pbkrtest/0.4-6-py2-r3.4-kzt6ecw
+   fontconfig/2.12.3-vjsdvjt                            protobuf/3.1.0-cm5ixrd                                         r-pcapp/1.9-72-py2-r3.5-ocyhcvd
+   fontconfig/2.12.3-py2-z7joneb                        ps-lite/20170328-2qgy3ul                                       r-permute/0.9-5-py3-hop7sbk
+   fontconfig/2.12.3-5kce2ts                            psm/3.3-7cwmtp7                                                r-pfam-db/3.4.1-py2-r3.4-qbqbviv
+   fontconfig/2.13.1-jer64wz                            psm/2017-04-28-qxuq6tw                                  (D)    r-phangorn/2.3.1-py2-r3.4-iwdfsma
+   fontconfig/2.13.1-ojibs3i                            psmc/2016-1-21-nv76w2g                                         r-phangorn/2.3.1-py2-r3.5-ojc6xxr                          (D)
+   fontconfig/2.13.1-3u5kid2                     (D)    py-alabaster/0.7.10-py2-mfpyyfw                                r-phytools/0.6-60-py2-r3.5-wu3halp
+   fontsproto/2.1.3-3f55gf2                             py-alabaster/0.7.10-py3-etn6kzn                         (D)    r-pillar/1.4.7-py3-poaelph
+   fontsproto/2.1.3-zhqufze                      (D)    py-appdirs/1.4.3-py2-rtbpfxa                                   r-pixmap/0.4-11-py3-77nd7lf
+   fpc/3.0.2-s6jqaoa                                    py-appdirs/1.4.3-py2-7xswwki                                   r-pkgbuild/1.0.3-py2-r3.5-7h4fmcf
+   freebayes/1.1.0-iwlfmg6                              py-appdirs/1.4.3-py2-7y7fxt6                                   r-pkgbuild/1.2.0-py3-7rxkwom                               (D)
+   freeglut/3.0.0-h5gxpfi                               py-appdirs/1.4.3-py3-mrb5wem                                   r-pkgconfig/2.0.1-py2-ew6ygoj
+   freeglut/3.0.0-py2-h5gxpfi                    (D)    py-appdirs/1.4.3-py3-z42fg2j                            (D)    r-pkgconfig/2.0.1-py2-r3.4-lmbjqfr
+   freetype/2.7.1-gdaxxa5                               py-argparse/1.4.0-py2-bfxyi6x                                  r-pkgconfig/2.0.1-py2-r3.5-tswzuie
+   freetype/2.9.1-hce6ny7                               py-argparse/1.4.0-py2-uqj6uox                           (D)    r-pkgconfig/2.0.1-py2-r3.5-77g4ucf
+   freetype/2.9.1-shupga5                               py-astroid/1.4.5-py2-2evdv6g                                   r-pkgconfig/2.0.3-py3-fxz4elo                              (D)
+   freetype/2.10.1-n3wygyg                              py-atomicwrites/1.1.5-py2-p36cxaj                              r-pkgload/1.0.2-py2-r3.5-nxd6ybw
+   freetype/2.10.1-4pkcqua                       (D)    py-atomicwrites/1.1.5-py3-oodmt5i                       (D)    r-pkgload/1.1.0-py3-gl33khu                                (D)
+   fsl/5.0.10-py2-druh3vv                               py-attrs/18.1.0-py2-dkquss2                                    r-pkgmaker/0.22-py2-r3.4-a63t7fn
+   gapcloser/1.12-r6-snmw4uv                            py-attrs/18.1.0-py3-7c6nyj6                             (D)    r-plogr/0.1-1-py2-r3.4-thcwpcu
+   gapfiller/1.10-66b3btu                               py-babel/2.4.0-py2-76vwbrz                                     r-plogr/0.2.0-py2-r3.5-ax6jpxd
+   gatk/3.8-0-6lrc5l4                                   py-babel/2.4.0-py3-qavwfyi                              (D)    r-plogr/0.2.0-py2-r3.5-nrxwdns                             (D)
+   gatk/3.8.1-7nx7y4l                                   py-backports-abc/0.4-py2-j2vuvfp                               r-plotrix/3.6-4-py2-r3.5-hyzukcf
+   gatk/4.0.4.0-py2-r3.5-2rrbjyx                 (D)    py-backports-functools-lru-cache/1.5-py2-cwhhory               r-pls/2.6-0-py2-r3.4-yqknlrm
+   gaussian/09-2bua3li                                  py-backports-shutil-get-terminal-size/1.0.0-py2-msb6r6w        r-plyr/1.8.4-py2-nhgz7ad
+   gawk/4.1.4-z3pvxce                                   py-backports-ssl-match-hostname/3.5.0.1-py2-w4yfqh3            r-plyr/1.8.4-py2-r3.4-bgsgfmc
+   gawk/5.0.1-ao2p6iv                                   py-biom-format/2.1.6-py2-kknszew                               r-plyr/1.8.4-py2-r3.5-d7d3q5j
+   gawk/5.0.1-x3iiuds                            (D)    py-biom-format/2.1.10-py3-ixl33ri                       (D)    r-plyr/1.8.4-py2-r3.5-nhgz7ad
+   gblocks/0.91b-4mk5c4p                                py-biopython/1.65-py2-fgq2vqv                                  r-plyr/1.8.6-py3-w63bxe5                                   (D)
+   gcc/6.4.0-vddll7o                                    py-biopython/1.70-py2-hcdisd2                                  r-png/0.1-7-py2-r3.4-pxyqd4p
+   gcc/7.3.0-xegsmw4                             (D)    py-biopython/1.70-py3-wos466g                                  r-popgenome/2.6.1-py2-r3.5-a3jsltd
+   gcta/1.91.2beta-q2ognx7                              py-biopython/1.73-py2-xn3fzmz                           (D)    r-popvar/1.2.1-py2-r3.5-gqbihkb
+   gdal/2.1.2-py2-rbzxoj2                               py-bottleneck/1.0.0-py2-yuzmlqp                                r-powerlaw/0.70.1-py2-r3.4-spnwla4
+   gdal/2.3.0-jm3m3w4                                   py-bottleneck/1.0.0-py3-vhnif2t                                r-prabclus/2.2-6-py2-r3.4-55fzgr5
+   gdal/2.4.0-yb25ti3                                   py-bottleneck/1.2.1-py3-a53c22v                                r-praise/1.0.0-py2-r3.4-mf7yp5a
+   gdal/3.2.1-2qc6xtg                            (D)    py-bottleneck/1.2.1-py3-js4wsf3                         (D)    r-praise/1.0.0-py2-r3.5-afswfao
+   gdb/8.2-py3-67ebwtx                                  py-breakseq2/2.2-py2-eqe7jtt                                   r-praise/1.0.0-py2-r3.5-l6xltmj
+   gdbm/1.14.1-7zby6of                                  py-bx-python/0.7.4-py2-fzojnnt                                 r-praise/1.0.0-py3-ojqtchk                                 (D)
+   gdbm/1.18.1-f3fpsq3                                  py-bx-python/0.7.4-py3-w5agapn                          (D)    r-preprocesscore/1.38.1-py2-r3.4-swzuoy7
+   gdbm/1.18.1-jd7h2sk                                  py-cached-property/1.5.2-py3-t4xwwcz                           r-preprocesscore/1.44.0-py2-r3.5-23dlleo                   (D)
+   gdbm/1.18.1-xr242f2                           (D)    py-cdo/1.3.2-py2-openmpi3-q3rdfvg                              r-prettyunits/1.0.2-py2-r3.5-nxdkrkk
+   gdk-pixbuf/2.31.2-py2-bndqddp                        py-certifi/2017.1.23-py2-dgzfrd3                               r-prettyunits/1.1.1-py3-yj763fl                            (D)
+   gdk-pixbuf/2.31.2-py2-lvifbhz                 (D)    py-certifi/2020.6.20-py3-teqzhdo                        (D)    r-processx/3.2.0-py2-r3.5-5i35sri
+   geant4/10.04-xikfmxv                                 py-cffi/1.10.0-py2-5h5l7kg                                     r-processx/3.4.5-py3-lte56r2                               (D)
+   genemark-et/4.33-dcorbrr                             py-checkm-genome/1.0.11-py2-cuda9-openmpi3-v2oiaye             r-progress/1.1.2-py2-r3.5-xcjjuff
+   genemark-et/4.33-iy2pvqm                             py-click/6.6-py2-j25du5o                                       r-progress/1.2.2-py3-4r2gooj                               (D)
+   genemark-et/4.38-63ipkx4                      (D)    py-click/7.1.2-py3-3w7xryu                              (D)    r-promises/1.1.1-py3-hsbm36h
+   genometools/1.5.9-py2-awelg6n                        py-cogent/1.9-py2-openmpi3-vcgcck7                             r-protgenerics/1.8.0-py2-r3.4-37z762e
+   geos/3.6.2-hsfugk5                                   py-colormath/2.1.1-py2-pbujewj                                 r-proto/0.3-10-py2-r3.4-hurbell
+   geos/3.8.1-i6lxmuk                            (D)    py-colormath/3.0.0-py2-ahearvr                          (D)    r-proto/1.0.0-py2-r3.5-gnij5vz                             (D)
+   gettext/0.19.8.1-bh3efqs                             py-configparser/3.5.0-py2-252avok                              r-ps/1.1.0-py2-r3.5-ugwtnu4
+   gettext/0.19.8.1-d2kipka                             py-crossmap/0.2.7-py2-f7ajtl2                                  r-ps/1.5.0-py3-cae6qht                                     (D)
+   gettext/0.19.8.1-eruqa52                             py-crossmap/0.3.3-py3-r3vfdqi                           (D)    r-psych/1.7.8-py2-r3.4-4nkyusb
+   gettext/0.19.8.1-gdjis6z                             py-cutadapt/1.13-py2-bg4hwev                                   r-psych/1.7.8-py2-r3.5-ntmqfri                             (D)
+   gettext/0.19.8.1-py2-hvebszo                         py-cutadapt/1.13-py2-e2j6srt                                   r-purrr/0.2.4-py2-r3.4-b5ccj4h
+   gettext/0.19.8.1-py2-wav43uf                         py-cutadapt/2.5-py3-j2ra6iu                                    r-purrr/0.2.4-py2-r3.5-ec7qgcu
+   gettext/0.20.1-vsof3yc                               py-cutadapt/2.9-py3-dobjkaz                             (D)    r-purrr/0.3.4-py3-v7fgxmj                                  (D)
+   gettext/0.20.1-x6e33jv                               py-cycler/0.10.0-py2-x5g65l2                                   r-qtl/1.44-9-py2-r3.5-lxydazf
+   gettext/0.20.2-dpkfgaz                               py-cycler/0.10.0-py3-cdhvdzn                                   r-quadprog/1.5-5-py2-r3.4-lwwy6e5
+   gettext/0.20.2-k4lauwg                               py-cycler/0.10.0-py3-rwx4qzp                                   r-quadprog/1.5-5-py2-r3.5-wszn7ct                          (D)
+   gettext/0.21-6uaof5c                          (D)    py-cycler/0.10.0-py3-27jevdw                            (D)    r-quantmod/0.4-10-py2-r3.4-iv47sgy
+   gflags/2.1.2-z2tqcss                                 py-cython/0.25.2-py2-xeqwogr                                   r-quantmod/0.4-10-py2-r3.5-36hdnrc                         (D)
+   ghostscript-fonts/8.11-yhrjddw                       py-cython/0.28.3-py2-gnum3bg                                   r-quantreg/5.29-py2-r3.4-pt7ozpe
+   ghostscript/9.21-vtvh7yk                             py-cython/0.28.3-py3-6wqi6zi                                   r-quantro/1.10.0-py2-r3.4-cuda9-openmpi3-k6tsk3d
+   giflib/5.1.4-7for32j                                 py-cython/0.29-py2-fw72vlz                                     r-qvalue/2.12.0-py2-r3.5-b4pz3zo
+   git/2.18.0-2zftnac                                   py-cython/0.29-py3-wyxvc5b                                     r-r6/2.2.2-py2-r3.4-kvc57ef
+   git/2.25.0-tsrry3o                            (D)    py-cython/0.29.14-py3-q2t3tep                                  r-r6/2.2.2-py2-r3.5-lq4tc6e
+   glew/2.0.0-py2-767nl5f                               py-cython/0.29.21-py3-yfooekb                           (D)    r-r6/2.2.2-py2-r3.5-sl6fup2
+   glew/2.0.0-767nl5f                            (D)    py-dadi/2020-12-02-py3-5qzytcv                                 r-r6/2.5.0-py3-snmwivi                                     (D)
+   glib/2.55.1-py2-e4atpwp                              py-dateutil/2.5.2-py2-7hxzsjr                                  r-randomforest/4.6-12-py2-r3.4-2biqljo
+   glib/2.55.1-py2-exs5ada                              py-dateutil/2.5.2-py3-dnni6vq                           (D)    r-randomglm/1.02-1-py2-r3.5-a67nm7v
+   glib/2.55.1-py2-kdrhlrn                              py-decorator/4.0.9-py2-y3mbrvl                                 r-rappdirs/0.3.1-py2-r3.4-g5tv3l7
+   glib/2.55.1-py2-kkepgi4                              py-decorator/4.3.0-py2-m2mag2i                                 r-rappdirs/0.3.1-py2-r3.5-b5qjt7b                          (D)
+   glib/2.55.1-py2-q4ojffa                              py-decorator/4.3.0-py3-fk77tdo                                 r-raster/2.5-8-py2-r3.5-cv33fil
+   glib/2.55.1-py2-urzhdnk                              py-decorator/4.4.0-py3-377llsy                          (D)    r-raster/3.4-5-py3-mmr6zhg                                 (D)
+   glib/2.55.1-py2-yaaljge                              py-deeptools/2.5.2-py2-lgbtqfe                                 r-rbgl/1.60.0-py2-l2sqwxj
+   glib/2.55.1-py2-yj6daev                              py-dendropy/4.3.0-py2-jtx2bu5                                  r-rcolorbrewer/1.1-2-py2-r3.4-3m73nqu
+   glib/2.55.1-py2-4hhohfp                              py-dendropy/4.3.0-py3-com2xpg                                  r-rcolorbrewer/1.1-2-py2-r3.5-dokjxho
+   glib/2.64.3-py3-3roksqy                              py-dendropy/4.3.0-py3-4jxhxd7                           (D)    r-rcolorbrewer/1.1-2-py2-r3.5-imfo5co
+   glib/2.64.3-py3-5d4erws                       (D)    py-dlcpar/1.0-py2-yp5wf5w                                      r-rcolorbrewer/1.1-2-py3-dwkx4fg                           (D)
+   glm/0.9.7.1-32irnkl                                  py-dnaio/0.3-py3-rnf7pul                                       r-rcpp/0.12.14-py2-r3.4-2kukuie
+   glog/0.3.5-r46nfti                                   py-docutils/0.13.1-py2-qn2pqch                                 r-rcpp/0.12.16-py2-c7oelhb
+   glpk/4.65-kydnpce                                    py-docutils/0.13.1-py2-sie7wj4                                 r-rcpp/0.12.16-py2-nprvxd6
+   glpk/4.65-orh4epl                             (D)    py-docutils/0.13.1-py3-6ahnof2                          (D)    r-rcpp/0.12.16-py2-r3.5-c7oelhb
+   glproto/1.4.17-huoo6bj                               py-editdistance/0.4-py2-ejhxnur                                r-rcpp/0.12.16-py2-r3.5-qi6t74t
+   gmake/4.2.1-aw6zaq6                                  py-entrypoints/0.2.3-py2-6gzqc57                               r-rcpp/1.0.0-py2-r3.5-vfowp2h
+   gmake/4.2.1-fblrgzl                                  py-enum34/1.1.6-py2-mgzixu6                                    r-rcpp/1.0.4.6-py3-zo4r6tx
+   gmake/4.2.1-lb7cfly                           (D)    py-et-xmlfile/1.0.1-py3-d7mwfee                                r-rcpp/1.0.6-py3-vsqb3uj                                   (D)
+   gmap-gsnap/2017-06-16-4oy56bt                        py-fastaindex/0.11rc7-py2-ilmrpiz                              r-rcpparmadillo/0.8.100.1.0-py2-m4g5gmx
+   gmap-gsnap/2018-03-25-qa3kh3t                        py-fastaindex/0.11rc7-py2-sj3lhkk                       (D)    r-rcpparmadillo/0.8.100.1.0-py2-r3.5-6vrcyra
+   gmap-gsnap/2018-07-04-gtu46xu                        py-faststructure/1.0-py2-k4vsldn                               r-rcpparmadillo/0.8.100.1.0-py2-r3.5-65z3l3h               (D)
+   gmap-gsnap/2019-05-12-zjqshxf                 (D)    py-funcsigs/0.4-py2-prasuhx                                    r-rcppblaze/0.2.2-py2-r3.4-xd6bcfz
+   gmp/6.1.2-5odxtlx                                    py-functools32/3.2.3-2-py2-cwgpy4b                             r-rcppeigen/0.3.2.9.0-py2-r3.4-hoqkrh5
+   gmsh/4.0.0-openmpi3-wpq2uve                          py-future/0.16.0-py2-e6u6gc7                                   r-rcppeigen/0.3.3.3.1-py2-r3.4-nhyqxoq
+   gnuplot/5.2.0-py2-fnj3nkc                            py-future/0.18.2-py3-5jn6rlc                            (D)    r-rcppeigen/0.3.3.3.1-py2-r3.5-ciypkdi
+   gnutls/3.5.13-pdshbvl                                py-h5py/2.7.1-py2-atfv2sz                                      r-rcppeigen/0.3.3.3.1-py2-x7sunv7                          (D)
+   gnutls/3.5.13-7a3mvfy                         (D)    py-h5py/2.7.1-py2-cuda9-openmpi3-4rce3fo                       r-rcurl/1.95-4.8-py2-r3.4-p52lgh2
+   go-bootstrap/1.4-bootstrap-20171003-d5kaqez          py-h5py/3.1.0-py3-ydhbua3                               (D)    r-rcurl/1.95-4.8-py2-r3.5-ek5yjmk
+   go-bootstrap/1.4-bootstrap-20171003-7yudi2b   (D)    py-htseq/0.9.1-py2-esf5t5a                                     r-rcurl/1.95-4.8-py2-r3.5-mtlcaqo                          (D)
+   go/1.11-dpfpaxt                                      py-htseq/0.11.2-py2-4757mqt                             (D)    r-rda/1.0.2-1-py2-r3.4-2p7rajj
+   go/1.13.7-lnuors5                             (D)    py-imagesize/0.7.1-py2-mvshre6                                 r-readr/1.1.1-py2-r3.4-ustuilk
+   gobject-introspection/1.49.2-py2-c22meiy             py-imagesize/0.7.1-py3-cinprnx                          (D)    r-readr/1.1.1-py2-r3.5-vyogu6r                             (D)
+   gobject-introspection/1.49.2-py2-dssikkl             py-ipykernel/4.5.0-py2-tpbyi66                                 r-readxl/1.1.0-py2-r3.5-q7nrb4j
+   gobject-introspection/1.49.2-py2-gneeth5             py-ipython-genutils/0.1.0-py2-zevwuba                          r-registry/0.3-py2-r3.4-wt3vsls
+   gobject-introspection/1.49.2-py2-h22fu7c             py-ipython/5.1.0-py2-iub2kkg                                   r-rematch/1.0.1-py2-r3.5-kyfbuvn
+   gobject-introspection/1.49.2-py2-jzc5rxn             py-isort/4.2.15-py2-hmrwyj5                                    r-rematch2/2.1.2-py3-2ijkalw
+   gobject-introspection/1.49.2-py2-khf7q7y             py-jdcal/1.3-py3-jjlyz24                                       r-reprex/0.1.1-py2-r3.5-i2qcxha
+   gobject-introspection/1.49.2-py2-lbo43y3             py-jinja2/2.9.6-py2-xu4tpst                                    r-reshape/0.8.7-py2-r3.4-jv7q2ss
+   gobject-introspection/1.49.2-py2-oie3tbd             py-jinja2/2.9.6-py3-ib6wbhf                             (D)    r-reshape2/1.4.2-py2-r3.4-lpf3jmm
+   gobject-introspection/1.56.1-py3-kexjult             py-joblib/0.11-py3-iq2emj6                                     r-reshape2/1.4.2-py2-r3.5-yb2soxq
+   gobject-introspection/1.56.1-py3-4gxws6m             py-joblib/0.14.0-py3-554jvmk                            (D)    r-reshape2/1.4.2-py2-r3.5-ywy5u5c
+   gobject-introspection/1.56.1-py3-5mggomf      (D)    py-jsonschema/2.5.1-py2-kyuachd                                r-reshape2/1.4.2-py2-ywy5u5c
+   googletest/1.10.0-apujard                            py-jupyter-client/4.4.0-py2-7cri6oz                            r-reshape2/1.4.4-py3-x5mbpmn                               (D)
+   gperf/3.0.4-e7poxgk                                  py-jupyter-console/5.0.0-py2-nxbg7ec                           r-rex/1.1.2-py2-r3.5-opf4eds
+   gperf/3.1-a7w2p7n                                    py-jupyter-core/4.2.0-py2-rmxijvr                              r-rgdal/1.2-16-py2-r3.4-3kl2wqy
+   gperf/3.1-vlpc23n                             (D)    py-jupyter-notebook/4.2.3-py2-6kdolxc                          r-rgdal/1.3-9-py2-r3.5-oiw25ec                             (D)
+   gperftools/2.4-hddm66q                               py-keras/2.0.3-py2-xdmqdaf                                     r-rgeos/0.3-26-py2-r3.4-wvhmlvv
+   gromacs/2018.1-cuda9-openmpi3-icqpm2v                py-keras/2.0.3-py3-gguikks                              (D)    r-rgeos/0.3-26-py2-r3.5-v2ywtxj                            (D)
+   gromacs/2018.1-openmpi3-5ds3yf7                      py-kiwisolver/1.0.1-py2-smsp2e3                                r-rgl/0.98.1-py2-r3.5-awgkg7d
+   gromacs/2018.1-py2-openmpi3-mly3xj7                  py-kiwisolver/1.0.1-py3-qgsqn6a                                r-rgl/0.99.16-py2-r3.5-ozlvors                             (D)
+   gromacs/2018.4-7xvarfz                        (D)    py-kiwisolver/1.1.0-py3-z2qvxbq                                r-rgooglemaps/1.2.0.7-py2-r3.4-iduklpr
+   gsl/2.4-3yckb53                                      py-kiwisolver/1.1.0-py3-4tssl32                         (D)    r-rhmmer/0.1.0-py2-r3.5-o22xvhd
+   gsl/2.5-px4dg7h                               (D)    py-lazy-object-proxy/1.3.1-py2-sy6vrcf                         r-rjags/4-6-py2-r3.4-g2whzuq
+   gtkplus/2.24.32-py2-dlotnzt                          py-lit/0.5.0-py2-3uo6v2u                                       r-rjava/0.9-8-py2-r3.4-wadatwr
+   gtkplus/2.24.32-py2-pjgzlqb                          py-llvmlite/0.20.0-py2-2gbfqvl                                 r-rjson/0.2.15-py2-r3.4-2qdzfsf
+   gtkplus/3.20.10-py3-qprjz54                          py-lzstring/1.0.3-py2-d46rc5o                                  r-rjson/0.2.15-py2-r3.5-iyn6syh                            (D)
+   gtkplus/3.20.10-py3-tgz7g5t                   (D)    py-macs2/2.1.1.20160309-py2-wgwiexf                            r-rjsonio/1.3-0-py2-r3.4-bxrgmjm
+   guile/2.2.0-py2-srj4sx4                              py-mako/1.0.4-py2-db6wscz                                      r-rlang/0.1.2-py2-r3.4-6ilgubm
+   hadoop/2.9.0-dakb3hm                                 py-mako/1.0.4-py2-xr7hz3b                                      r-rlang/0.2.2-py2-r3.5-gy2o2fy
+   hapcut2/2017-07-10-6eivuri                           py-mako/1.0.4-py3-fgy5xbq                               (D)    r-rlang/0.2.2-py2-r3.5-wbf5in4
+   hapdip/2018.02.20-n5yqjzg                            py-mappy/2.2-py2-2bmjpge                                       r-rlang/0.4.10-py3-ssukavg                                 (D)
+   haploview/4.1-i23dhwh                                py-markdown/2.6.7-py2-d3sgo26                                  r-rmarkdown/1.7-py2-r3.5-si35yg6
+   harfbuzz/1.4.6-py2-czk377k                           py-markdown/2.6.11-py2-2bvsk22                          (D)    r-rmpfr/0.6-1-py2-r3.5-w4r4o74
+   harfbuzz/1.4.6-py2-f3yvi66                           py-markupsafe/1.0-py2-ezorswn                                  r-rmpi/0.6-6-py2-openmpi3-oaay64l
+   harfbuzz/1.4.6-py2-gj2ojon                           py-markupsafe/1.0-py2-3mmsmlz                                  r-rmpi/0.6-6-py2-r3.4-cuda9-openmpi3-pkr2ukz
+   harfbuzz/1.4.6-py2-hud6y54                           py-markupsafe/1.0-py3-ix2j3gi                           (D)    r-rmpi/0.6-6-py2-r3.5-mpich-wkiulxt
+   harfbuzz/1.4.6-py2-v372uqf                           py-matplotlib/2.0.2-py2-m755aws                                r-rmpi/0.6-6-py2-r3.5-openmpi3-oaay64l
+   harfbuzz/2.1.3-py2-gnat6zv                           py-matplotlib/2.2.2-py2-442lvtw                                r-rmpi/0.6-6-py2-r3.5-openmpi3-th7q4sc
+   harfbuzz/2.1.3-py2-on5gsh4                           py-matplotlib/2.2.2-py3-ko25og4                                r-rmpi/0.6-9-openmpi3-py3-7nlo5re                          (D)
+   harfbuzz/2.3.1-py2-hkgsatk                           py-matplotlib/3.0.0-py3-xr6eijv                                r-rngtools/1.2.4-py2-r3.4-4gkebzj
+   harfbuzz/2.3.1-py2-sf3p64k                           py-matplotlib/3.2.0-py3-d4yztxj                                r-rnoaa/0.8.4-py2-r3.5-yqxcgqm
+   harfbuzz/2.3.1-py3-ct4hdag                           py-matplotlib/3.3.3-py3-myxuthi                         (D)    r-robust/0.4-18-py2-r3.5-tpfv5jl
+   harfbuzz/2.3.1-py3-4csovjs                    (D)    py-mccabe/0.6.1-py2-ci5fybx                                    r-robustbase/0.92-7-py2-r3.4-sj3fat7
+   hdf5/1.8.19-cuda9-openmpi3-cojo5sm                   py-mg-rast-tools/2018.04.17-py2-r3.4-dismtmy                   r-robustbase/0.92-7-py2-r3.5-lkaejzo                       (D)
+   hdf5/1.10.1-cuda9-openmpi3-akgrqz7                   py-misopy/0.5.4-py2-z5bkw3d                                    r-rocr/1.0-7-py2-r3.4-kuc2phw
+   hdf5/1.10.1-cuda9-openmpi3-grwy2ki                   py-mistune/0.7.1-py2-dsodiek                                   r-rodbc/1.3-13-py2-r3.5-eyiud4u
+   hdf5/1.10.1-cuda9-openmpi3-4wi422y                   py-mlxtend/0.16.0-py3-mnznath                                  r-rots/1.8.0-py2-r3.5-iopprln
+   hdf5/1.10.1-mpich-qokf6ws                            py-more-itertools/4.3.0-py2-cmfo7o3                            r-roxygen2/5.0.1-py2-r3.4-g3akbf7
+   hdf5/1.10.1-openmpi3-gei6krt                         py-more-itertools/4.3.0-py3-2s6yvdj                     (D)    r-roxygen2/5.0.1-py2-r3.5-5uj2evr
+   hdf5/1.10.2-openmpi3-4z6xnr5                         py-mpi4py/3.0.0-py2-cuda9-openmpi3-3v6ih3f                     r-roxygen2/6.1.1-py2-r3.5-q7puyli                          (D)
+   hdf5/1.10.3-openmpi3-g7e5dmb                         py-mpi4py/3.0.0-py2-openmpi3-ub53gew                    (D)    r-rpart/4.1-11-py2-r3.4-hss2dap
+   hdf5/1.10.3-openmpi3-wbpru66                         py-mpmath/1.0.0-py2-6yjp5oz                                    r-rpostgresql/0.4-1-py2-r3.5-2tjjunj
+   hdf5/1.10.3-tqvtfv6                                  py-mpmath/1.0.0-py2-zlqroev                             (D)    r-rprojroot/1.2-py2-r3.4-kiffuhh
+   hdf5/1.10.4-mpich-pgwllwc                            py-multiqc/1.5-py2-lqqx3ht                                     r-rprojroot/1.2-py2-r3.5-7odecom
+   hdf5/1.10.4-openmpi3-vtixs4j                         py-nbconvert/4.2.0-py2-3auugen                                 r-rprojroot/2.0.2-py3-l7gvc2u                              (D)
+   hdf5/1.10.5-openmpi3-fx7c4wu                         py-nbformat/4.1.0-py2-qmymuji                                  r-rrblup/4.6-py2-r3.5-3vfpm4x
+   hdf5/1.10.6-openmpi3-py3-7siqbf4                     py-netcdf4/1.2.7-py2-openmpi3-ep24p4d                          r-rrcov/1.4-7-py2-r3.5-gkrtv4g
+   hdf5/1.10.7-46zruon                           (D)    py-networkx/1.10-py2-2rrvpu6                                   r-rrpp/0.3.0-py2-r3.5-7skz4oy
+   help2man/1.47.4-phopsy7                              py-networkx/2.1-py2-fbsf2d3                                    r-rsamtools/1.28.0-py2-r3.4-cuda9-openmpi3-7qj6enh
+   help2man/1.47.8-7sce2nu                              py-networkx/2.1-py3-mfsvnsu                                    r-rsamtools/1.32.2-py2-r3.5-mpich-hq3t6jr                  (D)
+   help2man/1.47.11-ckxm7o5                             py-networkx/2.2-py3-7a4en4b                             (D)    r-rsolnp/1.16-py2-r3.4-zqbypnc
+   help2man/1.47.11-66fv46c                      (D)    py-nose/1.3.7-py2-4myx537                                      r-rsqlite/2.0-py2-r3.4-whxxfit
+   hisat2/2.1.0-tnpjajc                                 py-nose/1.3.7-py3-zve6qgj                               (D)    r-rsqlite/2.0-py2-r3.5-sccyprt
+   hisat2/2.2.0-5kvb7f2                          (D)    py-numba/0.35.0-py2-rlbwcvu                                    r-rsqlite/2.0-py2-r3.5-zew7f5p                             (D)
+   hisea/2017.12.26-py2-zop7jda                         py-numexpr/2.6.1-py2-f3lo5mj                                   r-rstan/2.17.2-py2-r3.4-ttyjsia
+   hmmer/3.1b2-cuda9-openmpi3-4ab6zzt                   py-numexpr/2.6.5-py3-vjjqpla                                   r-rstan/2.17.2-py2-r3.5-5ephc2n                            (D)
+   hmmer/3.1b2-openmpi3-xcxe4mo                         py-numexpr/2.6.5-py3-zradyzj                                   r-rstantools/1.5.1-py2-r3.5-7aypq6n
+   hmmer/3.2.1-mpich-nl2zszt                            py-numexpr/2.7.2-py3-tpgskg6                            (D)    r-rstudioapi/0.6-py2-r3.4-vxvhco4
+   hmmer/3.2.1-openmpi3-uyjannl                  (D)    py-numpy/1.13.3-py2-sx2jhbh                                    r-rstudioapi/0.7-py2-r3.5-bok2rqo
+   hoomd-blue/2.2.2-py3-f2fl3l7                         py-numpy/1.13.3-py3-s4k366j                                    r-rstudioapi/0.7-py2-r3.5-q62r2gw
+   hoomd-blue/2.2.2-py3-openmpi3-z4c5cgq         (D)    py-numpy/1.14.2-py3-zugitkk                                    r-rstudioapi/0.13-py3-ylpqjot                              (D)
+   hpl/2.2-openmpi3-f43ybdg                             py-numpy/1.15.1-py2-wsjcwec                                    r-rtracklayer/1.36.6-py2-r3.4-cuda9-openmpi3-jh4sd5z
+   htslib/1.6-fnhnk3u                                   py-numpy/1.15.1-py2-6ptlq2c                                    r-rtracklayer/1.40.5-py2-r3.5-mpich-2ny5sm2                (D)
+   htslib/1.7-wec2wcm                                   py-numpy/1.15.2-py2-fdkji5s                                    r-rvest/0.3.2-py2-r3.4-63hcroc
+   htslib/1.8-77okcrw                                   py-numpy/1.15.2-py3-i2pxd4u                                    r-rvest/0.3.2-py2-r3.5-hg75pr2                             (D)
+   htslib/1.9-xjiydch                                   py-numpy/1.15.2-py3-wwyx7ek                                    r-s4vectors/0.14.7-py2-r3.4-girz5av
+   htslib/1.10.2-ylwwcx3                                py-numpy/1.18.1-py3-d27wxj2                                    r-s4vectors/0.18.3-py2-r3.5-uc2fykw
+   htslib/1.10.2-4xqakok                         (D)    py-numpy/1.19.4-py3-drqm2op                             (D)    r-s4vectors/0.18.3-py2-r3.5-zu25lvo                        (D)
+   hwloc/1.11.8-cuda8-wshjmj5                           py-numpydoc/0.6.0-py2-iady7mn                                  r-sandwich/2.3-4-py2-r3.4-sqk67fv
+   hwloc/1.11.8-cuda9-msyhlx6                           py-openpyxl/2.4.5-py3-xd4nxle                                  r-sandwich/2.3-4-py2-r3.5-reh5wly                          (D)
+   hwloc/1.11.8-ptr2u6t                                 py-packaging/16.8-py2-sp4wome                                  r-scales/0.5.0-py2-r3.4-g4z3iee
+   hwloc/1.11.9-cuda9-gkw6d3j                           py-packaging/16.8-py2-vjsojew                                  r-scales/0.5.0-py2-r3.5-j7imynz
+   hwloc/1.11.9-gold444                                 py-packaging/16.8-py2-2dmuld4                                  r-scales/0.5.0-py2-r3.5-pzw4jwy
+   hwloc/1.11.9-iifo7ex                                 py-packaging/16.8-py3-cbnlhkm                                  r-scales/1.1.1-py3-oeijduu                                 (D)
+   hwloc/1.11.9-py2-lwsded2                             py-packaging/16.8-py3-xlopy4a                           (D)    r-scatterplot3d/0.3-40-py2-r3.5-wvrazf2
+   hwloc/1.11.11-co4cens                                py-pandas/0.21.1-py2-326uzkn                                   r-segmented/1.3-1-py3-3x4lsht
+   hwloc/1.11.11-cu4sj6b                                py-pandas/0.21.1-py3-dtxtdrs                                   r-selectr/0.3-1-py2-r3.4-huvrehw
+   hwloc/1.11.11-pkorjlt                                py-pandas/0.23.4-py3-sx6iffy                                   r-selectr/0.3-1-py2-r3.5-pgvvryq                           (D)
+   hwloc/1.11.11-py2-ldp52gp                            py-pandas/1.2.1-py3-73ji3z5                             (D)    r-seqinr/4.2-5-py3-2ybq4o3
+   hwloc/1.11.11-3gvuaqc                                py-pathlib2/2.1.0-py2-z4ht2bx                                  r-seqlogo/1.44.0-py2-r3.4-6niyt5q
+   hwloc/2.4.0-j3a5epf                           (D)    py-pexpect/4.2.1-py2-wylmgf3                                   r-sf/0.5-5-py2-r3.4-7w6k4l6
+   hybpiper/1.2.0-py2-4ofyjqo                           py-pickleshare/0.7.4-py2-oe7qzqs                               r-sf/0.5-5-py2-r3.5-jbvruoa                                (D)
+   hypre/2.13.0-openmpi3-3ot2sxv                        py-picrust2/2.3.0-b-py3-y75pay5                                r-sfsmisc/1.1-0-py2-r3.4-v5pn4oe
+   hypre/2.15.0-openmpi3-ukcbj67                 (D)    py-pillow/3.2.0-py2-ods24od                                    r-shiny/1.0.5-py2-r3.4-b3mzhca
+   icu4c/60.1-6yusggv                                   py-pillow/3.2.0-py3-xennqso                                    r-shiny/1.0.5-py2-r3.5-nadhnbr
+   icu4c/64.1-imiooqd                                   py-pillow/5.1.0-py3-mugbfrq                                    r-shiny/1.0.5-py2-r3.5-4fhf52v
+   icu4c/65.1-v6fesza                                   py-pillow/7.0.0-py3-l4ojcng                                    r-shiny/1.5.0-py3-sy6tp5g                                  (D)
+   icu4c/65.1-py2-haptyjv                               py-pillow/7.2.0-py3-34pltak                             (D)    r-siggenes/1.50.0-py2-r3.4-copl7rz
+   icu4c/65.1-py3-v6fesza                        (D)    py-pip/9.0.1-py2-wytt5sn                                       r-sm/2.2-5.5-py2-r3.5-yzz47kg
+   idba/1.1.3-xnzv4wk                                   py-pip/9.0.1-py3-dpds55c                                       r-snow/0.4-2-py2-r3.4-cuda9-openmpi3-y5bh2eb
+   igv/2.8.0-scju2hp                                    py-pip/10.0.1-py2-awax6zo                                      r-snow/0.4-2-py2-r3.5-mpich-zqcvweo
+   igvtools/2.3.98-kdam6kp                              py-pip/18.1-py2-lbbb5yp                                        r-snow/0.4-2-py2-r3.5-openmpi3-zpt7uz3                     (D)
+   image-magick/7.0.5-9-py2-6xplmhr                     py-pip/20.2-py3-gibulwf                                 (D)    r-snowfall/1.84-6.1-py2-r3.4-cuda9-openmpi3-5fo5zju
+   impute2/2.3.2-4bioaor                                py-pkgconfig/1.2.2-py2-bas3pfn                                 r-snprelate/1.12.2-py2-r3.4-dzjxl6t
+   infernal/1.1.2-j3mzi6h                               py-pkgconfig/1.5.1-py3-vhzajhq                          (D)    r-sourcetools/0.1.6-py2-r3.4-lboy6df
+   inputproto/2.3.2-gap7to6                             py-pluggy/0.7.1-py2-5cbg4i2                                    r-sourcetools/0.1.6-py2-r3.5-qzaj2j3
+   inputproto/2.3.2-lwzvvik                      (D)    py-pluggy/0.7.1-py3-wvwayr5                             (D)    r-sourcetools/0.1.6-py2-r3.5-rzktd3t
+   intel-mkl-dnn/0.11-mzxvoxq                           py-ply/3.11-py2-sjxaivz                                        r-sourcetools/0.1.7-py3-ad5ff5l                            (D)
+   intel-mkl/2018.1.163-l32qhsi                         py-pmw/2.0.0-py2-26wplkf                                       r-sp/1.2-3-py2-r3.4-azoqigq
+   intel-tbb/2018.2-hi7jhdg                             py-poster/0.8.1-py2-s7y44fu                                    r-sp/1.2-3-py2-r3.5-2kgh65a
+   interproscan/5.38-76.0-py3-7ahddsa                   py-prettytable/0.7.2-py2-m7vglu5                               r-sp/1.4-5-py3-ce56ob6                                     (D)
+   intltool/0.51.0-acgss3n                              py-prompt-toolkit/1.0.9-py2-6ztwhgy                            r-sparsem/1.74-py2-r3.4-z2egrud
+   intltool/0.51.0-yu2aryd                              py-ptyprocess/0.5.1-py2-rai5g7o                                r-spatial/7.3-11-py2-r3.5-s3xglbi
+   intltool/0.51.0-7gyycfb                       (D)    py-py/1.4.33-py2-cwa2par                                       r-spdata/0.3.8-py3-wrxffy6
+   isl/0.18-3wslknu                                     py-py/1.5.4-py2-abtubpk                                        r-spem/1.18.0-py2-r3.4-xg7xjnw
+   itsx/1.0.11-cuda9-openmpi3-scjox46                   py-py/1.5.4-py3-xocwdip                                 (D)    r-splitstackshape/1.4.4-py2-r3.4-eexnelv
+   jags/4.2.0-inyliwp                                   py-py2bit/0.2.1-py2-wg3hjol                                    r-stanheaders/2.10.0-2-py2-r3.4-hn52yjt
+   jasper/1.900.1-j5dxqtz                               py-pybedtools/0.6.9-py2-km3pqqd                                r-stanheaders/2.17.1-py2-r3.4-sdm7hz3
+   jasper/2.0.14-75rlieo                         (D)    py-pybedtools/0.7.10-py2-a7gbt3r                        (D)    r-stanheaders/2.17.1-py2-r3.5-46voqf5                      (D)
+   jdk/8u141-b15-xf726oe                                py-pybigwig/0.3.4-py2-w4fmye2                                  r-stringi/1.1.5-py2-kyby77t
+   jdk/8u172-b11-rnauqmr                                py-pybigwig/0.3.4-py3-sgh7lsu                           (D)    r-stringi/1.1.5-py2-r3.4-hw7h6fe
+   jdk/10.0.2_13-fr57jru                         (D)    py-pybind11/2.5.0-py3-wy6zhwi                                  r-stringi/1.1.5-py2-r3.5-kyby77t
+   jellyfish/1.1.11-py2-hyeiz54                         py-pybind11/2.5.0-py3-zq6rqqe                           (D)    r-stringi/1.1.5-py2-r3.5-nzxe6mj
+   jellyfish/2.2.7-py2-4niyehs                          py-pycparser/2.17-py2-l5e6773                                  r-stringi/1.5.3-py3-zqauzpd                                (D)
+   jellyfish/2.2.7-py2-4ntksjo                   (D)    py-pycurl/7.43.0-py2-7yvjcwm                                   r-stringr/1.2.0-py2-r3.4-ncynzzd
+   jemalloc/4.5.0-nrlun2l                               py-pyfaidx/0.5.5.2-py3-btfvjez                                 r-stringr/1.2.0-py2-r3.5-diiptio
+   jq/1.5-4xy2cfq                                       py-pyfaidx/0.5.5.2-py3-ezwtap6                          (D)    r-stringr/1.2.0-py2-r3.5-uoogz7r
+   json-c/0.13.1-z2t45bu                                py-pygments/2.2.0-py2-b3e5upk                                  r-stringr/1.2.0-py2-uoogz7r
+   julia/1.0.0-py2-vnrrqk6                              py-pygments/2.2.0-py3-sexh3hb                           (D)    r-stringr/1.4.0-py3-wdp6mhj                                (D)
+   k8/0.2.4-6usj5zs                                     py-pygpu/0.7.5-py3-cuda9-4p42mlb                               r-strucchange/1.5-1-py2-r3.5-csu6wrd
+   kaks-calculator/2.0-lpuhq6g                          py-pylint/1.6.5-py2-5sehdxj                                    r-subplex/1.4-1-py2-r3.5-dml6s3c
+   kallisto/0.43.1-mpich-q3xsues                        py-pymol/2.1.0-py2-etrwza2                                     r-summarizedexperiment/1.6.5-py2-r3.4-iiawscf
+   kallisto/0.43.1-mpich-5lt6lqk                        py-pyparsing/2.2.0-py2-ei7qscv                                 r-summarizedexperiment/1.10.0-py2-r3.5-mpich-bn3e6xy
+   kallisto/0.46.2-openmpi3-py3-bjls6kt          (D)    py-pyparsing/2.2.0-py2-fmr6gjk                                 r-summarizedexperiment/1.10.0-py2-r3.5-openmpi3-33fxvzq    (D)
+   kbproto/1.0.7-u77b2q6                                py-pyparsing/2.2.0-py2-6cmlimo                                 r-survival/2.41-3-py2-r3.4-hahoxt5
+   kbproto/1.0.7-xjtsozl                         (D)    py-pyparsing/2.2.0-py3-e74nhn6                                 r-survival/2.41-3-py2-r3.5-h4cuyqk
+   kmergenie/1.7044-py2-r3.4-oigcykd                    py-pyparsing/2.2.0-py3-pgo266z                                 r-survival/2.41-3-py2-r3.5-wq2bmoi
+   kraken/1.0-py2-paf2xmn                               py-pyparsing/2.4.2-py3-wc56kol                                 r-survival/2.42-6-py2-r3.5-zyfqqlx                         (D)
+   lammps/20170922-py2-cuda9-openmpi3-mdirmsh           py-pyparsing/2.4.2-py3-53rcrcr                          (D)    r-tensora/0.36-py2-r3.4-theuo6v
+   last/869-56gezob                                     py-pypeflow/2017-05-04-py2-jgb47wx                             r-testit/0.7-py2-r3.4-jn7xxjj
+   latte/1.0.1-cuda9-openmpi3-s2jiwed                   py-pyqi/0.3.2-py2-wotjj7p                                      r-testit/0.7-py2-r3.5-falyqlh
+   lcms/2.8-xaqni3b                                     py-pyqt/4.11.3-py2-kqlfzri                                     r-testit/0.7-py2-r3.5-xtioj4r                              (D)
+   lcms/2.9-kyy57yo                                     py-pyrad/3.0.66-py2-pia2aqp                                    r-testthat/1.0.2-py2-r3.4-5supiyz
+   lcms/2.9-p4xpr43                              (D)    py-pysam/0.7.7-py2-utae2pa                                     r-testthat/1.0.2-py2-r3.5-ioc3ga6
+   ldak/5.1-ree2scg                                     py-pysam/0.13-py2-fyuazcs                                      r-testthat/1.0.2-py2-r3.5-5mqpe4d
+   leveldb/1.20-6juww6u                                 py-pysam/0.14.1-py3-bbx2pg4                                    r-testthat/3.0.1-py3-e2u2t6c                               (D)
+   libaio/0.3.110-ikh4t2h                               py-pysam/0.15.2-py3-6eoxnly                             (D)    r-tfbstools/1.16.0-py2-r3.4-cuda9-openmpi3-rlw57k3
+   libarchive/3.3.2-3kjt4gj                             py-pyscaf/0.12a4-py2-hei3vvu                                   r-tfmpvalue/0.0.6-py2-r3.4-xjf34lh
+   libatomic-ops/7.6.6-hst5csp                          py-pyscaf/0.12a4-py2-nndm3zn                            (D)    r-th-data/1.0-8-py2-r3.4-o2lurhh
+   libbeagle/2.1.2-uzciztv                              py-pytables/3.3.0-py2-cuda9-openmpi3-jrd3eez                   r-threejs/0.2.2-py2-r3.4-mnfpdck
+   libbeagle/3.1.2-nxszy75                       (D)    py-pytest/3.7.2-py2-b3mqj24                                    r-tibble/1.3.4-py2-r3.4-vc3qzji
+   libbsd/0.8.6-5ugdsox                                 py-pytest/3.7.2-py3-l65jw2j                             (D)    r-tibble/1.3.4-py2-r3.5-sccv6lj
+   libbsd/0.9.1-li3rs5m                                 py-python-dateutil/2.8.0-py3-iadxv2f                           r-tibble/1.3.4-py2-r3.5-wiohpat
+   libbsd/0.10.0-gtvfbft                                py-python-dateutil/2.8.0-py3-uosangp                           r-tibble/3.0.5-py3-pkyarvt                                 (D)
+   libbsd/0.10.0-wgsg6tq                         (D)    py-python-dateutil/2.8.0-py3-3ayv5xa                    (D)    r-tidycensus/0.3.1-py2-r3.4-is3jdh3
+   libcerf/1.3-p5vle4j                                  py-pytz/2017.2-py2-xdvtwfd                                     r-tidyr/0.5.1-py2-r3.4-fv6p25a
+   libcheck/0.12.0-dmktxiy                              py-pytz/2017.2-py3-wzpe2la                                     r-tidyr/0.7.2-py2-r3.5-qzjmg7e                             (D)
+   libdivsufsort/2.0.1-5ruqkwl                          py-pytz/2020.1-py3-2fyxnt2                              (D)    r-tidyselect/0.2.3-py2-r3.5-kseqxid
+   libedit/3.1-20170329-nqyfczz                         py-pyvcf/0.6.0-py3-xa23qf7                                     r-tidyselect/1.1.0-py3-oeuhjjo                             (D)
+   libedit/3.1-20191231-2tlvgkk                  (D)    py-pyvcf/0.6.7-py2-pcenwr3                                     r-tidyverse/1.2.1-py2-r3.5-zvowqw7
+   libelf/0.8.13-7hdn4ui                                py-pyvcf/0.6.8-py2-ublaxdt                              (D)    r-tigris/0.5.3-py2-r3.4-xdvupw3
+   libepoxy/1.4.3-py3-vrfab2n                           py-pyyaml/3.11-py2-faug7yh                                     r-timedate/3012.100-py2-r3.5-3oze7i7
+   libepoxy/1.4.3-py3-3tsbcam                    (D)    py-pyyaml/3.11-py3-i4wfxvy                              (D)    r-tmixclust/1.0.1-py2-r3.4-cuda9-openmpi3-fbdn4oo
+   libevent/2.0.21-kr4uctp                              py-requests-toolbelt/0.8.0-py2-5zmdkz5                         r-triebeard/0.3.0-py2-r3.5-zw5vpk4
+   libevent/2.0.21-yprcni4                              py-requests/2.14.2-py2-7cyzw7l                                 r-trimcluster/0.1-2-py2-r3.4-jdm7ol5
+   libevent/2.1.8-lvvff3j                               py-requests/2.14.2-py3-ootiltr                          (D)    r-truncnorm/1.0-8-py2-r3.4-6cbi4d4
+   libevent/2.1.8-zu33zde                        (D)    py-rseqc/2.6.4-py2-r3.5-ug2wfwh                                r-truncnorm/1.0-8-py2-r3.5-44a4nog                         (D)
+   libfabric/1.5.3-tdx4w3v                              py-scientificpython/2.8.1-py2-dzaahij                          r-tseries/0.10-42-py2-r3.5-vfyyhan
+   libfabric/1.6.0-enlsdou                              py-scikit-learn/0.13.1-py2-psl42je                             r-ttr/0.23-1-py2-r3.4-yh7hfc4
+   libfabric/1.6.0-rz4zjo6                              py-scikit-learn/0.18.1-py2-uqbs5ic                             r-ttr/0.23-1-py2-r3.5-xwzvbqo                              (D)
+   libfabric/1.6.0-ut4zxxc                              py-scikit-learn/0.20.0-py3-hahzgcb                             r-udunits2/0.13-py2-r3.4-r7yxxyw
+   libfabric/1.7.1-aszmvgy                       (D)    py-scikit-learn/0.21.2-py3-eynmzqr                      (D)    r-udunits2/0.13-py2-r3.5-l5hjay6                           (D)
+   libffi/3.2.1-sacvu6i                                 py-scipy/1.0.0-py2-flqcuxg                                     r-units/0.4-6-py2-r3.4-6alsg7k
+   libffi/3.2.1-4s3dshk                                 py-scipy/1.0.0-py3-crt6aae                                     r-units/0.4-6-py2-r3.5-ta3rmie
+   libffi/3.3-lrlh6qi                                   py-scipy/1.1.0-py2-rrg4qpb                                     r-units/0.6-7-py3-vlcpylo                                  (D)
+   libffi/3.3-otgxbwu                            (D)    py-scipy/1.1.0-py3-zfiwiow                                     r-urltools/1.7.3-py2-r3.5-fj5whvz
+   libfontenc/1.1.3-lq55lgq                             py-scipy/1.1.0-py3-pzig4lr                                     r-utf8/1.1.4-py3-nncrrld
+   libfontenc/1.1.3-5wlzgnc                      (D)    py-scipy/1.5.4-py3-35nibs3                                     r-utils/2.5.0-py2-r3.4-yqkmtcf
+   libgcrypt/1.8.1-wsin6oz                              py-scipy/1.6.0-py3-dwtst2n                              (D)    r-utils/2.5.0-py2-r3.5-fw72aac                             (D)
+   libgcrypt/1.8.5-5febj6m                       (D)    py-setuptools-scm/1.15.6-py2-tetznpo                           r-uuid/0.1-2-py2-r3.4-7eboanv
+   libgd/2.2.4-yhtzrt7                                  py-setuptools-scm/3.1.0-py2-ag3swcb                            r-varselrf/0.7-8-py2-r3.4-i22eeiz
+   libgeotiff/1.4.2-n25eeht                             py-setuptools-scm/3.1.0-py3-vridcyv                            r-vcd/1.4-1-py2-r3.4-6c4p6px
+   libgeotiff/1.4.2-27ebhgz                             py-setuptools-scm/3.3.3-py3-2m4n2ay                            r-vctrs/0.3.6-py3-ajbnw5i
+   libgeotiff/1.6.0-kqwrnxi                      (D)    py-setuptools-scm/4.1.2-py3-cyqtrca                            r-vegan/2.5-7-py3-2pcfswe
+   libgpg-error/1.27-fujfyzn                            py-setuptools-scm/4.1.2-py3-xue66d7                     (D)    r-vfs/1.0.2-py2-r3.5-o6dinir
+   libgpg-error/1.36-quxkdoq                            py-setuptools/25.2.0-py2-db5aqd4                               r-vgam/1.0-4-py2-r3.4-3kud4c6
+   libgpg-error/1.37-saclbgd                     (D)    py-setuptools/35.0.2-py2-dpmyzxo                               r-viridis/0.4.0-py2-r3.4-oj5nrdk
+   libgpuarray/0.7.5-cuda9-bxmj3gh                      py-setuptools/35.0.2-py2-hqrsjff                               r-viridis/0.4.0-py2-r3.5-gifc6to
+   libgtextutils/0.7-jcyezv2                            py-setuptools/35.0.2-py2-sascix4                               r-viridis/0.4.0-py2-r3.5-x3gfls6                           (D)
+   libice/1.0.9-v2yilgg                                 py-setuptools/35.0.2-py3-cgovd3b                               r-viridislite/0.2.0-py2-r3.4-lpkwaas
+   libice/1.0.9-yuawlqf                          (D)    py-setuptools/35.0.2-py3-kvj5vuz                               r-viridislite/0.2.0-py2-r3.5-klvbnd6
+   libiconv/1.15-vlje6ju                                py-setuptools/41.4.0-py3-clqnrg4                               r-viridislite/0.2.0-py2-r3.5-3pckfit
+   libiconv/1.16-xcmzb6a                                py-setuptools/41.4.0-py3-s66qbuo                               r-viridislite/0.3.0-py3-jphwz7i                            (D)
+   libiconv/1.16-xqfklyc                         (D)    py-setuptools/44.1.0-py2-fcc6eu2                               r-waldo/0.2.3-py3-hgedyys
+   libjpeg-turbo/1.5.0-kuy56o2                          py-setuptools/46.1.3-py3-t43vgqz                               r-webshot/0.5.1-py2-r3.5-sitskhf
+   libjpeg-turbo/1.5.0-plsq6cx                          py-setuptools/46.1.3-py3-zghmeqy                               r-wgcna/1.64-1-py2-r3.5-vv57766
+   libjpeg-turbo/2.0.3-lxrshbq                          py-setuptools/49.2.0-py3-e5n5efu                               r-whisker/0.3-2-py2-r3.4-s7x4tfl
+   libjpeg-turbo/2.0.3-3qvasrq                          py-setuptools/50.1.0-py3-ii6gybf                               r-whisker/0.3-2-py2-r3.5-ddcpckf                           (D)
+   libjpeg-turbo/2.0.4-g7kqwyz                   (D)    py-setuptools/50.3.2-py3-ftsqp2f                        (D)    r-withr/1.0.2-py2-r3.4-xaxxjqc
+   libjpeg/9c-h3otql3                                   py-simplegeneric/0.8.1-py2-ytko76u                             r-withr/1.0.2-py2-r3.5-gkernq3
+   libmatheval/1.1.11-wwl3vuo                           py-simplejson/3.10.0-py2-cgyv7p7                               r-withr/2.4.0-py3-rxfqy5a                                  (D)
+   libmng/2.0.3-boetshl                                 py-singledispatch/3.4.0.3-py2-qwld3gu                          r-xlsx/0.5.7-py2-r3.4-bk5n3cu
+   libmng/2.0.3-37pstoz                          (D)    py-sip/4.16.7-py2-j32ztr2                                      r-xlsxjars/0.6.1-py2-r3.4-ghcl7p6
+   libnl/3.3.0-dy57k3z                                  py-six/1.10.0-py2-qib55bg                                      r-xml/3.98-1.9-py2-r3.4-pvznlga
+   libnova/0.15.0-wt7hedy                               py-six/1.10.0-py2-tbiyqo4                                      r-xml/3.98-1.9-py2-r3.5-jgzb6zq
+   libpciaccess/0.13.5-qxhgslw                          py-six/1.10.0-py2-u5uwy5o                                      r-xml/3.98-1.9-py2-r3.5-u2anr4x                            (D)
+   libpciaccess/0.16-tvxbsj7                     (D)    py-six/1.10.0-py3-dt6jiah                                      r-xml2/1.1.1-py2-r3.4-4lsegit
+   libpng/1.2.57-heed2oc                                py-six/1.10.0-py3-5f27zta                                      r-xml2/1.1.1-py2-r3.5-e2znoxg                              (D)
+   libpng/1.6.29-3ivpdto                                py-six/1.12.0-py3-we73arn                                      r-xtable/1.8-2-py2-r3.4-vhwavbb
+   libpng/1.6.37-wc4lkwl                                py-six/1.14.0-py3-lzvtseg                                      r-xtable/1.8-2-py2-r3.5-kc23h7g
+   libpng/1.6.37-p24imzt                         (D)    py-six/1.15.0-py3-hkrc236                                      r-xtable/1.8-2-py2-r3.5-v7ui5ho
+   libpthread-stubs/0.4-l4k4ijz                         py-six/1.15.0-py3-xignsiu                               (D)    r-xtable/1.8-4-py3-rtkuawl                                 (D)
+   libpthread-stubs/0.4-ysy56bb                  (D)    py-snowballstemmer/1.2.1-py2-zigc2zs                           r-xts/0.9-7-py2-r3.4-wyzotgn
+   libsigsegv/2.11-om53yuf                              py-snowballstemmer/1.2.1-py3-ec4wlqy                    (D)    r-xts/0.11-2-py2-r3.5-6hg4zlm                              (D)
+   libsigsegv/2.11-3byxblk                              py-spectra/0.0.8-py2-zxdlemv                                   r-xvector/0.16.0-py2-r3.4-rxqvbjf
+   libsigsegv/2.12-dpvxtlh                              py-spectra/0.0.11-py2-wcyghbq                                  r-xvector/0.20.0-py2-r3.5-c6bizxo
+   libsigsegv/2.12-oywfhvk                       (D)    py-spectra/0.0.11-py2-42r6433                           (D)    r-xvector/0.20.0-py2-r3.5-oqibk3b                          (D)
+   libsm/1.2.2-u4duloh                                  py-sphinx-rtd-theme/0.2.5b1-py2-ioqennr                        r-yaml/2.1.14-py2-r3.4-ff3dnwr
+   libsm/1.2.2-7aqs5p3                                  py-sphinx-rtd-theme/0.2.5b1-py3-4axdcys                 (D)    r-yaml/2.1.14-py2-r3.5-2f372rz
+   libsm/1.2.3-fwebfrq                           (D)    py-sphinx/1.4.5-py3-4jdh2yt                                    r-yaml/2.1.14-py2-r3.5-7t2bi6a                             (D)
+   libsodium/1.0.15-tdragwh                             py-sphinx/1.6.3-py2-gemmgk4                                    r-yarn/1.2.0-py2-r3.4-cuda9-openmpi3-s3whg63
+   libsvm/322-7gzdcbu                                   py-sphinx/1.7.4-py3-u6ll4um                             (D)    r-zlibbioc/1.22.0-py2-r3.4-6ubqj2l
+   libszip/2.1.1-uepok6b                                py-sphinxcontrib-websupport/1.0.1-py2-ev766gd                  r-zlibbioc/1.26.0-py2-r3.5-cglecxp
+   libtiff/4.0.8-ls6m5vr                                py-sphinxcontrib-websupport/1.0.1-py3-fqm36yb           (D)    r-zlibbioc/1.26.0-py2-r3.5-plnuzch                         (D)
+   libtiff/4.0.9-eerxq3w                                py-subprocess32/3.2.7-py2-5jkkh4b                              r-zoo/1.7-14-py2-r3.4-egwoaf4
+   libtiff/4.0.9-ktztape                                py-sympy/1.1.1-py2-6dd5ri4                                     r-zoo/1.7-14-py2-r3.5-ixwpzfo                              (D)
+   libtiff/4.0.9-2vn7ucu                                py-sympy/1.1.1-py2-zosyphy                              (D)    r/3.4.3-py2-kaltwmm
+   libtiff/4.0.10-2xh6mk5                               py-theano/0.8.2-py2-yedaa2c                                    r/3.5.0-py2-el7uoxe
+   libtiff/4.0.10-6zle3js                               py-theano/1.0.1-py3-tn5mnt3                                    r/3.5.0-py2-hqpehv5
+   libtiff/4.0.10-7zp2zfw                               py-theano/1.0.2-py3-cuda9-mjlvqov                       (D)    r/3.5.0-py2-qqwf6c6
+   libtiff/4.0.10-57uhn4f                        (D)    py-tornado/4.4.0-py2-qblm2r4                                   r/3.5.0-py2-ufvuwmm
+   libtool/2.4.6-hnkxexo                                py-traitlets/4.3.1-py2-dgtz5la                                 r/3.5.0-py2-x335hrh
+   libtool/2.4.6-swiq7rt                         (D)    py-typing/3.6.1-py2-cer2brc                                    r/3.6.0-py2-fupx2uq
+   libunistring/0.9.7-ibu54zx                           py-typing/3.6.1-py3-qofeokj                             (D)    r/3.6.3-py3-oywcw22
+   libunwind/1.1-wiabe6r                                py-vcversioner/2.16.0.0-py2-emmwhcl                            r/3.6.3-py3-sxv6dw3                                        (D)
+   libuuid/1.0.3-n4dikzc                                py-virtualenv/16.0.0-py2-2pk57bv                               randfold/2.0.1-4oxd4y3
+   libuuid/1.0.3-nt4g6ke                         (D)    py-virtualenv/16.0.0-py3-vxbweyf                               randrproto/1.5.0-c32nkh4
+   libx11/1.6.5-gzzvgt3                                 py-virtualenv/16.7.6-py2-bi7hojt                               raxml/8.2.11-cuda9-openmpi3-cgkorxj
+   libx11/1.6.5-6zkj6ch                                 py-virtualenv/16.7.6-py3-gtq4dvy                               raxml/8.2.11-cuda9-openmpi3-4lea4gq
+   libx11/1.6.7-inzooc2                                 py-virtualenv/16.7.6-py3-slxbg2x                        (D)    raxml/8.2.11-openmpi3-ffoixg2                              (D)
+   libx11/1.6.7-6d2qbwl                          (D)    py-wcwidth/0.1.7-py2-bfz5lha                                   ray/2.3.1-cuda9-openmpi3-s7pckqb
+   libxau/1.0.8-ef262vn                                 py-whatshap/0.17-py3-jqn3itr                                   rclone/1.43-3nm7tbr
+   libxau/1.0.8-33gftuo                          (D)    py-wheel/0.35.1-py3-zc6rdge                                    rdma-core/13-wwgwvxd
+   libxaw/1.0.13-jo6uhhw                                py-wrapt/1.10.10-py2-56xehls                                   rdma-core/17.1-7n2hvcz
+   libxcb/1.12-d2pppsa                                  py-wrapt/1.10.10-py3-gffdere                            (D)    rdma-core/20-jseuuuv                                       (D)
+   libxcb/1.12-kkt3tap                                  py-xopen/0.1.1-py2-osayidv                                     rdp-classifier/2.12-6bl5l3g
+   libxcb/1.12-tm7i5vj                           (D)    py-xopen/0.8.2-py3-tvs25p7                                     readfq/2013.04.10-sbs7bu3
+   libxcomposite/0.4.4-eluofbm                          py-xopen/0.8.2-py3-p7h7vat                              (D)    readline/7.0-jushdjv
+   libxdamage/1.1.4-zmhlycd                             py-xvfbwrapper/0.2.9-py2-i7cgqlv                               readline/7.0-sttvloc
+   libxdmcp/1.1.2-g4trovn                               py-zmq/16.0.2-py2-robpcp5                                      readline/8.0-maed2yl
+   libxdmcp/1.1.2-lsgxmwu                               python/2.7.14-h73plf5                                          readline/8.0-q67xey7                                       (D)
+   libxdmcp/1.1.2-w5b5rej                        (D)    python/2.7.14-ljwrzcs                                          recon/1.05-lgtq36k
+   libxext/1.3.3-e7zuy5k                                python/2.7.14-v7ateyh                                          recordproto/1.14.2-cpoljny
+   libxext/1.3.3-i7scm6d                                python/2.7.14-xuocyol                                          redundans/0.13c-py2-kigsz5c
+   libxext/1.3.3-w5bvcfl                                python/2.7.15-h2cedbf                                          relion/2.1-cuda8-openmpi3-7uoaqxy
+   libxext/1.3.3-6j5gy5w                         (D)    python/2.7.15-ief5zfp                                          relion/2.1-openmpi3-jcy23pu
+   libxfixes/5.0.2-cpjoqev                              python/2.7.15-qxpsl7m                                          relion/3.0.8-openmpi3-qsz553o                              (D)
+   libxfixes/5.0.2-znrxoyz                       (D)    python/2.7.15-zw76pi2                                          renderproto/0.11.1-roycin6
+   libxfont/1.5.2-d5zmdtk                               python/2.7.18-2ut3ogj                                          renderproto/0.11.1-v3iy6dg                                 (D)
+   libxfont/1.5.2-peahklr                               python/3.6.3-u4oaxsb                                           repeatmasker/4.0.7-openmpi3-jwr6xss
+   libxfont/1.5.2-vjs5sak                        (D)    python/3.6.5-fwk5uaj                                           repeatmasker/4.0.7-openmpi3-vruhfro
+   libxft/2.3.2-sqezd4c                                 python/3.7.6-y2hnyr4                                           repeatmasker/4.0.9-openmpi3-zhjnazt                        (D)
+   libxft/2.3.2-st3uswa                                 python/3.7.7-b5s6jni                                           repeatmodeler/1.0.11-openmpi3-5v7auyo
+   libxft/2.3.2-t4os465                                 python/3.7.7-dwjowwi                                           repeatscout/1.0.5-vq4ug2h
+   libxft/2.3.2-py2-as55pro                             python/3.8.0-k7w5uj4                                    (D)    revbayes/1.0.4-py2-cuda9-openmpi3-gnsnwac
+   libxft/2.3.2-p5fpwdd                                 qhull/2015.2-fi774kn                                           revbayes/1.0.4-py2-5wkb7lu
+   libxft/2.3.2-7q2piqm                          (D)    qhull/2015.2-w2knrls                                           revbayes/1.0.10-py2-quakkmf
+   libxi/1.7.6-g5fa6sw                                  qhull/2020.1-22tvbyb                                    (D)    revbayes/1.0.11-sortof-py2-w6ebmza                         (D)
+   libxi/1.7.6-txfeeqm                           (D)    qorts/1.2.42-py2-r3.5-iszqbqi                                  rmats/4.0.2-py2-yul5zxu
+   libxinerama/1.1.3-lynbyc3                            qt/4.8.6-py2-vxm3hwz                                           rna-seqc/1.1.8-cwws6wb
+   libxml2/2.7.8-ltmuzu6                                qt/5.10.0-py2-vkppetg                                   (D)    root/6.08.06-py2-openmpi3-md4abwo
+   libxml2/2.9.4-7x5vwih                                quantum-espresso/6.3-openmpi3-mauh5yi                          rsem/1.3.0-py2-r3.4-uzuecri
+   libxml2/2.9.8-ffzbok4                                r-a4/1.24.0-py2-r3.4-r5ktebk                                   rsem/1.3.0-py2-r3.5-6w56sc6                                (D)
+   libxml2/2.9.8-py2-snarhgy                            r-a4base/1.24.0-py2-r3.4-4crqlv7                               rtax/0.984-lexrpqe
+   libxml2/2.9.8-7j7n7sk                                r-a4classif/1.24.0-py2-r3.4-ljwokpi                            sabre/2013-09-27-jhqfw3n
+   libxml2/2.9.9-azmlgc5                                r-a4core/1.24.0-py2-r3.4-dmnldto                               salmon/0.9.1-py2-mpich-434m5zb
+   libxml2/2.9.9-hionxpg                                r-a4preproc/1.24.0-py2-r3.4-3vlsqve                            samblaster/0.1.24-qubfke4
+   libxml2/2.9.9-oqe2ao3                                r-a4reporting/1.24.0-py2-r3.4-wwnambt                          samtools/1.6-lyscjka
+   libxml2/2.9.10-i7eqked                        (D)    r-acepack/1.4.1-py2-r3.4-7r7e46i                               samtools/1.7-kglvk7q
+   libxmu/1.1.2-weujutd                                 r-acepack/1.4.1-py2-r3.5-3gq5fnp                               samtools/1.8-r54nmop
+   libxmu/1.1.2-y6lkbh2                                 r-acepack/1.4.1-py2-r3.5-zmdesfl                        (D)    samtools/1.9-k6deoga
+   libxmu/1.1.2-6zjibzx                          (D)    r-ade4/1.7-16-py3-pfdviww                                      samtools/1.10-py3-xuj7ylj                                  (D)
+   libxpm/3.5.12-lueu3im                                r-amap/0.8-16-py2-r3.5-uhtezng                                 scallop/0.10.3-py2-openmpi3-c37avaw
+   libxpm/3.5.12-py2-owiborm                     (D)    r-animation/2.5-py2-r3.5-cgqyxwg                               scons/2.5.1-py2-e6mf57v
+   libxrandr/1.5.0-tldccaa                              r-annaffy/1.48.0-py2-r3.4-dmhubc3                              scotch/6.0.4-cuda9-openmpi3-v2dusgf
+   libxrender/0.9.10-fv5dfpl                            r-annotate/1.54.0-py2-r3.4-pdt6p77                             scotch/6.0.6-openmpi3-hsyszfm                              (D)
+   libxrender/0.9.10-g44o2am                            r-annotate/1.58.0-py2-r3.5-s3g3nqs                             scrnsaverproto/1.2.2-kqn5hja
+   libxrender/0.9.10-pjnfafe                            r-annotate/1.58.0-py2-r3.5-4sjc2ej                      (D)    scrnsaverproto/1.2.2-6zdyiyp                               (D)
+   libxrender/0.9.10-nmj3owx                     (D)    r-annotationdbi/1.38.2-py2-r3.4-jbzlhe2                        sentieon-genomics/201808.01-opfuvzr
+   libxscrnsaver/1.2.2-gluo5cy                          r-annotationdbi/1.42.1-py2-r3.5-b3m4akb                        seqprep/1.3.2-mumcpyi
+   libxscrnsaver/1.2.2-6m64mfw                   (D)    r-annotationdbi/1.42.1-py2-r3.5-tcijmt6                 (D)    seqtk/1.2-by5hlhw
+   libxshmfence/1.2-zvvhcge                             r-annotationfilter/1.0.0-py2-r3.4-wbq3fqg                      serf/1.3.9-izq4aeo
+   libxshmfence/1.3-qu3rvju                      (D)    r-annotationhub/2.8.3-py2-r3.4-rncs4x4                         sga/0.10.15-2pc2sdi
+   libxslt/1.1.26-vm6ccoh                               r-ape/5.0-py2-r3.4-j7a2brt                                     shadow/4.7-z33xjzf
+   libxslt/1.1.29-a3amejk                               r-ape/5.0-py2-r3.5-y5l5smk                                     shapeit/2.837-26wwehr
+   libxslt/1.1.29-x6atugr                               r-ape/5.4-1-py3-cmfbycq                                 (D)    shared-mime-info/1.8-py2-xt6e3iy
+   libxslt/1.1.33-qhahjep                        (D)    r-argparse/1.1.1-py2-r3.5-rewqsho                              shared-mime-info/1.9-py2-yc2giyd
+   libxt/1.1.5-b7q37tk                                  r-assertthat/0.2.0-py2-r3.4-frbe2zr                            shared-mime-info/1.9-py3-4qe2v6b                           (D)
+   libxt/1.1.5-ikeitze                                  r-assertthat/0.2.0-py2-r3.5-e6koowu                            shocklibs/0.9.24-f7dqdau
+   libxt/1.1.5-szesdng                                  r-assertthat/0.2.0-py2-r3.5-rrpfovm                            sickle/1.33-pmo5ddi
+   libxt/1.1.5-xcfvyen                           (D)    r-assertthat/0.2.1-py3-5dhqo75                          (D)    signalp/4.1f-py2-binsfdx
+   libxtst/1.2.2-qahfurb                                r-backports/1.1.1-py2-r3.4-ubjybji                             singularity/2.5.2-22s5ays
+   libxtst/1.2.2-wqh53ks                         (D)    r-backports/1.1.1-py2-r3.5-xwyai7o                             singularity/2.6.0-xpi4udb
+   libxv/1.0.10-wxlh6tc                                 r-backports/1.1.1-py2-r3.5-22tt67c                      (D)    singularity/3.1.1-367qqd3
+   libxvmc/1.0.9-lu5xgdh                                r-base64/2.0-py2-r3.4-wwhgfdy                                  singularity/3.5.2-py2-ewuuq5o                              (D)
+   libzip/1.2.0-jdtbmdg                                 r-base64enc/0.1-3-py2-r3.4-4r7ocip                             slepc/3.10.0-py2-openmpi3-l5ux67r
+   libzip/1.2.0-tvvzy46                          (D)    r-base64enc/0.1-3-py2-r3.5-clhsodd                             slepc/3.10.1-openmpi3-7ibpdkd
+   lighttpd/1.4.50-hcnxd7z                              r-base64enc/0.1-3-py2-r3.5-ohhvmw4                             slepc/3.10.1-py2-openmpi3-7ibpdkd                          (D)
+   linkphase3/2017-06-14-wg76b2z                        r-base64enc/0.1-3-py3-fvinzdq                           (D)    slurm/17-02-6-1-gmskfea
+   llvm/4.0.1-py2-b4hw5r2                               r-beanplot/1.2-py2-r3.4-ky4kmfk                                slurm/17-02-6-1-hr3w432
+   llvm/6.0.1-py2-stupz7d                               r-bfast/1.5.7-py2-r3.5-jivn5z3                                 slurm/17-02-6-1-ulknyqb
+   llvm/7.1.0-py3-fk22rke                        (D)    r-bfastspatial/0.6.2-py2-r3.5-sllrkqb                          slurm/17-02-6-1-w75tsv7
+   lmdb/0.9.21-imli33b                                  r-bglr/1.0.8-py2-r3.5-kdjf5bk                                  slurm/19-05-6-1-py3-5najbrb                                (D)
+   lordec/0.8-py2-hmonr6g                               r-bh/1.65.0-1-py2-r3.4-c4uvnhm                                 smalt/0.7.6-wt32n66
+   lvm2/2.03.05-oibrypb                                 r-bh/1.65.0-1-py2-r3.5-vgejyto                                 smof/2.13.1-py3-zsayl3q
+   lz4/1.8.1.2-q7awix3                                  r-bh/1.65.0-1-py2-r3.5-vlqi3n5                                 snakemake/3.11.2-py3-wait26e
+   lz4/1.9.2-7nsv3fv                             (D)    r-bh/1.69.0-1-py2-ksaqdvh                                      snap-berkeley/0.15-fk2fsvp
+   lzma/4.32.7-thcwup3                                  r-bh/1.69.0-1-py2-r3.5-kryd4t5                                 snap-berkeley/1.0beta.18-ol6i273                           (D)
+   lzo/2.09-hkpqpuf                                     r-bh/1.69.0-1-py3-wgtbm4d                                      snap-korf/2013-11-29-py2-cuda9-openmpi3-ylxuena
+   lzo/2.10-cvl27ht                              (D)    r-bh/1.72.0-3-py3-q4jd7qg                               (D)    snap/master-cuda9-openmpi3-k3jldqj
+   m4/1.4.18-dipchcn                                    r-biasedurn/1.07-py2-r3.5-jk3ypq5                              snappy/1.1.7-56mjjfp
+   m4/1.4.18-errkzq3                                    r-bigalgebra/0.8.4.2-py3-jywg3nu                               snpeff/2017-11-24-3ueyysf
+   m4/1.4.18-ev45r33                                    r-bigmemory-sri/0.1.3-py3-jnd332k                              snphylo/2016-02-04-py2-r3.4-qftdohu
+   m4/1.4.18-ffrwz2d                                    r-bigmemory/4.5.36-py3-2murmip                                 soap2/2.21-sc6hjwj
+   m4/1.4.18-fpmxamr                                    r-bindr/0.1-py2-r3.4-5r762ox                                   soapdenovo-trans/1.0.4-kfl7rhm
+   m4/1.4.18-wa6bwfu                                    r-bindr/0.1.1-py2-r3.5-qxscsv2                          (D)    soapdenovo2/240-bg2qxy6
+   m4/1.4.18-wxe6xen                                    r-bindrcpp/0.2-py2-r3.4-3kjcjgw                                soapdenovo2/242-kz6zyjk                                    (D)
+   m4/1.4.18-7xevsht                             (D)    r-bindrcpp/0.2.2-py2-r3.5-icezuhg                       (D)    soapindel/2.1.7.17-6v66y7g
+   mafft/7.221-oucevqh                                  r-biobase/2.36.2-py2-r3.4-c7hriuu                              soapsnp/1.03-py2-cuda9-openmpi3-bgecq4u
+   mafft/7.453-nnqadsx                           (D)    r-biobase/2.40.0-py2-r3.5-oe3p6si                              sortmerna/2017-07-13-uwwup37
+   maq/0.5.0-dxwa4g6                                    r-biobase/2.40.0-py2-r3.5-qsd4xkt                       (D)    spades/3.11.1-py2-arfy7sc
+   mariadb/5.5.56-py2-openmpi3-f3fbvvd                  r-biocgenerics/0.22.1-py2-r3.4-ohjzb5x                         spark/2.1.0-2sb54uj
+   mariadb/5.5.56-py2-2dppfdi                           r-biocgenerics/0.26.0-py2-r3.5-fzrcrcs                         sparsehash/2.0.3-nrzvzho
+   mariadb/5.5.56-py3-openmpi3-xvgsu5f                  r-biocgenerics/0.26.0-py2-r3.5-orc7tng                         sparta/1.25-py3-5txygcn
+   mariadb/10.1.23-py2-mpich-qfxutlj             (D)    r-biocgenerics/0.30.0-py2-nz5ygg6                       (D)    spm/12_r7219-jllgybc
+   mark/1.0-3mia74f                                     r-biocinstaller/1.26.1-py2-r3.4-kn4xnf7                        sqlite/3.21.0-dijk7iu
+   masurca/3.2.3-py2-cuda9-openmpi3-oht3vo2             r-biocparallel/1.10.1-py2-r3.4-cuda9-openmpi3-bw3gjye          sqlite/3.21.0-7bttd2h
+   masurca/3.2.6-py2-efeqehn                            r-biocparallel/1.14.2-py2-r3.5-mpich-ak6onnh                   sqlite/3.26.0-gplgskg
+   mathematica/12.0.0-bc7l7wr                           r-biocparallel/1.14.2-py2-r3.5-openmpi3-7vs2kad         (D)    sqlite/3.28.0-2l6wl2y
+   matio/1.5.9-openmpi3-5gytgeb                         r-biom-utils/0.9-py2-r3.4-dptsxmn                              sqlite/3.30.1-b6ooufv
+   matlab/R2018b-wcgqwpe                                r-biomart/2.32.1-py2-r3.4-r27tiap                              sqlite/3.30.1-ydsrzlu
+   matlab/R2019a-io4754x                                r-biomart/2.36.1-py2-r3.5-4l75ssr                       (D)    sqlite/3.31.1-nyztlb6                                      (D)
+   maven/3.5.0-bhh6qyr                                  r-biostrings/2.44.2-py2-r3.4-fuiebk5                           squashfs/4.3-q4zttlz
+   maven/3.6.3-riivrcm                           (D)    r-biostrings/2.48.0-py2-r3.5-k2wa7ah                    (D)    squashfs/4.4-6n2uzjn                                       (D)
+   mcl/14-137-4aumkvp                                   r-bit/1.1-12-py2-r3.4-cpnzupj                                  squid/1.9g-s3qau75
+   mefit/1.0-py2-cuda9-openmpi3-cu2uujd                 r-bit/1.1-12-py2-r3.5-wxe3nh3                                  sra-toolkit/2.8.2-1-inqpbuz
+   meraculous/2.2.4-py2-cuda9-openmpi3-jhhdeke          r-bit/1.1-12-py2-r3.5-4wk46an                           (D)    sra-toolkit/2.9.6-ub7kz5h                                  (D)
+   mesa-glu/9.0.0-utwumr4                               r-bit64/0.9-7-py2-r3.4-bq2mt37                                 sspace-longread/1.1-5ae3ijg
+   mesa-glu/9.0.0-py2-elxcsty                    (D)    r-bit64/0.9-7-py2-r3.5-jrwbr6p                                 sspace-standard/3.0-l7adt46
+   mesa/17.2.3-cxx6m63                                  r-bit64/0.9-7-py2-r3.5-4yyu33s                          (D)    star/2.5.3a-rdzqclb
+   mesa/18.1.2-py2-ndtgdnb                       (D)    r-bitops/1.0-6-py2-r3.4-chfdkl6                                stata/16-gsum4rn
+   meson/0.54.2-py3-endh22l                             r-bitops/1.0-6-py2-r3.5-bvhsxz6                                stringtie/1.3.4a-2tasavq
+   meson/0.54.2-py3-moqw7w4                             r-bitops/1.0-6-py2-r3.5-v75nhxi                         (D)    stringtie/1.3.4a-3fmlrwa                                   (D)
+   meson/0.55.1-py3-h6dlvno                             r-blob/1.1.0-py2-r3.4-qa3gxbt                                  structure/2.3.4-xjehvcx
+   meson/0.55.1-py3-wqljrz5                      (D)    r-blob/1.1.0-py2-r3.5-s7q5xdw                                  subread/1.6.0-ak6vxhs
+   metasv/0.5.4-py2-i2wyria                             r-blob/1.1.0-py2-r3.5-vwxynbc                           (D)    subversion/1.9.7-i5rgjph
+   metis/5.1.0-b3l465o                                  r-boot/1.3-25-py3-r27ltqv                                      suite-sparse/5.1.0-cuda9-vzyefcd
+   metis/5.1.0-3ak5ab4                                  r-brew/1.0-6-py2-r3.4-hr5javm                                  suite-sparse/5.1.0-cwoxxle
+   metis/5.1.0-7p5r3mv                           (D)    r-brew/1.0-6-py2-r3.5-a3okiyv                           (D)    suite-sparse/5.1.0-mfastbc
+   microbiomeutil/20110519-py2-a6tuuap                  r-brio/1.1.0-py3-xsrpqme                                       suite-sparse/5.1.0-xxd2k3l                                 (D)
+   mindthegap/2.0.2-7jl4b5g                             r-broom/0.4.2-py2-r3.4-rgeh36p                                 sumaclust/1.0.20-ds52in2
+   miniasm/2018-3-30-6q3chxo                            r-broom/0.4.2-py2-r3.5-vyfg7hn                          (D)    sundials/3.2.1-openmpi3-3q2bh4y
+   miniconda2/4.3.30-gy2db2b                            r-bsgenome/1.44.2-py2-r3.4-cuda9-openmpi3-ephfs5b              superlu-dist/5.4.0-openmpi3-vhsvaqe
+   miniconda3/4.3.30-qdauveb                            r-bumphunter/1.16.0-py2-r3.4-cuda9-openmpi3-d4a6eup            superlu-dist/5.4.0-openmpi3-2cw6dzn
+   minimap2/2.2-py2-x2lyc3y                             r-cairo/1.5-9-py2-r3.4-mtylj2t                                 superlu-dist/5.4.0-openmpi3-6gd4i6x
+   mirdeep/2.0.0.8-py2-inhiwsb                          r-cairo/1.5-9-py2-r3.5-egpo2a7                          (D)    superlu-dist/6.0.0-openmpi3-xbtgstx                        (D)
+   mitofates/1.2-4ujd2yc                                r-callr/3.0.0-py2-r3.5-revqc27                                 supernova/2.0.1-py2-h3d4egt
+   mkfontdir/1.0.7-bj4rfg2                              r-callr/3.5.1-py3-ced25eo                               (D)    swap-assembler/0.4-mpich-fjf7kvt
+   mkfontdir/1.0.7-iq73awz                              r-car/2.1-4-py2-r3.4-wjcisua                                   swarm/2.1.13-e4qr422
+   mkfontdir/1.0.7-svpi6xi                       (D)    r-caret/6.0-73-py2-r3.4-x4wqfe7                                swig/3.0.12-4mztrob
+   mkfontscale/1.1.2-f66mnjf                            r-caroline/0.7.6-py2-r3.5-azn2uyv                              swig/3.0.12-6kcitbo
+   mkfontscale/1.1.2-hx6m63w                            r-catools/1.17.1-py2-r3.4-nblhcdz                              swig/4.0.2-whd2fl7                                         (D)
+   mkfontscale/1.1.2-ikafs5n                            r-catools/1.17.1-py2-r3.5-6ir537z                       (D)    tabix/2013-12-16-py2-cdmiklq
+   mkfontscale/1.1.2-6ym2nc4                     (D)    r-cellranger/1.1.0-py2-r3.5-drtjao6                            tabix/2013-12-16-py2-talztjl
+   mlhka/2.1-egkc3ck                                    r-checkmate/1.8.4-py2-r3.4-oc52v6x                             tabix/2013-12-16-py3-skvidzv                               (D)
+   montage/5.0-py2-openmpi3-kl6mmrr                     r-checkmate/1.8.4-py2-r3.5-e4u4pug                             tar/1.29-yrevvuw
+   mothur/1.39.5-py2-cuda9-openmpi3-l52hztq             r-checkmate/1.8.4-py2-r3.5-5el7v5z                      (D)    tar/1.30-ucx2vrv
+   mothur/1.40.5-py2-openmpi3-wim4rkw                   r-class/7.3-14-py2-r3.4-osrraau                                tar/1.31-wiqmehf
+   mothur/1.43.0-py2-openmpi3-cd7eeej                   r-class/7.3-14-py2-r3.5-prqgk7u                                tar/1.32-eeyu3bg
+   mothur/1.43.0-py3-xawcwsi                            r-class/7.3-17-py3-aigxrl2                              (D)    tar/1.32-gem5z6s
+   mothur/1.43.0-py3-7cpdet4                     (D)    r-classint/0.1-24-py2-r3.4-bqnjqsp                             tar/1.32-nl7dovt                                           (D)
+   motif/2.3.8-q2jnv56                                  r-classint/0.1-24-py2-r3.5-gsb6unm                             targetp/1.1b-py2-jsimjx2
+   motif/2.3.8-tvllsb5                           (D)    r-classint/0.4-3-py3-zxuffy4                            (D)    tassel/2017-07-22-a2zfsyf
+   mpc/1.0.3-5gvknf2                                    r-cli/1.0.0-py2-r3.5-bqwqx23                                   tcl/8.6.6-kxqpvbm
+   mpest/1.5-clgh2rx                                    r-cli/2.2.0-py3-5cjrfba                                 (D)    tcl/8.6.6-6n6yu4g
+   mpfr/3.1.5-gzm2jew                                   r-clipr/0.4.0-py2-r3.5-ovo5pdh                                 tcl/8.6.8-5nqkfcn                                          (D)
+   mpfr/4.0.1-ifx46jh                                   r-cluster/2.0.7-1-py2-r3.4-otu67e2                             tcoffee/2017-08-17-py2-p2rgpto
+   mpfr/4.0.2-tzhfm4d                                   r-cluster/2.0.7-1-py2-r3.5-yzyuntn                             tcsh/6.20.00-akh5t6q
+   mpfr/4.0.2-ulc3sly                            (D)    r-cluster/2.1.0-py3-czrfpcj                             (D)    tetgen/1.5.0-fwaembc
+   mpich/3.2-pzfoq7c                                    r-clustergeneration/1.3.4-py2-r3.5-zwfuvzo                     texinfo/6.5-ezmxgax
+   mpich/3.2.1-e2jykcv                                  r-cner/1.14.0-py2-r3.4-cuda9-openmpi3-7yfr6i5                  texinfo/6.5-mr24fcx
+   mpich/3.2.1-geowaxe                           (D)    r-coda/0.19-1-py2-r3.4-2rzpekq                                 texinfo/6.5-37u23tz
+   msgpack-c/1.4.1-2xbj5c4                              r-coda/0.19-1-py2-r3.5-2pb7l4j                                 texinfo/6.5-znvhext                                        (D)
+   mshadow/20170721-ega3u4l                             r-coda/0.19-4-py3-unkg24w                               (D)    time/1.9-eti3ybo
+   mummer/3.23-py2-22xij3j                              r-codetools/0.2-15-py2-r3.4-3chnr7l                            tk/8.6.6-fisdvn4
+   mumps/5.1.1-openmpi3-mxegpq6                         r-codetools/0.2-15-py2-r3.5-bmpqejo                            tk/8.6.6-ij3ztsa
+   mumps/5.2.0-openmpi3-4cuqxyz                  (D)    r-codetools/0.2-15-py2-r3.5-jil6rjk                     (D)    tk/8.6.6-vtnich7
+   munge/0.5.11-otaniyx                                 r-colorspace/1.3-2-py2-r3.4-bz2oryq                            tk/8.6.6-ygpdzkg                                           (D)
+   munge/0.5.14-smvhbdi                          (D)    r-colorspace/1.3-2-py2-r3.5-s3ku7m4                            tmalign/2016-05-25-bpi3oyc
+   muparser/2.2.6.1-bajlgxf                             r-colorspace/1.3-2-py2-r3.5-3rtjkgp                            tophat/2.1.1-py2-cuda9-openmpi3-xp77ege
+   muscle/3.8.1551-ylw4paz                              r-colorspace/2.0-0-py3-cofmymn                          (D)    tppred/2.0-py2-aqubpxu
+   namd/2.13-2pddbba                             (D)    r-combinat/0.0-8-py2-r3.5-52rqe2t                              transdecoder/3.0.1-5v2fngv
+   nanoflann/1.2.3-7efo35t                              r-commonmark/1.7-py2-r3.5-dwm4v54                              transdecoder/3.0.1-53ns2ne
+   nasm/2.11.06-obbognl                                 r-commonmark/1.7-py3-ezabmh6                            (D)    transdecoder/5.5.0-lr3a445                                 (D)
+   nasm/2.11.06-zgpwqoq                                 r-convevol/1.3-py2-r3.5-nss3lxi                                transposome/0.11.2-py2-hwbrgcy
+   nasm/2.14.02-mancsvw                                 r-corhmm/1.22-py2-r3.5-ibzxhdn                                 transrate/1.0.3-hkppzfl
+   nasm/2.14.02-7ddoe3u                                 r-corpcor/1.6.9-py2-r3.4-satgb6l                               treesub/0.2-openmpi3-kip7hus
+   nasm/2.15.05-mvma6sz                          (D)    r-corpcor/1.6.9-py2-r3.5-jlmd4ou                        (D)    trf/4.09-sy76uot
+   ncbi-rmblastn/2.2.28-t52d4vp                         r-covr/3.0.1-py2-r3.5-2irotzt                                  trilinos/12.12.1-py2-openmpi3-adap73o
+   ncbi-rmblastn/2.6.0-2kyyml7                   (D)    r-crayon/1.3.4-py2-r3.4-eoe6rdm                                trilinos/12.12.1-py2-openmpi3-rv5ofep                      (D)
+   ncbi-toolkit/21_0_0-py2-4md6u2m                      r-crayon/1.3.4-py2-r3.5-dh3la6a                                trimgalore/0.4.5-py2-n7kavxd
+   ncl/6.4.0-py2-cuda9-openmpi3-tu7iszv                 r-crayon/1.3.4-py2-r3.5-rfdldex                                trimgalore/0.6.4-py3-uqnfrhw
+   ncurses/6.0-missrnz                                  r-crayon/1.3.4-py3-g3cy5qq                              (D)    trimgalore/0.6.4-py3-36bynaj                               (D)
+   ncurses/6.0-ws245kv                                  r-crosstalk/1.0.0-py2-r3.5-m2cvkxj                             trimmomatic/0.36-lkktrba
+   ncurses/6.0-3ncf3bb                                  r-crul/0.7.4-py2-r3.5-74ctt6i                                  trimmomatic/0.39-da5npsr                                   (D)
+   ncurses/6.2-n5qqcgu                           (D)    r-ctc/1.54.0-py2-r3.5-5c7m5b6                                  trinity/2.6.6-py2-r3.5-mpich-nl7v7dq
+   netcdf-c/4.7.2-openmpi3-i65ujlu                      r-curl/3.0-py2-r3.4-rpn77u5                                    trinotate/3.1.1-py2-r3.5-mpich-5mqxvur
+   netcdf-cxx/4.2-openmpi3-gpzoz56                      r-curl/3.0-py2-r3.5-qcpvjfv                                    trnascan-se/2.0.0-wriua4r
+   netcdf-fortran/4.4.4-cuda9-openmpi3-x7o37yo          r-curl/3.3-py2-r3.5-lyuj3xj                             (D)    udunits/2.2.24-vucp36s
+   netcdf-fortran/4.4.4-openmpi3-clboe3i                r-data-table/1.10.4-2-py2-r3.4-wnvhymn                         udunits2/2.2.24-nbqmsi5
+   netcdf-fortran/4.4.4-openmpi3-2k6rtqi                r-data-table/1.10.4-3-py2-r3.5-5atj6o2                         udunits2/2.2.24-thmybwd                                    (D)
+   netcdf-fortran/4.5.2-openmpi3-vfh2jlg         (D)    r-data-table/1.10.4-3-py2-r3.5-5esjngm                  (D)    unixodbc/2.3.4-52obrzr
+   netcdf/4.4.1.1-cuda9-openmpi3-gpuwkj2                r-dbi/0.7-py2-r3.4-jraiaz6                                     unzip/6.0-f5dbwkg
+   netcdf/4.4.1.1-cuda9-openmpi3-l64d4gv                r-dbi/0.7-py2-r3.5-xdrr5a4                                     usearch/10.0.240-q26e6qd
+   netcdf/4.6.1-openmpi3-gkzqn7n                        r-dbi/0.7-py2-r3.5-7v6jmyh                                     util-linux/2.29.2-py2-3rxvtx6
+   netcdf/4.6.1-openmpi3-hnelvuz                        r-dbi/1.1.0-py3-cmd2vkq                                 (D)    util-macros/1.19.1-msje2yc
+   netcdf/4.6.2-openmpi3-qxgl7os                 (D)    r-dbplyr/1.1.0-py2-r3.5-dpbttwf                                util-macros/1.19.1-s4xjvop                                 (D)
+   netgen/5.3.1-openmpi3-wyxuzgt                        r-delayedarray/0.2.7-py2-r3.4-g535kf4                          valgrind/3.13.0-py2-cuda9-openmpi3-jyy6j6n
+   netlib-scalapack/2.0.2-cuda9-openmpi3-7xndx6u        r-delayedarray/0.6.5-py2-r3.5-mpich-lbxcf4l                    varscan/2.4.2-xfyfvfi
+   netlib-scalapack/2.0.2-openmpi3-ezwqh43              r-delayedarray/0.6.5-py2-r3.5-openmpi3-nx5zjfm          (D)    vcftools/0.1.14-xp36ajy
+   netlib-scalapack/2.0.2-openmpi3-sakcdle              r-deldir/0.2-3-py3-hqofttn                                     vegas2/2-py2-r3.4-47bi35z
+   netlib-scalapack/2.0.2-openmpi3-ufh2gja       (D)    r-deoptimr/1.0-8-py2-r3.4-tmyzyto                              velvet/1.2.10-nvoiysl
+   nettle/3.3-jcgc7wh                                   r-deoptimr/1.0-8-py2-r3.5-mewmi7q                       (D)    videoproto/2.3.3-7fgiha6
+   nettle/3.4-hadcqul                            (D)    r-desc/1.2.0-py2-r3.5-l47lhwx                                  viennarna/2.4.3-py2-jody6ro
+   ninja/1.8.2-py2-4fd4nsu                              r-desc/1.2.0-py3-7yc5i5p                                (D)    vmatch/2.3.0-dqwxpxx
+   ninja/1.10.0-x5piewj                                 r-deseq2/1.20.0-py2-r3.5-mpich-du4kpd4                         voropp/0.4.6-coianx4
+   ninja/1.10.0-py3-x5piewj                             r-deseq2/1.20.0-py2-r3.5-openmpi3-zhebatp               (D)    vsearch/2.4.3-dc5fyyy
+   ninja/1.10.1-py3-tvdonev                      (D)    r-desolve/1.20-py2-r3.5-wndk4mu                                vsearch/2.13.3-cvbzygy
+   nlopt/2.5.0-py2-uit45yv                              r-devtools/1.12.0-py2-r3.4-47jzlan                             vsearch/2.14.1-3dzdifw                                     (D)
+   nlopt/2.6.1-py3-iouqcjk                       (D)    r-devtools/1.12.0-py2-r3.5-3zfj3n2                      (D)    wcslib/5.18-3u264sc
+   nnvm/20170418-ojgzdup                                r-dichromat/2.0-0-py2-r3.4-bb37ubm                             wget/1.19.1-ausysqd
+   node-js/8.9.1-wiwztu7                                r-dichromat/2.0-0-py2-r3.5-3fex5w2                             wgsim/2011.10.17-cjqybf3
+   npm/3.10.9-cjfbomo                                   r-dichromat/2.0-0-py2-r3.5-3trnxyo                      (D)    wrf/4.0-openmpi3-loks4ku
+   nseg/1.0-ai4iqip                                     r-diffobj/0.3.3-py3-wehsxfl                                    wtdbg2/2.3-myroslh
+   numactl/2.0.11-d5tronv                               r-digest/0.6.12-py2-r3.4-khwlygy                               wx/3.0.2-py2-7zan6kf
+   numactl/2.0.11-2kixr7l                               r-digest/0.6.12-py2-r3.5-jfubzg3                               wxwidgets/3.1.0-py3-4o4sjww
+   numactl/2.0.12-7ea652q                        (D)    r-digest/0.6.12-py2-r3.5-4rpmk5z                               wxwidgets/3.1.0-py3-zgxwisd                                (D)
+   nwchem/6.8-py2-openmpi3-3q5knk4               (D)    r-digest/0.6.27-py3-aryu3hl                             (D)    xbitmaps/1.1.1-ldj7p32
+   oce/0.18.3-od3o5lq                            (D)    r-diptest/0.75-7-py2-r3.4-svbtuuc                              xcb-proto/1.12-7bwvai6
+   oniguruma/6.1.3-4ycnxow                              r-dirichletmultinomial/1.20.0-py2-r3.4-75onxmk                 xcb-proto/1.12-zonb6ej
+   opa-psm2/10.3-37-jyw65r7                             r-diversitree/0.9-10-py2-r3.5-openmpi3-2boszee                 xcb-proto/1.12-pzsnrhv                                     (D)
+   opa-psm2/10.3-37-lijdbw4                             r-doparallel/1.0.11-py2-r3.4-tzdczfv                           xclip/0.13-w7cv5qm
+   opa-psm2/10.3-37-nxdxxgp                             r-doparallel/1.0.11-py2-r3.5-tlbjucn                    (D)    xerces-c/3.1.4-g4glk5d
+   opa-psm2/10.3-37-tnf2waq                             r-dorng/1.6.6-py2-r3.4-7dp26z5                                 xextproto/7.3.0-kookqqj
+   opa-psm2/11.2.68-f4u4to5                      (D)    r-downloader/0.4-py2-r3.4-oby3b45                              xextproto/7.3.0-qemeyu3                                    (D)
+   openbabel/2.4.1-py2-openmpi3-4wogcfs                 r-dplyr/0.7.3-py2-r3.4-p2gyosx                                 xineramaproto/1.2.1-lf32kxt
+   openblas/0.2.20-jj2xj3g                              r-dplyr/0.7.5-py2-r3.5-4jcgekn                                 xplor-nih/2.45-py2-kjk5oet
+   openblas/0.2.20-zp4k2fi                              r-dplyr/1.0.3-py3-4pcfkgs                               (D)    xproto/7.0.31-cwm6tcm
+   openblas/0.3.3-tykac5a                               r-dynamictreecut/1.63-1-py2-r3.5-dpalfjg                       xproto/7.0.31-wtblcw4                                      (D)
+   openblas/0.3.3-vbnrrlv                               r-e1071/1.6-7-py2-r3.4-ihpogov                                 xrandr/1.5.0-4utwho5
+   openblas/0.3.3-7hxz2zr                               r-e1071/1.6-7-py2-r3.5-2dwbnkv                                 xtrans/1.3.5-uuohg3z
+   openblas/0.3.4-iupm5xe                               r-e1071/1.7-4-py3-foombqc                               (D)    xtrans/1.3.5-6jyxjtr                                       (D)
+   openblas/0.3.8-c5yfjgb                               r-edger/3.18.1-py2-r3.4-x7iw7yq                                xz/5.2.3-yxhjznh
+   openblas/0.3.9-cyzu2z7                               r-edger/3.22.3-py2-r3.5-zu5pp3n                         (D)    xz/5.2.4-lvajsnj
+   openblas/0.3.12-ltih6zf                       (D)    r-ellipse/0.3-8-py2-r3.5-b7slmfn                               xz/5.2.4-rh7gav6
+   opencv/3.4.1-py3-openmpi3-e2auncs                    r-ellipsis/0.3.1-py3-rb2q5ej                                   xz/5.2.5-evgwz4v
+   openfoam-org/5.0-openmpi3-hwb2ysx                    r-emmli/0.0.3-py2-r3.5-rrikoek                                 xz/5.2.5-4wylwql                                           (D)
+   openjdk/1.8.0_222-b10-ipodmgy                        r-ensembldb/2.0.4-py2-r3.4-cuda9-openmpi3-jlm3i4r              yasm/1.3.0-gpegnw6
+   openjdk/11.0.1-qka7zfb                               r-evaluate/0.10.1-py2-r3.4-7wldk4v                             zeromq/4.2.2-zh7oww5
+   openjdk/11.0.2-qnkz7hk                               r-evaluate/0.10.1-py2-r3.5-kel4hem                             zip/3.0-5gegks4
+   openjdk/11.0.2-zhooo2r                        (D)    r-evaluate/0.10.1-py2-r3.5-sf4npi3                             zlib/1.2.11-vhzh5cf
+   openjpeg/2.1.2-fzsx6yk                               r-evaluate/0.14-py3-37kz3yu                             (D)    zlib/1.2.11-zolwez4                                        (D)
+   openmpi/1.10.7-cuda8-vgp5nx2                         r-expm/0.999-2-py2-r3.5-p6ucwpc                                zsh/5.4.2-pnmi7ny
+   openmpi/2.1.5-jn7f53v                                r-expm/0.999-6-py3-jprqs4n                              (D)    zstd/1.3.0-gkzh6rj
+   openmpi/3.0.0-cuda9-hjmmn2l                          r-fansi/0.4.1-py3-27pe3ds
+
+-------------------------------------------------------------------------------- /shared/hpc/modulefiles ---------------------------------------------------------------------------------
+   abaqus/6.13              cgal/4.10.1                      fluent/19.3                         intel/18.2                   openfoam-intel/5.0        singularity/2.2.1
+   abaqus/6.14              chromedriver/77.0.3865.40        fluent/19.4                  (D)    intel/18.3            (D)    openfoam-intel/6.0 (D)    starccm/11.04.010-R8
+   abaqus/2016              comsol/4.4                       forge/6.0                           intel/19.1                   openfoam/2.2.2            starccm/11.04.010
+   abaqus/2017              comsol/5.2                       forge/6.1.1                         intel/19.4                   openfoam/2.4.0            starccm/12.04.010-R8
+   abaqus/2019       (D)    comsol/5.3a                      forge/7.0.6                         intel/20.0                   openfoam/4.0-dev          starccm/12.04.010
+   allinea/6.0              comsol/5.4                (D)    forge/18.2.3                 (D)    intel/20.1                   openfoam/4.0              starccm/12.04.011-R8
+   allinea/6.1.1            continuity/6.4                   gams/24.8                           juicer/1.5.7                 openfoam/5.0       (D)    starccm/13.02.013-R8
+   allinea/18.2.3           cplex/12.7.1                     gatk/3.8.0                          juicer/1.6            (D)    osi/0.107.9               starccm/13.04.010-R8
+   allinea/19.0.3    (D)    cplex/12.8-py2                   gmap-gsnap-legacy/2018.07.04        libs/fftw/3.3.4              perf-reports/6.0          starccm/13.04.010
+   ansys/15.0               cplex/12.8-py3                   gurobi/7.5.1                        matlab/R2014a                perf-reports/6.1.1        starccm/14.02.012-R8
+   ansys/16.1               cplex/12.8                (D)    gurobi/8.1.1                        matlab/R2015b                perf-reports/7.0.1 (D)    starccm/14.02.012
+   ansys/17.2               dafoam/1.0                       gurobi/9.0.3                 (D)    matlab/R2016a                petsc-intel/3.9.2         starccm/14.04.011-R8
+   ansys/18.1               damask/2.0.1                     hdf5-intel/1.10                     matlab/R2017a         (D)    petsc/3.6.3               starccm/14.04.011
+   ansys/19.2               damask/2.0.2              (D)    icemcfd/15.0                        matlab/R2017b                petsc/3.6.4               starccm/15.02.009-R8
+   ansys/19.3               dealii/8.4.1                     icemcfd/16.1                        matlab/R2018a                petsc/3.7.7               starccm/15.02.009
+   ansys/19.4               emtg/9.0                         icemcfd/19.2                        matlab/R2018b                petsc/3.8.0               starccm/15.04.008-R8
+   ansys/20.2        (D)    esp/1.10                         icemcfd/19.3                        matlab/R2019a                pfft-intel/1.0.8          starccm/15.04.008    (D)
+   ansysEM/19.1             fftw-intel/3.3.4                 icemcfd/19.4                 (D)    matlab/R2019b                pfft/1.0.8                su2/4.0
+   arm/20.0.3               fftw/3.0                         intel/15.0.2                        matlab/R2020a                pgi64/16.10               su2/4.2
+   arm/20.1          (D)    fftw/3.3.6                       intel/16.0                          matlab/runtime-R2015a        pgi64/17.5                su2/5.0              (D)
+   aspera/3.7.7             fluent/15.0                      intel/16.4                          mpich/3.2                    pgi64/19.4                tecplot/2017r1/360ex
+   bwa/0.7.16a              fluent/16.1                      intel/16.5                          nccl/1.3.4                   pgi64/20.11        (D)    vasp/5.4.1
+   caffe/1.0.0              fluent/17.2                      intel/17.0.1                        nsight/2019.4.0.12           picard/2.13.2             vmd/1.9.3
+   cgal-intel/4.10.1        fluent/18.1                      intel/17.4                          nvhpc/20.11                  pointwise/18.0R2
+   cgal/4.9.1               fluent/19.2                      intel/18.1                          oce/0.17.2                   singularity/2.2
+
+------------------------------------------------------------------------- /usr/share/lmod/lmod/modulefiles/Core --------------------------------------------------------------------------
+   lmod    settarg
+
+  Where:
+   D:  Default Module
+
+Use "module spider" to find all possible modules and extensions.
+Use "module keyword key1 key2 ..." to search for all possible modules matching any of the "keys".
+
+
