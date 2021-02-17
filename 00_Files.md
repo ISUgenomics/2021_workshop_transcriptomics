@@ -14,6 +14,7 @@ cut -f 7 tsv | more | perl -pe 's/;/\n/g' | xargs -I xx echo "wget ftp://xx"
 Download on Nova must be performed on Novadtn
 
 * Nova: /work/gif/TranscriptomicsWorkshop/severin/Maize
+
 ```
 wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR157/004/SRR1573504/SRR1573504_1.fastq.gz
 wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR157/004/SRR1573504/SRR1573504_2.fastq.gz
@@ -66,7 +67,15 @@ wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR157/007/SRR1573527/SRR1573527_2.fastq
 
 ```
 
+<b>Maize Reference - b73</b>
 
+* NCBI Entry - [https://www.ncbi.nlm.nih.gov/assembly/GCF_902167145.1/](https://www.ncbi.nlm.nih.gov/assembly/GCF_902167145.1/)
+* Came out of [Matthew Hufford's group](http://www.zeagenomics.org/)
+
+```
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/902/167/145/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.fna.gz
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/902/167/145/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.gff.gz
+```
 
 #### Illumina Reads
 
