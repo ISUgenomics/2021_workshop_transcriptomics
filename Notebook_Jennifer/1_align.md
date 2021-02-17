@@ -490,7 +490,7 @@ ${GSNAP} \
 
 The purpose of `samtools view -bS` is basically to convert a large sam file into a smaller bam file (binary)
 
-* see explaination on SAM vs BAM here - [wikilink](https://en.wikipedia.org/wiki/SAMtools#:~:text=SAM%20files%20are%20human%2Dreadable,to%20work%20with%20than%20SAM.)
+* see explaination on SAM vs BAM here - [wikilink](https://en.wikipedia.org/wiki/SAMtools#:~:text=SAM%20files%20are%20human%2Dreadable,to%20work%20with%20than%20SAM.) - lol, whoever is updating the wiki is also using `[todo: ...]` statements :)
 
 [todo: add shortened view of SAM file or example SAM file here ]
 
