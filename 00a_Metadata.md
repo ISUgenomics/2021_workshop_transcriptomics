@@ -47,3 +47,5 @@ The SRX vs sample relation is given here broadly captured from the full metadata
 |SRX699528      |SRR1573527|B73           |wild-type|adaxial L1 tissue was captured.  sheath; Repeat:3                  |S_L1.3      |
 
 For more details refer to the figure below:![figure](Figures/LCM_maize_samples.png) This shows how the various tissue samples were microdissected. This is modified from original Fig 2 in [Johnston et al. 2014](http://www.plantcell.org/content/26/12/4718#sec-9),
+
+Reads are unstranded.
