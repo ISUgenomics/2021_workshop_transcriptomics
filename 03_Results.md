@@ -2,9 +2,9 @@
 
 
 Comparing different alignments and DGE identifying Methods
-|dataset 	|Alignment method 	|DEG identifying method 	|Who is working on this problem|# of DE genes| 
-| --- | --- | --- | --- | --- | 
-|Maize/Bee 	|Star 	|DESeq2 	|Maryam and Ambi| | 
+|dataset 	|Alignment method |method of counting 	|DEG identifying method 	|Who is working on this problem|# of DE genes| 
+| --- | --- | --- |---| --- | --- | 
+|Maize/Bee 	|Star | [featureCounts](./data/counts/Maryam-STAR-featureCounts-At_count.txt)|DESeq2 	|Maryam and Ambi| | 
 |Maize/Bee 	|Hisat2 	|DESeq2 	|Rick and Alex|| 
 |Maize/Bee 	|gsnap 	|DESeq2 	|Jennifer and Kathy|| 
 |Maize/Bee 	|gsnap 	|EdgeR 	|Severin|| 
