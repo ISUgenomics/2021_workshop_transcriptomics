@@ -11,10 +11,10 @@ Written summary of methods performed in this repo. This is the methods write up 
 
 | dataset | Alignment method | DEG identifying method | Who is working on this problem |
 | --- | --- | --- | --- |
-| Maize/Bee | Star | DESeq2 |Maryam and Ambi  |
+| Maize/Bee | Star| [featureCounts]() |  DESeq2 |Maryam and Ambi  |
 | Maize/Bee | Hisat2 | DESeq2 | Rick and Alex|
-| Maize/Bee | gsnap | DESeq2 |Jennifer and Kathy |  
-|Maize/Bee| gsnap | EdgeR| Severin
+| Maize/Bee | gsnap[featureCounts]()  |  DESeq2 |Jennifer and Kathy |  
+|Maize/Bee| gsnap[featureCounts]()  | EdgeR| Severin
 | Maize/Bee | Star | EdgeR | Sathesh and Katie |
 | Maize/Bee | Hisat2 | EdgeR | Ryan and Siva|
 |Maize/Bee| Hisat2|Stringtie/Ballgown | Siva and Jennifer  |
