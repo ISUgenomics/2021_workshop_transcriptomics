@@ -54,8 +54,7 @@ There are multiple taxons that are present in the bee data, though it does not a
  less FinalContaminationNetwork.tab |awk '{print $2}' |sort |uniq -c |sort -k1,1nr |less
 ```
 <details>
-  <summary>Abundance Summary</summary>
-  <pre>
+
 | 60 | Sarcocystidae |
 | 60 | Sporisoriumgraminicola |
 | 57 | Apicomplexa |
