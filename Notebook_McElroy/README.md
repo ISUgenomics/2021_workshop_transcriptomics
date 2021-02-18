@@ -7,4 +7,5 @@ In this workshop I will be using Kallisto and Salmon to measure transcript abund
 | File Name | Description |
 | -- | -- |
 |00_rawdata.md | Getting the raw data |
-|01_abundance.md | Measure transcript abundance |
+|01_qc.md | Quality check and trim/filer reads |
+|02_abundance.md | Measure transcript abundance |
