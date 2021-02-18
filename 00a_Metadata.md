@@ -3,6 +3,7 @@
 
 ## Bumble Bee
 |Well_ID|	Sample_Name|	Trt|	Nest|
+|:-:|:-:|:-:|:-:|
 |A01|	A1|	ctrl|	1|
 |A02|	A2|	ctrl|	1|
 |A03|	A3|	ctrl|	1|
