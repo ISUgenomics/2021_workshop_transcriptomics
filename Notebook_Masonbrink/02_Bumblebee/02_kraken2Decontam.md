@@ -94,4 +94,3 @@ There are multiple taxons that are present in the bee data, though it does not a
 | 1 | Weissellaparamesenteroides |
 | 1 | Zygosaccharomycesrouxii |
 </details>
-</pre>
