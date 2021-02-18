@@ -50,7 +50,7 @@ cat *report.summary |sed 's/_L002_R1_001.fastq.gz.report//g' |awk '{print $3,$6,
 There are multiple taxons that are present in the bee data, though it does not appear to be related to a treatment.  
 
 
-### Read content identified as Bombus terrestris 
+### Read content identified as Bombus terrestris
 
 ```
 grep "terrestris" *.report|awk '$5=="S1"' |awk '$2>0' |sed 's/_/\t/2'  |cut -f 1,3- |sed 's/[ ]*//g' |sed 's/terrestris/ terrestris/g' |less
@@ -407,7 +407,7 @@ Not much information out there. The basidiomycete Sporisorium graminicola (forma
 ```
 grep "Sporisorium graminicola" *.report|awk '$2>0' |sed 's/_/\t/2'  |sed 's/: /\t/1'  |cut -f 1,3-|sed 's/[ ]*//g' |sed 's/graminicola/_graminicola/g' |less
 ```
-Half of these reads go to the species Zymoseptoria tritici IPO323
+Half of these reads go to the species Zymoseptoria tritici IPO323. Zymoseptoria tritici, synonyms Septoria tritici, Mycosphaerella graminicola, is a species of filamentous fungus, an ascomycete in the family Mycosphaerellaceae. It is a wheat plant pathogen causing septoria leaf blotch that is difficult to control due to resistance to multiple fungicides.
 <details>
 <p>
 
