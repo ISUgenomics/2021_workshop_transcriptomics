@@ -50,6 +50,14 @@ gunzip GCF_000188095.3_BIMP_2.2_genomic.gff.gz
 
 5. Collect the Maize RNA-seq data from NCBI SRA
 
+First, make a list of the SRA files to download
+
+```sh
+# tsv file downloaded from the workshop repo
+cut -f 7 tsv | more | perl -pe 's/;/\n/g' | xargs -I xx echo "wget http://xx"
+awk '{print $3}' tsv > sra
+```
+
 Run this SLURM array script to download the SRA file with fastq-dump from the SRA-toolkit.
 
 ```sh
@@ -73,10 +81,6 @@ Run this SLURM array script to download the SRA file with fastq-dump from the SR
 module load sra-toolkit/2.9.6-ub7kz5h
 
 cd /work/LAS/serb-lab/kmcelroy/2021_workshop_transcriptomics/01_data
-
-# tsv file downloaded from the workshop repo
-cut -f 7 tsv | more | perl -pe 's/;/\n/g' | xargs -I xx echo "wget http://xx"
-awk '{print $3}' tsv > sra
 
 names=($(cat sra))
 echo ${names[${SLURM_ARRAY_TASK_ID}]}
