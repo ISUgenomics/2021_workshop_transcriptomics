@@ -54,14 +54,14 @@ This script does the following
 ```
 #!/bin/bash
 
-module load gmap-gsnap/2018-07-04-gtu46xu
+module load gmap-gsnap/2019-05-12-zjqshxf
 export GMAPDB=/work/gif/TranscriptomicsWorkshop/severin/Maize/02_gsnap/Zea/NAMV5/
 DB_NAME="NAMV5"
 FILE1="$1"
 FILE2="$2"
 OUTFILE=$(basename ${FILE1} | sed 's/_1.fastq$//g')
 # Note: "-N" option for detecting novel splice sites, remove if not needed (0=OFF; 1=ON)
-gsnap -d ${DB_NAME} -N 1 -t 8 -B 5 -m 5 --fails-as-input --input-buffer-size=1000000 --output-buffer-size=1000000 -A sam --split-output=${DB_NAME}_${OUTFILE} ${FILE1} ${FILE2}
+gsnap -d ${DB_NAME} -N 1 -t 8 -B 4 -m 5 --input-buffer-size=1000000 --output-buffer-size=1000000 -A sam --split-output=${DB_NAME}_${OUTFILE} ${FILE1} ${FILE2}
 ```
 
 #### run the script using nextflow parallel workflow
@@ -70,4 +70,15 @@ Parallel workflow requires the input files command which will be executed and pl
 
 ```
 nextflow run isugifNF/parallel --input "ls *fastq | paste - -" --script "gsnapScript.sh" --threads 8 -profile nova
+TranscriptomicsWorkshop/severin/Maize/02_gsnap/gsnapScript.sh" --threads 8 -profile nova
+N E X T F L O W  ~  version 20.07.1
+Launching `isugifNF/parallel` [scruffy_hoover] - revision: 101d292e2e [master]
+process finished for inFILE
+executor >  local (1), slurm (24)
+[3c/8064fe] process > createInput      [100%] 1 of 1 ✔
+[5a/10a85b] process > inputScript (17) [100%] 24 of 24 ✔
+Completed at: 17-Feb-2021 14:03:30
+Duration    : 2h 39m 27s
+CPU hours   : 10.4
+Succeeded   : 25
 ```
