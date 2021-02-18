@@ -1,4 +1,4 @@
-name: gsnapxc_env
+name: gsnap_env
 channels:
   - conda-forge
   - bioconda

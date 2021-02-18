@@ -2,9 +2,13 @@
 
 Authors: Mou & Jennifer
 
-Okay so we are looking at **gsnap** alignment. However is this even installed on Atlas? If not, either install natively / via miniconda / via singularity containers.
+Log onto Atlas HPC and check if the following programs are installed
 
-# Is GSNAP installed?
+* **GSNAP** - for indexing the reference and alignment
+* **samtools** - for `*.sam` to `*.bam` file conversion (smaller intermediate files)
+* **featureCounts** - for getting counts. 
+
+## Check Atlas HPC Modules
 
 The usual way to check if a program is installed is using:
 
@@ -76,9 +80,55 @@ module load singularity/3.5.2      #<= recommended to keep version number, for a
 module load singularity            #<= will load 3.7.1, since that has a "D" = default next to it in list
 ```
 
-I'm not seeing GSNAP on the list...hmm, but there's `singularity` so we could install it via a singularity image. I'm surprised there isn't `miniconda` so we could install the python libraries. Mou and I worked on installing miniconda and GSNAP.
+I'm not seeing GSNAP, samtools or featureCounts on the list...hmm, but there's `singularity` so we could install it via a singularity image. I'm surprised there isn't `miniconda` so we could install the python libraries. Mou and I worked on installing miniconda and GSNAP.
 
-## Install GSNAP locally
+<details><summary><b>Nova HPC</b> contained gsnap, samtools, and featureCounts</summary>
+
+* [Nova\_module\_list.txt](bin/nova_module_list.txt)
+
+Since Nova had many more modules, I used `grep` to pull out lines that contained "gsnap", "samtools" or "subread"
+
+```
+grep -e "gsnap" -e "samtools" -e "subread" nova_module_list.txt
+```
+
+Which gave me: 
+
+```
+   gmap-gsnap/2017-06-16-4oy56bt                        py-fastaindex/0.11rc7-py2-ilmrpiz                              r-rcpparmadillo/0.8.100.1.0-py2-m4g5gmx
+   gmap-gsnap/2018-03-25-qa3kh3t                        py-fastaindex/0.11rc7-py2-sj3lhkk                       (D)    r-rcpparmadillo/0.8.100.1.0-py2-r3.5-6vrcyra
+   gmap-gsnap/2018-07-04-gtu46xu                        py-faststructure/1.0-py2-k4vsldn                               r-rcpparmadillo/0.8.100.1.0-py2-r3.5-65z3l3h               (D)
+   gmap-gsnap/2019-05-12-zjqshxf                 (D)    py-funcsigs/0.4-py2-prasuhx                                    r-rcppblaze/0.2.2-py2-r3.4-xd6bcfz
+   help2man/1.47.4-phopsy7                              py-networkx/2.1-py2-fbsf2d3                                    r-rsamtools/1.28.0-py2-r3.4-cuda9-openmpi3-7qj6enh
+   help2man/1.47.8-7sce2nu                              py-networkx/2.1-py3-mfsvnsu                                    r-rsamtools/1.32.2-py2-r3.5-mpich-hq3t6jr                  (D)
+   libxml2/2.9.9-oqe2ao3                                r-a4reporting/1.24.0-py2-r3.4-wwnambt                          samtools/1.6-lyscjka
+   libxml2/2.9.10-i7eqked                        (D)    r-acepack/1.4.1-py2-r3.4-7r7e46i                               samtools/1.7-kglvk7q
+   libxmu/1.1.2-weujutd                                 r-acepack/1.4.1-py2-r3.5-3gq5fnp                               samtools/1.8-r54nmop
+   libxmu/1.1.2-y6lkbh2                                 r-acepack/1.4.1-py2-r3.5-zmdesfl                        (D)    samtools/1.9-k6deoga
+   libxmu/1.1.2-6zjibzx                          (D)    r-ade4/1.7-16-py3-pfdviww                                      samtools/1.10-py3-xuj7ylj                                  (D)
+   meson/0.55.1-py3-wqljrz5                      (D)    r-blob/1.1.0-py2-r3.5-s7q5xdw                                  subread/1.6.0-ak6vxhs
+   allinea/19.0.3    (D)    cplex/12.8-py2                   gmap-gsnap-legacy/2018.07.04        libs/fftw/3.3.4              perf-reports/6.0          starccm/13.04.010
+```
+
+Ergo, we only had to add the following to the top of slurm scripts:
+
+```
+# === Load Nova Modules
+module load gmap-gsnap
+module load samtools
+module load subread
+
+# === Can check the help documentation for each tool
+gmap_build --help > gmap_build_help.txt
+samtools view --help > samtools_help.txt
+featureCounts --help > featureCounts_help.txt
+```
+
+</details>
+
+---
+
+## Install Programs
 
 Before we get into installing your own programs in the HPC. We need to touch on file organization on an HPC.
 
@@ -90,7 +140,7 @@ This is my general template for organizing folders and files on an HPC. Since th
 
 ```
 /project/projectname/
-           |_ software/              #<= soft link to home (shared programs across a research group)
+           |_ software/              #<= soft link to home (shared programs across a research group, local installs here)
            |_ Jennifer/
                 |_ inbox/            #<= softlink to home
                 |_ outbox/           #<= softlink to home
@@ -99,12 +149,19 @@ This is my general template for organizing folders and files on an HPC. Since th
                     |_ .conda/       #<= softlink to home
                     |_ .nextflow/    #<= softlink to home
                     |_ R/            #<= softlink to home
+                    |_ miniconda3/   #<= will eventually add this... do not add this yet, could also put this in software
 ```
 
 * `inbox` and `outbox`  are nice b.c. I can do ssh mylocalfile.tar.gz jenchang@atlas:inbox/.  and don't have to think about 5gb limit
 * dotfiles (`.singularity`, `.conda`) are usually invisible folders that get large as you install conda packages, or singularity images. These can eat up your home folder ~5GB memory limit if they're not softlinked
 
 ---
+
+Initially we tried to install the programs natively, but eventually switched to `miniconda`
+
+<details><summary>Notes from a local **GSNAP** install</summary>
+
+## Local install of GSNAP
 
 Initially, I was indecisive on compiling GSNAP from source or installing via miniconda. Compiling from source is always going to run faster (more natively) then installing via miniconda/singularity/other containerization program. Installing from a miniconda/singularity/etc will tend to be easier. In the end, we were able to get it installed from source.
 
@@ -162,101 +219,13 @@ ls bin/
 #> gff3_splicesites  gsnap		iit_dump		    vcf_iit
 #> gmap		  gsnap.avx2	iit_get
 ```
+----
 
-# Start GSNAP alignment
+</details>
 
-Hahaha, well we've finally made it (after ~2 days of searching and installing). 
+<details><summary>Notes from local install of **featureCounts**</summary>
 
-Mou found a tutorial link on GSNAP:
-
-* [https://hbctraining.github.io/Intro-to-rnaseq-hpc-gt/lessons/08\_rnaseq\_workflow.html](https://hbctraining.github.io/Intro-to-rnaseq-hpc-gt/lessons/08_rnaseq_workflow.html)
-
-The general format of the pipeline is:
-
-```
-(1) index genome -> (2) map reads to genome -> (3) get counts
-```
-
-The counts will be sent to Diffential Expression analysis programs.
-
-## (1) Build index
-
-This portion is still in progress...
-
-```
-GMAP_BIN=/project/project_name/software/gmap-2020-12-17/bin
-
-${GMAP_BIN}/gmap_build -d <genome name> <path to genome fasta file>
-```
-
-Fetch Maize Reference (B73)
-
-* NCBI Entry for Maize - [https://www.ncbi.nlm.nih.gov/assembly/GCF_902167145.1/](https://www.ncbi.nlm.nih.gov/assembly/GCF_902167145.1/)
-
-Fetch the fna (fasta nucleotide) and the gff (general feature format) files.
-
-Need to unzip the fasta file before `gmap_build` can use it. 
-
-```
-wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/902/167/145/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.fna.gz
-wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/902/167/145/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.gff.gz
-```
-
-Index reference file. You may need to edit paths. 
-
-```
-GMAP_BIN=/project/project_name/software/gmap-2020-12-17/bin
-${GMAP_BIN}/gmap_build \
- -d b73 \
- data_maize/ref/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.fna
-```
-
-* [gsnap_indexgenome.slurm](bin/gsnap_indexgenome.slurm)
-
-# (2) map reads to index
-
-Paired end reads must be fed into gsnap
-
-```
-ls data_maize/reads/* |\
-  tr '\n' '\t'|\
-  sed 's/_2.fastq.gz/_2.fastq.gz|/g'|\
-  tr '|' '\n'|\
-  awk '{print $1,$2}' > input.txt
-```
-
-Let's look at input.txt
-
-```
-data_maize/reads/SRR1573504_1.fastq.gz data_maize/reads/SRR1573504_2.fastq.gz
-data_maize/reads/SRR1573505_1.fastq.gz data_maize/reads/SRR1573505_2.fastq.gz
-data_maize/reads/SRR1573506_1.fastq.gz data_maize/reads/SRR1573506_2.fastq.gz
-data_maize/reads/SRR1573507_1.fastq.gz data_maize/reads/SRR1573507_2.fastq.gz
-data_maize/reads/SRR1573508_1.fastq.gz data_maize/reads/SRR1573508_2.fastq.gz
-data_maize/reads/SRR1573509_1.fastq.gz data_maize/reads/SRR1573509_2.fastq.gz
-data_maize/reads/SRR1573510_1.fastq.gz data_maize/reads/SRR1573510_2.fastq.gz
-data_maize/reads/SRR1573511_1.fastq.gz data_maize/reads/SRR1573511_2.fastq.gz
-data_maize/reads/SRR1573512_1.fastq.gz data_maize/reads/SRR1573512_2.fastq.gz
-data_maize/reads/SRR1573513_1.fastq.gz data_maize/reads/SRR1573513_2.fastq.gz
-data_maize/reads/SRR1573514_1.fastq.gz data_maize/reads/SRR1573514_2.fastq.gz
-data_maize/reads/SRR1573515_1.fastq.gz data_maize/reads/SRR1573515_2.fastq.gz
-data_maize/reads/SRR1573516_1.fastq.gz data_maize/reads/SRR1573516_2.fastq.gz
-data_maize/reads/SRR1573517_1.fastq.gz data_maize/reads/SRR1573517_2.fastq.gz
-data_maize/reads/SRR1573518_1.fastq.gz data_maize/reads/SRR1573518_2.fastq.gz
-data_maize/reads/SRR1573519_1.fastq.gz data_maize/reads/SRR1573519_2.fastq.gz
-data_maize/reads/SRR1573520_1.fastq.gz data_maize/reads/SRR1573520_2.fastq.gz
-data_maize/reads/SRR1573521_1.fastq.gz data_maize/reads/SRR1573521_2.fastq.gz
-data_maize/reads/SRR1573522_1.fastq.gz data_maize/reads/SRR1573522_2.fastq.gz
-data_maize/reads/SRR1573523_1.fastq.gz data_maize/reads/SRR1573523_2.fastq.gz
-data_maize/reads/SRR1573524_1.fastq.gz data_maize/reads/SRR1573524_2.fastq.gz
-data_maize/reads/SRR1573525_1.fastq.gz data_maize/reads/SRR1573525_2.fastq.gz
-data_maize/reads/SRR1573526_1.fastq.gz data_maize/reads/SRR1573526_2.fastq.gz
-data_maize/reads/SRR1573527_1.fastq.gz data_maize/reads/SRR1573527_2.fastq.gz
-```
-
-# (3) get counts
-
-## Install featureCount
+## Local install of featureCounts
 
 Heh, this one was missing too.
 
@@ -289,15 +258,22 @@ Thankfully this is an already compiled binary. Ergo:
   
 4. Make sure program runs: `./bin/featureCounts`
 
-Geh... samtools is missing, which requires two difficult to install libraries... the benefits of installing natively has gone down.
+</details>
 
-# Alternative: install everything in miniconda
+<details><summary>Notes from a local install of **samtools** - c library linking errors, did not finish</summary>
 
-Samtools required a few specific C libraries, ergo I gave up natively install and switched to miniconda.
+## Local install of samtools
+
+Geh... samtools is missing, which requires two difficult to install libraries... the benefits of installing natively has gone down. Decided to switch to miniconda. Samtools required a few specific C libraries, ergo I gave up natively install and switched to miniconda.
+
+</details>
+
+
+# Restart: install everything in miniconda
 
 ## Install miniconda
 
-Based on [https://conda.io/projects/conda/en/latest/user-guide/install/linux.html], install locally to Atlas HPC.
+Based on [https://conda.io/projects/conda/en/latest/user-guide/install/linux.html](https://conda.io/projects/conda/en/latest/user-guide/install/linux.html), install locally to Atlas HPC.
 
 ```
 # Fetch the install script
@@ -305,55 +281,296 @@ wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 
 # Run the fetched script
 bash Miniconda3-latest-Linux-x86_64.sh
+# acceept all defaults (press enter/yes through entire download process)
 
 # By default it places miniconda3 in home folder (remember 5gb limit)
 # Ergo we move this to the project folder and link to home
 mv ~/miniconda3 /project/project_folder/software/.
 ln -s /project/project_folder/software/miniconda3 ~/.
+
+# Check if miniconda is installed and working
+source ~/.bashrc
+conda -version
 ```
 
-Create an environment file, save it as `gsnap_env.yml`.
+## Install samtools, gmap, subread (featureCounts)
+
+1. Create an environment file, save it as `gsnap_env.yml`.
+
+  ```
+  name: gsnap_env
+  channels:
+    - conda-forge
+    - bioconda
+    - defaults
+  dependencies:
+    - python=3.8
+    - gmap 
+    - samtools
+    - subread
+  ```
+
+2. From the command line create the miniconda environment:
+
+  ```
+  conda env create -f gsnap_env.yml
+  ```
+
+  And enjoy the ease with which miniconda installs all dependencies for gsnap (`gmap`), samtools (`samtools`) and featureCounts (`featureCounts`). 
+  
+3. Check if environment was created:
+
+  ```
+  conda env list          #<= list all environments
+  
+  #> conda environments:
+  #> base                  *  /home/jennifer.chang/miniconda3
+  #> gsnap_env                /home/jennifer.chang/miniconda3/envs/gsnap_env
+  ```
+  
+  Notice how a new folder is created in `miniconda` which contains all the python executables and python packages.
+  
+  ```
+  ls /home/jennifer.chang/miniconda3/envs/gsnap_env/
+  ```
+  
+4. Then the tools are available when you activate the environment.
+
+  ```
+  conda activate gsnap_env
+  samtools --version        # check samtools version...
+  gmap --version
+  featureCounts -v
+  ```
+
+5. In order to use a miniconda environment in a slurm script, you'll need to activate yoru local miniconda, then the `gsnap_env`. Place the following after your `SBATCH` lines and before the `gsnap` / `samtools` / `featureCounts` calls.
+
+  The top of the slurm script will require a few extra lines before `conda activate` will work.
+
+  ```
+  set +eu
+  USER=jennifer.chang
+  source /home/${USER}/miniconda3/etc/profile.d/conda.sh
+  conda activate gsnap_env
+
+  ## gsnap/samtools/featureCount commands here
+  ```
+
+-----
+
+# Start GSNAP alignment
+
+Hahaha, well we've finally made it (after a week of trying installation methods). 
+
+Mou found a tutorial link on GSNAP:
+
+* [https://hbctraining.github.io/Intro-to-rnaseq-hpc-gt/lessons/08\_rnaseq\_workflow.html](https://hbctraining.github.io/Intro-to-rnaseq-hpc-gt/lessons/08_rnaseq_workflow.html)
+
+The general format of the pipeline is:
+
+  ```
+  (1) index genome -> (2) map reads to genome -> (3) get counts
+  ```
+
+The counts will be sent to Diffential Expression analysis programs.
+
+## (1) Build reference genome index with `gmap_build`
+
+1. Index the reference genome
+
+<details><summary>More info on Maize Reference</summary>
+
+Fetch Maize Reference (B73)
+
+* NCBI Entry for Maize - [https://www.ncbi.nlm.nih.gov/assembly/GCF_902167145.1/](https://www.ncbi.nlm.nih.gov/assembly/GCF_902167145.1/)
+
+Fetch the fna (fasta nucleotide) and the gff (general feature format) files.
+
+Need to unzip the fasta file before `gmap_build` can use it. 
 
 ```
-name: gsnap_env
-channels:
-  - conda-forge
-  - bioconda
-  - defaults
-dependencies:
-  - python=3.8
-  - gmap
-  - samtools      #<= notice you could probably list all tools
-  - subread
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/902/167/145/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.fna.gz
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/902/167/145/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.gff.gz
 ```
 
-And from the command line create the miniconda environment:
+</details>
 
 ```
-conda env create -f gsnap_env.yml
-```
-
-And enjoy the ease with which miniconda installs all dependencies for gsnap (`gmap`), samtools (`samtools`) and featureCounts (`featureCounts`). 
-
-Then the tools are available when you activate the environment.
-
-```
-conda activate gsnap_env
-samtools -v
-gmap -v
-featureCounts -v
-```
-
-The top of the slurm script will require a few extra lines before `conda activate` will work.
-
-```
+# ==== Activate miniconda
+set +eu
 USER=jennifer.chang
-source /home/${USER}/.bashrc
+source /home/${USER}/miniconda3/etc/profile.d/conda.sh
 conda activate gsnap_env
 
-## gsnap/samtools/featureCount commands here
+# ==== Connect the executable (either local or miniconda)
+# GMAP_BUILD=/project/project_name/software/gmap-2020-12-17/bin/gmap_build
+GMAP_BUILD=gmap_build
+
+# ==== Define input/output variables
+GENOME_NAME=b73
+GENOME_FASTA=data_maize/ref/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.fna.gz
+GMAPDB=/project/project_name/software/gmapdb
+
+# ==== Main Run
+${GMAP_BUILD} --gunzip -d ${GENOME_NAME} -D ${GMAPDB} ${GENOME_FASTA}
 ```
 
+* [gsnap_indexgenome.slurm](bin/gsnap_indexgenome.slurm) - needs to be updated...
 
+Notice how we can split the `gmap_build` command in 3 sections. 
 
+|flag | value | reason |
+|:-:|:-:|:-:|
+| -d | b73 | arbitrary name of the reference genome |
+| -D | /project/project_name/software/gmapdb | directory where indexed genome will be saved |
+|--gunzip| | input file is a compressed gz file |
 
+How might you change the above command to run bumblebee data?
+
+# (2) map RNAseq reads to reference with `gsnap`
+
+```
+#SBATCH --mem 300000
+
+# ==== Activate miniconda
+set +eu
+USER=jennifer.chang
+source /home/${USER}/miniconda3/etc/profile.d/conda.sh
+conda activate gsnap_env
+
+# ==== Link executables (local or miniconda)
+# GSNAP=/project/project_name/software/gmap-2020-12-17/bin/gsnap
+GSNAP=gsnap
+SAMTOOLS=samtools
+
+# ==== Define input/output variables
+GENOME_NAME=b73
+GMAPDB=/project/project_name/software/gmapdb
+READNAME="Treatment_r1"
+READONE=  # Path to left reads
+READTWO=  # Path to right reads
+OUTBAM=${READNAME}.Aligned.sortedByCoord.out.bam
+
+# ==== Main Run
+${GSNAP} \
+ -d ${GENOME_NAME} -D ${GMAPDB} \
+ -t 16 -M 2 -n 10 -N 1 \
+ --quality-protocol=sanger -w 200000 --pairmax-rna=200000 \
+ -E 1 -B 2 \
+ -A sam \
+ ${READONE} ${READTWO} | \
+ ${SAMTOOLS} view -bS - > ${OUTBAM}
+ 
+# ${SAMTOOLS} sort -m 3G - > ${OUTBAM} <= The sort statement keeps running out of memory and quitting, commenting out for now
+```
+
+**gsnap parameters**
+
+|flag | value | reason |
+|:-:|:-:|:-:|
+| -d | b73 | arbitrary name of the reference genome |
+| -D | /project/project_name/software/gmapdb | directory where indexed genome will be saved |
+| -t | 16 | number of threads to use |
+| -M | 2 | |
+| -n | 10 | |
+| -N | 1 | |
+|--quality-protocol | sanger | use sanger (vs illumina) quality scores |
+| -w | 200000 | window? |
+| --pairmax-rna | 200000 | |
+| -E | 1 | | 
+| -B | 2 | |
+| -A | sam | output a sam file? |
+
+**samtools view parameters**
+
+|flag | value | reason |
+|:-:|:-:|:-:|
+| -b | | output file as a bam file |
+| -S | | auto detect if input is bam or sam |
+
+The purpose of `samtools view -bS` is basically to convert a large sam file into a smaller bam file (binary)
+
+* see explaination on SAM vs BAM here - [wikilink](https://en.wikipedia.org/wiki/SAMtools#:~:text=SAM%20files%20are%20human%2Dreadable,to%20work%20with%20than%20SAM.) - lol, whoever is updating the wiki is also using `[todo: ...]` statements :)
+
+[todo: add shortened view of SAM file or example SAM file here ]
+
+To determine amount of memory per node, use `sinfo`.
+
+```
+sinfo -O partition,allocnodes,memory
+#         |          |           |_ size of memory per node in megabytes
+#         |          |_ allowed allocating nodes
+#         |_ name of partition (#SBATCH -p partitionNameHere)
+```
+
+For more information on `sinfo`, see [this link](http://manpages.ubuntu.com/manpages/cosmic/man1/sinfo.1.html)
+
+### In progress, preparing input files
+
+... In progress... preparing input files ... wasn't sure if `gsnap` automatically detects paired read data if I pass in a glob `*_1.fastq.gz` and `*_2.fastq.gz` or if it would do an all `_1` vs all `_2` comparison. Check this first before scaling up. I could hard code the command (make sure it's not being inefficient) but the developers of `gsnap` hopefully have fixed this potential issue in the design of the software (test and check).
+
+Paired end reads must be fed into gsnap in order, basically print out the paired end reads.
+
+```
+ls data_maize/reads/* |\
+  tr '\n' '\t'|\
+  sed 's/_2.fastq.gz/_2.fastq.gz|/g'|\
+  tr '|' '\n'|\
+  awk '{print $1,$2}' > input.txt
+```
+
+Let's look at input.txt
+
+<details><summary>input.txt</summary>
+
+```
+data_maize/reads/SRR1573504_1.fastq.gz data_maize/reads/SRR1573504_2.fastq.gz
+data_maize/reads/SRR1573505_1.fastq.gz data_maize/reads/SRR1573505_2.fastq.gz
+data_maize/reads/SRR1573506_1.fastq.gz data_maize/reads/SRR1573506_2.fastq.gz
+data_maize/reads/SRR1573507_1.fastq.gz data_maize/reads/SRR1573507_2.fastq.gz
+data_maize/reads/SRR1573508_1.fastq.gz data_maize/reads/SRR1573508_2.fastq.gz
+data_maize/reads/SRR1573509_1.fastq.gz data_maize/reads/SRR1573509_2.fastq.gz
+data_maize/reads/SRR1573510_1.fastq.gz data_maize/reads/SRR1573510_2.fastq.gz
+data_maize/reads/SRR1573511_1.fastq.gz data_maize/reads/SRR1573511_2.fastq.gz
+data_maize/reads/SRR1573512_1.fastq.gz data_maize/reads/SRR1573512_2.fastq.gz
+data_maize/reads/SRR1573513_1.fastq.gz data_maize/reads/SRR1573513_2.fastq.gz
+data_maize/reads/SRR1573514_1.fastq.gz data_maize/reads/SRR1573514_2.fastq.gz
+data_maize/reads/SRR1573515_1.fastq.gz data_maize/reads/SRR1573515_2.fastq.gz
+data_maize/reads/SRR1573516_1.fastq.gz data_maize/reads/SRR1573516_2.fastq.gz
+data_maize/reads/SRR1573517_1.fastq.gz data_maize/reads/SRR1573517_2.fastq.gz
+data_maize/reads/SRR1573518_1.fastq.gz data_maize/reads/SRR1573518_2.fastq.gz
+data_maize/reads/SRR1573519_1.fastq.gz data_maize/reads/SRR1573519_2.fastq.gz
+data_maize/reads/SRR1573520_1.fastq.gz data_maize/reads/SRR1573520_2.fastq.gz
+data_maize/reads/SRR1573521_1.fastq.gz data_maize/reads/SRR1573521_2.fastq.gz
+data_maize/reads/SRR1573522_1.fastq.gz data_maize/reads/SRR1573522_2.fastq.gz
+data_maize/reads/SRR1573523_1.fastq.gz data_maize/reads/SRR1573523_2.fastq.gz
+data_maize/reads/SRR1573524_1.fastq.gz data_maize/reads/SRR1573524_2.fastq.gz
+data_maize/reads/SRR1573525_1.fastq.gz data_maize/reads/SRR1573525_2.fastq.gz
+data_maize/reads/SRR1573526_1.fastq.gz data_maize/reads/SRR1573526_2.fastq.gz
+data_maize/reads/SRR1573527_1.fastq.gz data_maize/reads/SRR1573527_2.fastq.gz
+```
+
+</details>
+
+# (3) get counts with `featureCounts`
+
+Posted by Rick in Slack Channel, will need to modify for gsnap output.
+
+```
+featureCounts -T 16 -p -t gene -g ID -a augustus.gff3 -o filtered_1703-TM102_sorted_counts_genes.txt filtered_1703-TM102_sorted.bam
+```
+
+**featureCounts parameters**
+
+|flag | value | reason |
+|:-:|:-:|:-:|
+| -T | | threads?|
+| -p | | |
+| -t | gene| |
+| -g | | |
+| -a | augustus.gff3 | annotation?|
+| -o | | output file name?|
+
+# Counts
+
+todo: describe final output here. Report basic stats, number of rows, etc. Do certain read pairs have more rows than others? Anything concerning about the data? Etc, etc.
