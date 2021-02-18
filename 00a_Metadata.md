@@ -2,6 +2,67 @@
 
 
 ## Bumble Bee
+Well_ID	Sample_Name	Trt	Nest
+A01	A1	ctrl	1
+A02	A2	ctrl	1
+A03	A3	ctrl	1
+A04	A4	ctrl	1
+A05	A5	ctrl	1
+A06	A6	ctrl	1
+A07	A7	ctrl	1
+A08	A8	ctrl	1
+A09	A9	ctrl	1
+A10	A10	ctrl	1
+A11	A11	ctrl	1
+A12	A12	ctrl	1
+B01	A13	ctrl	1
+B02	A14	ctrl	1
+B03	A16	ctrl	1
+B04	A17	ctrl	1
+B05	A18	ctrl	1
+B06	A19	ctrl	1
+B07	B2	exposed	2
+B08	B3	exposed	2
+B09	B4	exposed	2
+B10	B5	exposed	2
+B11	B6	exposed	2
+B12	B7	exposed	2
+C01	B8	exposed	2
+C02	B10	exposed	2
+C03	C1	ctrl	3
+C04	C2	ctrl	3
+C05	C3	ctrl	3
+C06	C4	ctrl	3
+C07	C6	ctrl	3
+C08	C7	ctrl	3
+C09	C8	ctrl	3
+C10	C9	ctrl	3
+C11	D1	exposed	4
+C12	D2	exposed	4
+D01	D5	exposed	4
+D02	D6	exposed	4
+D03	D7	exposed	4
+D04	D8	exposed	4
+D05	D9	exposed	4
+D06	D10	exposed	4
+D07	D11	exposed	4
+D08	E1	exposed	5
+D09	E2	exposed	5
+D10	E5	exposed	5
+D11	E7	exposed	5
+D12	E8	exposed	5
+E01	E9	exposed	5
+E02	E10	exposed	5
+E03	F1	exposed	6
+E04	F2	exposed	6
+E05	F3	exposed	6
+E06	F4	exposed	6
+E07	F5	exposed	6
+E08	F6	exposed	6
+E09	F7	exposed	6
+E10	F8	exposed	6
+E11	F9	exposed	6
+E12	F10	exposed	6
 
 
 ## Maize Dataset:
