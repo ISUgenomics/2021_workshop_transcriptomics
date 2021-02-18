@@ -19,6 +19,7 @@ salmon index --keepDuplicates -t GCF_000188095.3_BIMP_2.2_rna.fna -i bombus_inde
 ## Maize data
 
 1. Kallisto
+
 Run this array job script to run kallisto quant on every pair of reads
 
 ```sh
@@ -59,6 +60,7 @@ sbatch kallisto_maize.sbatch
 ```
 
 2. Salmon
+
 Run this array job script to run salmon quant on every pair of reads
 
 ```sh
@@ -98,7 +100,7 @@ Run the above script:
 sbatch salmon_maize.sbatch
 ```
 
-How similar are the Kallisto and Salmon abundance estimates? I generated one file with all of the counts and tpm values organized by SRA file, analysis program, and transcritp.
+How similar are the Kallisto and Salmon abundance estimates? I generated one file with all of the counts and tpm values organized by SRA file, analysis program, and transcript.
 
 ```sh
 # make file with headers for columns
