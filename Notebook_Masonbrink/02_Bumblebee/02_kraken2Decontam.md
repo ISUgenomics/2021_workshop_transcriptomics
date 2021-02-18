@@ -50,7 +50,7 @@ cat *report.summary |sed 's/_L002_R1_001.fastq.gz.report//g' |awk '{print $3,$6,
 There are multiple taxons that are present in the bee data, though it does not appear to be related to a treatment.  
 
 
-##### Read content identified as Bombus terrestris
+### Read content identified as Bombus terrestris 
 
 ```
 grep "terrestris" *.report|awk '$5=="S1"' |awk '$2>0' |sed 's/_/\t/2'  |cut -f 1,3- |sed 's/[ ]*//g' |sed 's/terrestris/ terrestris/g' |less
@@ -125,7 +125,7 @@ grep "terrestris" *.report|awk '$5=="S1"' |awk '$2>0' |sed 's/_/\t/2'  |cut -f 1
 </details>
 
 
-###### Read content unknown
+##### Read content unknown
 ```
 grep "unclassified" *.report|awk '$5=="U"' |awk '$2>0' |sed 's/_/\t/2'  |sed 's/: /\t/1'  |cut -f 1,3-|sed 's/[ ]*//g' |less
 ```
@@ -198,7 +198,7 @@ grep "unclassified" *.report|awk '$5=="U"' |awk '$2>0' |sed 's/_/\t/2'  |sed 's/
 </p>
 </details>
 
-##### General contaminant abundance within the 60 samples.
+### General contaminant abundance within the 60 samples.
 ```
  less FinalContaminationNetwork.tab |awk '{print $2}' |sort |uniq -c |sort -k1,1nr |less
 ```
@@ -250,7 +250,7 @@ grep "unclassified" *.report|awk '$5=="U"' |awk '$2>0' |sed 's/_/\t/2'  |sed 's/
 </details>
 
 
-###### Sarcoystidae Read Counts
+##### Sarcoystidae Read Content
 ```
  grep "Sarcocystidae" *.report|awk '$2>0' |sed 's/_/\t/2'  |sed 's/: /\t/1'  |cut -f 1,3-|sed 's/[ ]*//g' |less  
 ```
@@ -326,7 +326,7 @@ This is a family of cyst-forming apicomplexan protozoan parasites. Kraken could 
 </details>
 
 
-###### Sporisorium graminicola Read Counts
+##### Sporisorium graminicola Read Content
 
 ```
 grep "Sporisorium graminicola" *.report|awk '$2>0' |sed 's/_/\t/2'  |sed 's/: /\t/1'  |cut -f 1,3-|sed 's/[ ]*//g' |sed 's/graminicola/_graminicola/g' |less
@@ -402,7 +402,7 @@ Not much information out there. The basidiomycete Sporisorium graminicola (forma
 </details>
 
 
-###### leotiomyceta Read Counts
+##### leotiomyceta Read Content
 
 ```
 grep "Sporisorium graminicola" *.report|awk '$2>0' |sed 's/_/\t/2'  |sed 's/: /\t/1'  |cut -f 1,3-|sed 's/[ ]*//g' |sed 's/graminicola/_graminicola/g' |less
@@ -476,7 +476,7 @@ Half of these reads go to the species Zymoseptoria tritici IPO323
 </details>
 
 
-###### Abyssogena phaseoliformis symbiont OG214
+##### Abyssogena phaseoliformis symbiont OG214 Read Content
 
 ```
 grep "Abyssogena" *.report|awk '$5=="S1"'|awk '$2>0' |sed 's/_/\t/2'  |sed 's/: /\t/1'  |cut -f 1,3-|sed 's/[ ]*//g' |sed 's/graminicola/_graminicola/g' |less
@@ -541,7 +541,7 @@ This is and endosymbiont of a vesicomyid bivalve very little known.
 </details>
 
 
-###### Dictyostelium discoideum AX4
+##### Dictyostelium discoideum AX4 Read Content
 ```
  grep "Dictyostelium" *.report|awk '$5=="S1"'|awk '$2>0' |sed 's/_/\t/2'  |sed 's/: /\t/1'  |cut -f 1,3-|sed 's/[ ]*//g' |sed 's/graminicola/_graminicola/g' |less
 ```
@@ -597,7 +597,7 @@ The amoebozoa are also noteworthy as representing one of the earliest branches f
 </details>
 
 
-###### Plasmodium Genus Content
+##### Plasmodium Genus Read Content
 ```
 grep "Plasmodium" *.report|awk '$5=="G"'|awk '$2>0' |sed 's/_/\t/2'  |sed 's/: /\t/1'  |cut -f 1,3-|sed 's/[ ]*//g' |sed 's/graminicola/_graminicola/g' |less
 ```
