@@ -4,7 +4,9 @@ Written summary of methods performed in this repo. A lot of the steps described 
 
 ## Raw data
 * **Maize data:** https://www.ebi.ac.uk/ena/browser/view/PRJNA260793
-* **Maize reference (*Zea mays* B73):** ftp://ftp.ensemblgenomes.org/pub/plants/release-49/fasta/zea_mays/dna/Zea_mays.B73_RefGen_v4.dna.*gz
+* **Maize reference (*Zea mays* B73), Version 5:**
+  * fna file: https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/902/167/145/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.fna.gz
+  * gff file: https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/902/167/145/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.gff.gz
 * **Bee data**
 * **Bee reference (*Bombia impatiens*):** https://hymenoptera.elsiklab.missouri.edu/genome_fasta<br /> Bombus_impatiens_GCF_000188095.3_BIMP_2.2_genomic.fa
 
@@ -14,14 +16,16 @@ https://www.hpc.msstate.edu/computing/atlas/
   * dtn node: faster speed at transferring data onto the HPC
 
 ### Maize
-`/project/group/username/rnaseq/maize`
+`/projectdirectory/mydirectory/rnaseq/maize`
 1. Fetch maize reference genome:
 ```
 wget ftp://ftp.ensemblgenomes.org/pub/plants/release-49/fasta/zea_mays/dna/Zea_mays.B73_RefGen_v4.dna.*gz
 ```
 
 2. Slurm script for fetching maize sequences to Atlas. See Jennifer's `atlas_maizedata.slurm` for template
-```
+<details><summary>See Jennifer's `atlas_maizedata.slurm` for template</summary>
+
+  ```
 #!/bin/bash
 #SBATCH --job-name=Maize                             # name of the job submitted
 #SBATCH -p service                                   # name of the queue you are submitting to
@@ -82,12 +86,12 @@ wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR157/007/SRR1573527/SRR1573527_1.fastq
 wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR157/007/SRR1573527/SRR1573527_2.fastq.gz
 #End of file
 ```
-`Submitted batch job 127697`
+  `Submitted batch job 127697`
   * Fetching sequences with `wget`: https://github.com/ISUgenomics/2021_workshop_transcriptomics/blob/main/00_Files.md
-
+  </details>
 
 ### Bee
-`/project/group/username/rnaseq/bee`
+`/projectdirectory/mydirectory/rnaseq/bee`
 
 1. Download all data locally in `bee/`
 
@@ -112,21 +116,27 @@ tar -zcvf bee.tar.gz bee/
 
 ## File and software tool locations on Atlas
 ```
-project/
+ProjectDirectory/
+  |_MyDirectory/
       |_bee/
-          |_raw_data/
-          |_meta/
-          |_results/
-          |_gsnap/
-          |_scripts/
+          |_bee.tar.gz
           |_logs/
+          |_mapping/
+          |_meta/
+          |_raw_data/
+          |_reference_genome_bee/
+          |_results/
+              |_gsnap/
+          |_scripts/
       |_maize/
-          |_raw_data/
-          |_meta/
-          |_results/
           |_gsnap/
-          |_scripts/
+              |_b73_reference_gsnap/
           |_logs/
+          |_metadata/
+          |_raw_data/
+          |_reference_genome/
+          |_results/    
+          |_scripts/
       |_dot_files
           |_miniconda3/
           |_Miniconda3-latest-Linux-x86_64.sh
@@ -138,15 +148,17 @@ project/
                   |_bin/ # executables in here
                       |_gmap_build
                       |_gmap
+              |_gmapdb/
+                  |_b73/
               |_gmap-gsnap-2020-12-17.tar
 ```
 ```
 home/
-    |_ShortcutToProjectDirectory/
-    |_inbox/
-    |_outbox/
-    |_miniconda3/ #linked to project directory/
-    |_software # linked to project directory/software/
+    |_rnaseq # linked to projectdirectory/mydirectory/
+    |_inbox/ #linked to projectdirectory/mydirectory/
+    |_outbox/ #linked to projectdirectory/mydirectory/
+    |_miniconda3/ #linked to projectdirectory/mydirectory/dot_files/
+    |_software # linked to projectdirectory/mydirectory/dot_files/
         |_bbmap/
         |_BBMap_38.86.tar
         |_gmap # symbolic link to gmap-2020-12-17/src/gmap.avx2>
@@ -155,7 +167,10 @@ home/
 ```
 * dotfiles (`.singularity, .conda`) are usually invisible folders that get large as you install conda packages, or singularity images. These can eat up your home folder ~5GB memory limit if they're not softlinked
 
-## Install gsnap on Atlas
+## Install gsnap on Atlas -- giving up because too difficult to locally install other tools that gsnap needs
+
+<details><summary>Notes from a local **GSNAP** install</summary>
+
 1. Fetch gsnap software to Atlas in project directory.
 ```
 wget http://research-pub.gene.com/gmap/src/gmap-gsnap-2020-12-17.tar.gz
@@ -174,6 +189,10 @@ make install
 * If we look at the README instructions, it shows the configure -> make -> make install method of building. Here, we modified the `./configure` slightly to place the gmap executable in the software folder.
 
 * executables including gmap are in `bin/`: `/project/dot_files/software/gmap-2020-12-17/bin`
+</details>
+
+3. See Jennifer's notes on local install of **featureCounts** and **samtools**. They were too difficult to install on Atlas, so will go with Miniconda instead.
+
 
 ## Setting up additional items on Atlas
 1. Created several shortcuts to set up and run `debug` and `myjobs` via editing `.bashrc` file (rather than typing the long commands for each)
@@ -184,14 +203,73 @@ salloc -N 1 -p atlas -t 01:00:00 --account=PROJnameHERE
 squeue | grep UserNameHere
 ```
 
-2. Also install miniconda to atlas by running `bash Miniconda3-latest-Linux-x86_64.sh`. Continuously press enter, even on prompt asking where to install miniconda3. You can move the source folder afterwards, in which case, it was moved to `project/`  and linked to `home/software/`
+2. Run `source ~/.bashrc` to "restart" shell and apply latest changes to `.bashrc`. Atlas doesn't do this when you login, but Ceres does.
 
-3. Run `source ~/.bashrc` to "restart" shell and apply latest changes to `.bashrc`. Atlas doesn't do this when you login, but Ceres does.
+3. Created `inbox` and `outbox` so that we can do ssh mylocalfile.tar.gz UserName@atlas:inbox/. and don't have to think about 5gb home directory limit
 
-4. Created `inbox` and `outbox` so that we can do ssh mylocalfile.tar.gz UserName@atlas:inbox/. and don't have to think about 5gb home directory limit
+## Restart: install everything in miniconda
+Decided miniconda was the best approach to run gmap, featureCounts, samtools. Local install of these tools were too difficult (see Jennifer's notes).
+
+1. Install miniconda to atlas by running `bash Miniconda3-latest-Linux-x86_64.sh`. Continuously press enter, even on prompt asking where to install miniconda3. You can move the source folder afterwards, in which case, it was moved to `project/`  and linked to `home/software/`.
+
+2. Install samtools, gmap, subread (featureCounts) by first creating an environment file `gsnap_env.yml` in `miniconda3/envs/`
+```
+name: gsnap_env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.8
+  - gmap
+  - samtools
+  - subread
+```
+
+3. From the command line (in `salloc` mode), create miniconda environment in same directory.
+```
+conda env create -f gsnap_env.yml
+```
+
+4. Check that environment was created:
+```
+conda env list          #<= list all environments
+#> conda environments:
+#> base                  *  /home/miniconda3
+#> gsnap_env                /home/miniconda3/envs/gsnap_env
+```
+
+5. Activate conda environment and do a version check as a test that everything is working
+```
+conda activate gsnap_env
+samtools --version        # check samtools version: 1.11
+gmap --version        # gmap version: 2020-10-14
+featureCounts -v    #featureCounts version: v2.0.1
+```
+
+6. To activate conda environment, activate local miniconda, and then `gsnap_env`.
+```
+#! /usr/bin/env bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=16
+#SBATCH --time=24:00:00
+#SBATCH --job-name=gsnap
+#SBATCH --out=stdout.%j.%N.%x
+#SBATCH --error=stderr.%j.%N.%x
+#SBATCH --mail-user=myemail@email.com
+#SBATCH --mail-type=begin
+#SBATCH --mail-type=end
+#SBATCH --account=ProjectName
+set -e
+set -u
+set +eu
+source /home/k/miniconda3/etc/profile.d/conda.sh
+conda activate gsnap_env
+## gsnap/samtools/featureCount commands here
+```
 
 ## Alignment with gsnap
-### Maize
+### About gsnap
 1. Workflow with gsnap: https://hbctraining.github.io/Intro-to-rnaseq-hpc-gt/lessons/08_rnaseq_workflow.html
 * Set up directory tree like one below
 ```
@@ -206,28 +284,213 @@ rnaseq/
 
 2. Literature about gsnap: https://link.springer.com/protocol/10.1007%2F978-1-4939-3578-9_15
 
-3. Pre-process a genome to create a genome index.
+3. The general format of the pipeline is:
+```
+(1) index genome -> (2) map reads to genome -> (3) get counts
+```
+* The counts will be sent to Diffential Expression analysis programs.
+
+4. First step: Pre-process reference genome to create a genome index.
 ```
 gmap_build -d <genome name> <path to genome fasta file>
 ```
+* default value for -k is 15 (from https://github.com/juliangehring/GMAP-GSNAP/blob/master/README)
 
-4. Map reads to genome
+5. Second step: Map reads to genome
 ```
 gsnap -d <genome> <read1_file> <read2_file>
 ```
 * <genome> is the name of the genome database created by gmap_build
 
+### Maize -- local gsnap
+<details><summary>Notes of running **GSNAP** locally - made genomic index using local gsnap, continue the rest with miniconda3</summary>
+
+1. Pre-process Zea mays B73 reference genome to create a genome index.
+```
+/project/projectdirectory/mydirectory/dot_files/software/gmap-2020-12-17/bin/gmap_build -d b73 /project/projectdirectory/mydirectory/rnaseq/maize/reference_genome/Zea_mays.B73_RefGen_v4.dna.toplevel.fa
+```
+```
+Submitted batch job 130262
+```
+
+2. Seems the command worked, but `b73/` ended up in `/project/projectdirectory/mydirectory/dot_files/software/gmapdb`. I looked at stderr file and noticed these two error messages found at the beginning and end of file
+```
+#lines 3-4
+Destination directory not defined with -D flag, so writing files under /project/projectdirectory/mydirectory/dot_files/software/gmapdb
+#line 338
+/var/spool/slurmd/job130262/slurm_script: line 33: Wed: unbound variable
+```
+* Jennifer pointed out that when we did `./configure --something_gmapdb=/project/.../software` it set the `-D` to be in `software/gmapdb`
+* `-d` is the genome name and `-D`  is where to store it
+* in the future, also make sure to add a `-D desired/directory/` to command
+* ignore error message on line 33 of stderr file.
+
+### Output files
+```
+b73.chromosome	    b73.contig.iit     b73.ref061regiondb	b73.version
+b73.chromosome.iit  b73.genomebits128  b73.ref153offsets64meta
+b73.chrsubset	    b73.genomecomp     b73.ref153offsets64strm
+b73.contig	    b73.maps	       b73.ref153positions
+```
+
+3. Map reads to genome
+```
+gsnap -d <genome> <read1_file> <read2_file>
+```
+Parameters to add
+* -D genome directory
+* -d genome database (is it `b73/`?)
+* what else?
+
+```
+gsnap -d /project/projectdirectory/mydirectory/dot_files/software/gmapdb/b73/ -D /project/projectdirectory/mydirectory/rnaseq/maize/gsnap/ /project/projectdirectory/mydirectory/rnaseq/maize/raw_data/*_1.fastq.gz /project/projectdirectory/mydirectory/rnaseq/maize/raw_data/*_2.fastq.gz
+```
+
+Example command for gsnap:
+```
+gsnap -d grch38_chr1 -D /gstore/scratch/hpctrain/chr1_reference_gsnap \
+-t 6 -M 2 -n 10 -N 1 \
+--quality-protocol=sanger -w 200000 --pairmax-rna=200000 \
+-E 1 -B 2 \
+-A sam raw_data/Mov10_oe_1.subset.fq | \
+samtools view -bS - | \
+samtools sort - \
+ > results/gsnap/Mov10_oe_1.Aligned.sortedByCoord.out.bam
+```
+</details>
+
+### Maize -- miniconda3
+1. Create genomic index with B73 reference genome version 5
+  ```
+  #! /usr/bin/env bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=16
+#SBATCH --time=24:00:00
+#SBATCH --job-name=gsnap
+#SBATCH --out=stdout.%j.%N.%x
+#SBATCH --error=stderr.%j.%N.%x
+#SBATCH --mail-user=myem@il.com
+#SBATCH --mail-type=begin
+#SBATCH --mail-type=end
+#SBATCH --account=fsepru
+set -e
+set -u
+
+# ==== Activate miniconda
+set +eu
+source /home/k/miniconda3/etc/profile.d/conda.sh
+conda activate gsnap_env
+
+# ==== Connect the executable (either local or miniconda)
+# GMAP_BUILD=/project/f/k/dot_files/software/gmap-2020-12-17/bin/gmap_build
+GMAP_BUILD=gmap_build
+
+# ==== Define Variables (this way you can swap out directories/input file)
+GENOME_NAME=b73
+GENOME_FASTA=/home/k/rnaseq/maize/reference_genome/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.fna
+GMAPDB=/project/f/k/dot_files/software/gmapdb
+
+# ==== Run gmap_build with Maize Reference Genome B73 to make genomic index. Used miniconda gsnap
+${GMAP_BUILD} -d ${GENOME_NAME} -D ${GMAPDB} ${GENOME_FASTA}
+  ```
+```
+Submitted job 151967
+```
+
+2. Run gsnap (adapted from `2021_workshop_transcriptomics/Notebook_Severin/Maize/02_gsnap.md` `gsnapScript.sh`)
+```
+#!/bin/bash
+source /home/k/miniconda3/etc/profile.d/conda.sh
+conda activate gsnap_env
+export GMAPDB=/project/f/k/dot_files/software/gmapdb/b73/
+DB_NAME="NAMV5" #<= forgot to change this to b73
+# Note: "-N" option for detecting novel splice sites, remove if not needed (0=OFF; 1=ON)
+for file in /home/k/rnaseq/maize/raw_data/*_1.fastq
+  do
+    file2=$(echo $file|sed -r 's/\_1/\_2/g')
+    OUTFILE=$(basename ${file} | sed 's/_1.fastq$//g')
+#echo ${OUTFILE}
+    gsnap -d ${DB_NAME} -N 1 -t 8 -B 4 -m 5 --input-buffer-size=1000000 --output-buffer-size=1000000 -A sam --split-output=${DB_NAME}_${OUTFILE} ${file} ${file2}
+#echo $file
+#echo $file2
+done
+```
+```
+Submitted batch job 151969
+```
+
+### Bee -- miniconda3
+1. Create genome index and map RNA-seq reads to B. impatiens
+  ```
+  set +eu
+  source /home/k/miniconda3/etc/profile.d/conda.sh
+  conda activate gsnap_env
+  # ==== Connect the executable (either local or miniconda)
+  # GMAP_BUILD=/project/f/k/dot_files/software/gmap-2020-12-17/bin/gmap_build
+  GMAP_BUILD=gmap_build
+  # ==== Define input/output variables
+  GENOME_NAME=B_impatiens
+  GENOME_FASTA=/project/f/k/rnaseq/bee/reference_genome_bee/Bombus_impatiens_GCF_000188095.3_BIMP_2.2_genomic.fa
+  GMAPDB=/project/f/k/dot_files/software/gmapdb
+  # ==== Main Run
+  ${GMAP_BUILD} -d ${GENOME_NAME} -D ${GMAPDB} ${GENOME_FASTA}
+  # ==== Mapping RNA-seq reads. Use miniconda3
+  gsnap -d ${GENOME_NAME} -D ${GMAPDB} \
+  -t 6 -M 2 -n 10 -N 1 \
+  --quality-protocol=sanger -w 200000 --pairmax-rna=200000 -E 1 -B 2 \
+  -A sam /project/f/k/rnaseq/bee/raw_data/1-A01-A1_S7_L002_R1_001.fastq | \
+  samtools view -bS - | \
+  samtools sort - \
+  > /project/f/k/rnaseq/bee/results/gsnap/1-A01-A1_S7_L002_R1.Aligned.sortedByCoord.out.bam
+  ```
+```
+Submitted job 136483
+```
+Job seemed to complete. Resulted in `1-A01-A1_S7_L002_R1.Aligned.sortedByCoord.out.bam` in `/f/k/rnaseq/bee/results/gsnap`
+
+2. Modified gsnap_bee.slurm `gsnap` step to loop and run `gsnap` on all raw fastq files
+```
+set -e
+set -u
+
+# ==== Activate miniconda
+set +eu
+source /home/k/miniconda3/etc/profile.d/conda.sh
+conda activate gsnap_env
+
+# ==== Mapping RNA-seq reads. Use miniconda3
+for readname in /home/k/rnaseq/bee/raw_data/test/*.fastq
+        do
+                OUTBAM=${readname}.Aligned.sortedByCoord.out.bam
+                gsnap -d ${GENOME_NAME} -D ${GMAPDB} \
+                        -t 6 -M 2 -n 10 -N 1 \
+                        --quality-protocol=sanger -w 200000 --pairmax-rna=200000 \
+                        -E 1 -B 2 \
+                        -A sam \
+                        ${readname} | \
+                        samtools view -bS - > ${OUTBAM}
+#               echo ${readname}
+#               echo ${OUTBAM}
+        done
+```
+```
+Submitted batch job 151965
+```
+
 #### Output files
+* `gmap_build`
+```
+b73.chromosome	    b73.contig.iit     b73.ref061regiondb	b73.version
+b73.chromosome.iit  b73.genomebits128  b73.ref153offsets64meta
+b73.chrsubset	    b73.genomecomp     b73.ref153offsets64strm
+b73.contig	    b73.maps	       b73.ref153positions
+```
 
-
-### Bee
-
-1.
-
-#### Output files
-
+* `gsnap`
 
 
 
 ## Differential expression with DESeq2
-1.
+### Maize
+### Bee
+#### Output files
