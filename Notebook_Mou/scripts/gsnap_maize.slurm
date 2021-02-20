@@ -34,7 +34,7 @@ DB_NAME="NAMV5" #<= forgot to change this to b73
 for file in /home/k/rnaseq/maize/raw_data/*_1.fastq
   do
     file2=$(echo $file|sed -r 's/\_1/\_2/g')
-    OUTFILE=$(basename ${file} | sed 's/_1.fastq$//g')
+    OUTFILE=$(basename ${file} | sed 's/_1\.fastq$//g')
 #echo ${OUTFILE}
     gsnap -d ${DB_NAME} -N 1 -t 8 -B 4 -m 5 --input-buffer-size=1000000 --output-buffer-size=1000000 -A sam --split-output=${DB_NAME}_${OUTFILE} ${file} ${file2}
 #echo $file
