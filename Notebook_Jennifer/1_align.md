@@ -82,6 +82,8 @@ module load singularity            #<= will load 3.7.1, since that has a "D" = d
 
 I'm not seeing GSNAP, samtools or featureCounts on the list...hmm, but there's `singularity` so we could install it via a singularity image. I'm surprised there isn't `miniconda` so we could install the python libraries. Mou and I worked on installing miniconda and GSNAP.
 
+Side Note: To request something to be installed on Atlas HPC, email: `help-usda@hpc.msstate.edu`. Several programs are available via `singularity/3.5.2` but not the latest `singularity/3.7.1` yet...not sure when this will be updated.
+
 <details><summary><b>Nova HPC</b> contained gsnap, samtools, and featureCounts</summary>
 
 * [Nova\_module\_list.txt](bin/nova_module_list.txt)
@@ -152,14 +154,14 @@ This is my general template for organizing folders and files on an HPC. Since th
                     |_ miniconda3/   #<= will eventually add this... do not add this yet, could also put this in software
 ```
 
-* `inbox` and `outbox`  are nice b.c. I can do ssh mylocalfile.tar.gz jenchang@atlas:inbox/.  and don't have to think about 5gb limit
+* `inbox` and `outbox`  are nice b.c. I can transfer files with `scp mylocalfile.tar.gz jenchang@atlas:inbox/.`  and don't have to think about 5gb limit
 * dotfiles (`.singularity`, `.conda`) are usually invisible folders that get large as you install conda packages, or singularity images. These can eat up your home folder ~5GB memory limit if they're not softlinked
 
 ---
 
 Initially we tried to install the programs natively, but eventually switched to `miniconda`
 
-<details><summary>Notes from a local **GSNAP** install</summary>
+<details><summary>Notes from a local <b>GSNAP</b> install - WORKED</summary>
 
 ## Local install of GSNAP
 
@@ -223,7 +225,7 @@ ls bin/
 
 </details>
 
-<details><summary>Notes from local install of **featureCounts**</summary>
+<details><summary>Notes from local install of <b>featureCounts</b> - WORKED</summary>
 
 ## Local install of featureCounts
 
@@ -571,6 +573,104 @@ featureCounts -T 16 -p -t gene -g ID -a augustus.gff3 -o filtered_1703-TM102_sor
 | -a | augustus.gff3 | annotation?|
 | -o | | output file name?|
 
+## Run the above 3 steps with Bee data
+
+* [Bee_Runner.slurm](bin/Bee_Runner.slurm)
+
+Followed Mou's method of looping across files, ran on Atlas HPC. The next step is splitting this across several slurm jobs to run in parallel. The final output are named similar to `readname_genecounts.txt` which can either be combined in bash or in R as input to DE analysis programs.
+
+```
+#! /usr/bin/env bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=16
+#SBATCH --time=24:00:00
+#SBATCH --job-name=Bees
+#SBATCH --output=R-%x.%J.out
+#SBATCH --error=R-%x.%J.err
+#SBATCH --mail-user=jenchang@iastate.edu
+#SBATCH --mail-type=begin
+#SBATCH --mail-type=end
+#SBATCH --account=isu_gif_vrsc
+
+set -e
+set -u
+
+start=`date +%s`
+
+# === Load Modules here and link executables
+
+# = Nova HPC
+# module load gmap-gsnap
+# module load samtools
+# module load subread
+
+# = Atlas HPC
+set +eu
+source /home/jennifer.chang/miniconda3/etc/profile.d/conda.sh
+conda activate gsnap_env
+GMAP_BUILD=gmap_build
+GSNAP=gsnap
+SAMTOOLS=samtools
+FEATURECOUNTS=featureCounts
+
+# === Set working directory and in/out variables
+cd ${SLURM_SUBMIT_DIR}
+
+# === Input / Output Variables
+REF_NAME=Bombus
+REF_FILE=data_bee/ref/GCA_000188095.3_BIMP_2.1_genomic.fna.gz
+REF_GFF=data_bee/ref/GCA_000188095.3_BIMP_2.1_genomic.gff.gz
+GMAPDB=gmapdb
+# See forloop for the directory of reads
+
+# === Main Program
+# (1) Index Genome
+${GMAP_BUILD} \
+  --gunzip \
+  -d ${REF_NAME} \
+  -D ${GMAPDB} \
+  ${REF_FILE}
+
+for FILE in data_bee/reads/*.fastq
+do
+  READ_NAME=$(basename ${FILE} | sed 's:_L002_R1_001.fastq::g')
+  DIR_NAME=$(dirname ${FILE})
+  READ_R1=${DIR_NAME}/${READ_NAME}_L002_R1_001.fastq
+  OUT_BAM=${READ_NAME}.aligned.out.bam
+  OUT_COUNTS=${READ_NAME}_genecounts.txt
+
+# (2) Map Reads:
+
+  ${GSNAP} \
+    -d ${REF_NAME} \
+    -D ${GMAPDB} \
+    -N 1 -t 16 -B 4 -m 5 \
+    --input-buffer-size=1000000 \
+    --output-buffer-size=1000000 \
+    -A sam \
+    ${READ_R1} | \
+    ${SAMTOOLS} view --threads 16 -bS - > ${OUT_BAM}
+
+# (3) Gene Counts
+  ${FEATURECOUNTS} -T 16 -t gene -g ID \
+    -a ${REF_GFF} \
+    -o ${OUT_COUNTS} \
+    ${OUT_BAM} 
+
+done
+
+end=`date +%s`
+
+# === Log msgs and resource use                          
+scontrol show job ${SLURM_JOB_ID}
+echo "ran gsnap.slurm: " `date` "; Execution time: " $((${end}-${start})) " seconds" >> LOGGER.txt
+```
+
 # Counts
 
 todo: describe final output here. Report basic stats, number of rows, etc. Do certain read pairs have more rows than others? Anything concerning about the data? Etc, etc.
+
+```
+Show first 10 lines here...as an example
+```
+

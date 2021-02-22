@@ -151,9 +151,14 @@ For the Reference, we fetched the B73 Maize reference genome.
   rsync -azP raw atlas-dtn:inbox/bee/.
   ```
   
-4. For the Reference, we fetched the ... Bumblebee reference genome.
+4. For the Reference, we fetched the Bombus impatiens reference genome, found by `kemcelroy`.
 
-  [todo: add link and instructions here]
+  * [https://www.ncbi.nlm.nih.gov/genome/3415?genome\_assembly\_id=468201](https://www.ncbi.nlm.nih.gov/genome/3415?genome_assembly_id=468201)
+  
+  ```
+  wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/188/095/GCA_000188095.3_BIMP_2.1/GCA_000188095.3_BIMP_2.1_genomic.fna.gz
+  wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/188/095/GCA_000188095.3_BIMP_2.1/GCA_000188095.3_BIMP_2.1_genomic.gff.gz
+  ```
   
 ## Data Files
 
