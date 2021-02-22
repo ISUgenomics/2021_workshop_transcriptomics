@@ -37,12 +37,12 @@ cd ${SLURM_SUBMIT_DIR}
 # === Input / Output Variables
 REF_NAME=Bombus
 REF_FILE=data_bee/ref/GCA_000188095.3_BIMP_2.1_genomic.fna.gz
-REF_GFF=data_bee/ref/GCA_000188095.3_BIMP_2.1_genomic.fna.gff.gz
+REF_GFF=data_bee/ref/GCA_000188095.3_BIMP_2.1_genomic.gff.gz
 GMAPDB=gmapdb
 # See forloop for the directory of reads
 
 # === Main Program
-# (1) Index Genome: maize Reference Genome is B73... you may need to edit the gmap_build path
+# (1) Index Genome
 ${GMAP_BUILD} \
   --gunzip \
   -d ${REF_NAME} \
@@ -57,8 +57,7 @@ do
   OUT_BAM=${READ_NAME}.aligned.out.bam
   OUT_COUNTS=${READ_NAME}_genecounts.txt
 
-# (2) Map Reads:
-
+# (2) Map Reads
   ${GSNAP} \
     -d ${REF_NAME} \
     -D ${GMAPDB} \
@@ -69,7 +68,7 @@ do
     ${READ_R1} | \
     ${SAMTOOLS} view --threads 16 -bS - > ${OUT_BAM}
 
-# 3) Get feature counts
+# (3) Gene Counts
   ${FEATURECOUNTS} -T 16 -t gene -g ID \
     -a ${REF_GFF} \
     -o ${OUT_COUNTS} \
