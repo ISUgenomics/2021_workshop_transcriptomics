@@ -42,13 +42,59 @@ For now, we'll use `miniconda` to install on Atlas HPC. Salmon is also provided 
 * ref = `data_maize/ref/*.fna.gz`
 * gff = `data_maize/ref/*.gff.gz`
 
-1. Run Salmon
+Oh weird, it doesn't use the full genome, only the transcriptome. I need to fetch the `*.rna.gz` file.
+
+Salmon run is split into two steps: (1) index transcriptome, (2) quantify RNAseq.
+
+1. Index Transcriptome
 
 ```
-....
-salmon ...
-...
+# === Input / Output Variables
+REF_RNA=data_maize/ref/*.rna.gz
+REF_NAME=b73
+
+salmon index -t ${REF_RNA} -i ${REF_NAME}
 ```
+
+|flag | value | reason |
+|:-:|:-:|:-:|
+| -t| data_maize/ref/*.rna.gz| transcriptome|
+| -i| b73 | index name, arbitrary genome name |
+
+2. Quantify Reads
+
+```
+# === Input / Output Variables
+REF_NAME=b73
+
+# === Loop through all read files
+for FILE in data_maize/reads/*_1.fastq.gz
+do
+  READ_NAME=$(basename ${FILE} | sed 's:_1.fastq.gz::g')
+  DIR_NAME=$(dirname ${FILE})
+  READ_R1=${DIR_NAME}/${READ_NAME}_1.fastq.gz
+  READ_R2=${DIR_NAME}/${READ_NAME}_2.fastq.gz
+  OUT_COUNTS=${READ_NAME}_genecounts.txt
+  
+  salmon quant -i ${REF_NAME} \
+    -l A \
+    -1 ${READ_R1} \
+    -2 ${READ_R2} \
+    -p 16 \
+    --validateMappings \
+    -o quants/${OUT_COUNTS}
+done
+```
+
+|flag | value | reason |
+|:-:|:-:|:-:|
+| -i| b73 | index name, arbitrary genome name |
+| -l| A | |
+| -1| *_1.fastq.gz | Left read |
+| -2| *_2.fastq.gz | Right read |
+| --validateMappings | | a validation step?|
+| -o | quants/readname_genecounts.txt | output file|
+
 
 ## Bee
 
@@ -56,10 +102,38 @@ salmon ...
 * ref = `data_bee/ref/*.fna.gz`
 * gff = `data_bee/ref/*.gff.gz`
 
+1. Index Transcriptome
+
 ```
-...
-salmon ...
-...
+# === Input / Output Variables
+REF_RNA=data_bee/ref/*.rna.gz
+REF_NAME=bombus
+
+salmon index -t ${REF_RNA} -i ${REF_NAME}
+```
+
+2. Quantify Reads
+
+```
+# === Input / Output Variables
+REF_NAME=bombus
+
+# === Loop through all read files
+for FILE in data_bee/reads/*.fastq
+do
+  READ_NAME=$(basename ${FILE} | sed 's:_L002_R1_001.fastq::g')
+  DIR_NAME=$(dirname ${FILE})
+  READ_R1=${DIR_NAME}/${READ_NAME}_L002_R1_001.fastq
+  OUT_COUNTS=${READ_NAME}_genecounts.txt
+  
+  # Not sure if this will worked with single end, will try...
+  salmon quant -i ${REF_NAME} \
+    -l A \
+    -1 ${READ_R1} \
+    -p 16 \
+    --validateMappings \
+    -o quants/${OUT_COUNTS}
+done
 ```
 
 ## Final Gene Counts
