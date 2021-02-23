@@ -618,8 +618,8 @@ cd ${SLURM_SUBMIT_DIR}
 
 # === Input / Output Variables
 REF_NAME=Bombus
-REF_FILE=data_bee/ref/GCA_000188095.3_BIMP_2.1_genomic.fna.gz
-REF_GFF=data_bee/ref/GCA_000188095.3_BIMP_2.1_genomic.gff.gz
+REF_FILE=data_bee/ref/GCF_000188095.3_BIMP_2.2_genomic.fna.gz
+REF_GFF=data_bee/ref/GCF_000188095.3_BIMP_2.2_genomic.gff.gz
 GMAPDB=gmapdb
 # See forloop for the directory of reads
 
@@ -671,6 +671,25 @@ echo "ran gsnap.slurm: " `date` "; Execution time: " $((${end}-${start})) " seco
 todo: describe final output here. Report basic stats, number of rows, etc. Do certain read pairs have more rows than others? Anything concerning about the data? Etc, etc.
 
 ```
-Show first 10 lines here...as an example
+# Program:featureCounts v2.0.1; Command:"featureCounts" "-T" "16" "-t" "gene" "-g" "ID" "-a" "data_bee/ref/GCF_000188095.3_BIMP_2.2_genomic.gff.gz" "-o" "1-A01-A1_S7_genecounts.txt" "1-A01-A1_S7.aligned.out.bam" 
+Geneid  Chr     Start   End     Strand  Length  1-A01-A1_S7.aligned.out.bam
+gene-LOC100740276       NT_176423.1     7       2256    +       2250    14
+gene-LOC100740157       NT_176423.1     2829    5996    +       3168    100
+gene-LOC100742884       NT_176427.1     27729   30739   +       3011    186
+gene-LOC100740399       NT_176427.1     32165   37261   +       5097    25
+gene-LOC100740519       NT_176427.1     38806   42290   -       3485    139
+gene-LOC100743001       NT_176427.1     42433   53365   +       10933   112
+gene-LOC100740639       NT_176427.1     54201   58114   +       3914    85
+gene-LOC100743123       NT_176427.1     58465   60894   -       2430    149
+...
+```
+
+Notice how the counts are in the final column.
+
+Can combine in R.
+
+```
+data <- readr::read_delim("1-A01-A1_S7_genecounts.txt", "\t", comment = "#")
+cdata <- data[,c(1,-1)]      # Get first and last column, combine on gene name.
 ```
 
