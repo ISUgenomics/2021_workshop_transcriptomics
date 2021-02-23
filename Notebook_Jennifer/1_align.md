@@ -417,7 +417,7 @@ GMAPDB=/project/project_name/software/gmapdb
 ${GMAP_BUILD} --gunzip -d ${GENOME_NAME} -D ${GMAPDB} ${GENOME_FASTA}
 ```
 
-* [gsnap_indexgenome.slurm](bin/gsnap_indexgenome.slurm) - needs to be updated...
+* [Maize_Runner.slurm](bin/Maize_Runner.slurm) - has been combined into one slurm script
 
 Notice how we can split the `gmap_build` command in 3 sections. 
 
@@ -688,8 +688,60 @@ Notice how the counts are in the final column.
 
 Can combine in R.
 
+* [combine.R](bin/combine.R)
+
 ```
-data <- readr::read_delim("1-A01-A1_S7_genecounts.txt", "\t", comment = "#")
-cdata <- data[,c(1,-1)]      # Get first and last column, combine on gene name.
+#! /usr/bin/env Rscript
+# Auth: Jennifer Chang
+# Date: 2021/02/23
+# Desc: Combine featureCounts output (1st and last column) files
+
+# === Load Libraries
+library(tidyverse)
+library(magrittr)
+library(readxl)
+
+# === Get list of featureCount output files
+dir_org="bee"         # counts are in a "bee" or "maize" subdirectory
+featureCount_files <- list.files(path = dir_org, pattern = "*genecounts.txt$", full.names = TRUE)
+
+# === Read in 1st file
+data <- read_delim(featureCount_files[1], delim="\t", comment = "#" ) %>%
+  select(Geneid, ends_with(".bam")) %>%              # Get 1st and last column (column was named after bam file)
+  pivot_longer(cols=ends_with(".bam")) %>%           # Melt data (tidy data)
+  mutate(
+    name = gsub(".aligned.out.bam", "", name)        # No longer need the bam extension, easier to read
+  )
+
+# === Loop and append the rest
+for (count_file in featureCount_files[-1]){
+  print(count_file)
+  temp <- read_delim(count_file, delim="\t", comment = "#") %>%
+    select(Geneid, ends_with(".bam")) %>%
+    pivot_longer(cols=ends_with(".bam")) %>%
+    mutate(
+      name = gsub(".aligned.out.bam", "", name)
+    )
+  data = rbind(data, temp)
+}
+
+# === Convert to excell like data (wider)
+wide_data <- data %>%
+  pivot_wider(id_cols=Geneid)
+
+# === Save tab delimited file (smaller file size)
+write_delim(wide_data, 
+            paste(dir_org, "genecounts.txt", sep="_"), 
+            delim="\t")
+
+# === Save Excel file (can be easier to work with)
+writexl::write_xlsx(wide_data, 
+                    path=paste(dir_org, "genecounts.xlsx", sep="_"))
 ```
 
+Final count files are in the following
+
+* [bee_genecounts.txt](bee_genecounts.txt)
+* [maize_genecounts.txt](maize_genecounts.txt)
+
+The above two files can be fed into DESeq2 or EdgeR.
