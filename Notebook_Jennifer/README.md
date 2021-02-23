@@ -5,7 +5,8 @@
 | File Name | Description |
 | -- | -- |
 |[0_data.md](0_data.md) | Getting the raw data onto Atlas HPC|
-|[1_align.md](1_align.md) | GSNAP alignment... in progress |
+|[1_align.md](1_align.md) | GSNAP alignment|
+|[1_align_salmon.md](1_align_salmon.md) | Salmon alignment... in progress |
 |[2\_DE\_analysis.md](2_DE_analysis.md) | Installing DESeq2 in R ... in progress |
 
 ## Timeline
