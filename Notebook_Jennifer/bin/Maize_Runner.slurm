@@ -2,7 +2,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=16
 #SBATCH --time=24:00:00
-#SBATCH --job-name=Bee
+#SBATCH --job-name=Maize
 #SBATCH --output=R-%x.%J.out
 #SBATCH --error=R-%x.%J.err
 #SBATCH --mail-user=jenchang@iastate.edu
@@ -35,9 +35,9 @@ FEATURECOUNTS=featureCounts
 cd ${SLURM_SUBMIT_DIR}
 
 # === Input / Output Variables
-REF_NAME=Bombus
-REF_FILE=data_bee/ref/GCF_000188095.3_BIMP_2.2_genomic.fna.gz
-REF_GFF=data_bee/ref/GCF_000188095.3_BIMP_2.2_genomic.gff.gz
+REF_NAME=b73
+REF_FILE=data_maize/ref/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.fna.gz
+REF_GFF=data_maize/ref/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.gff.gz
 GMAPDB=gmapdb
 
 # === Main Program
@@ -50,25 +50,27 @@ ${GMAP_BUILD} \
   -D ${GMAPDB} \
   ${REF_FILE}
 
-for FILE in data_bee/reads/*.fastq
+for FILE in data_maize/reads/*_1.fastq.gz
 do
 
-  READ_NAME=$(basename ${FILE} | sed 's:_L002_R1_001.fastq::g')
+  READ_NAME=$(basename ${FILE} | sed 's:_1.fastq.gz::g')
   DIR_NAME=$(dirname ${FILE})
-  READ_R1=${DIR_NAME}/${READ_NAME}_L002_R1_001.fastq
+  READ_R1=${DIR_NAME}/${READ_NAME}_1.fastq.gz
+  READ_R2=${DIR_NAME}/${READ_NAME}_2.fastq.gz
   OUT_BAM=${READ_NAME}.aligned.out.bam
   OUT_COUNTS=${READ_NAME}_genecounts.txt
   echo "Processing ... ${READ_NAME}"
 
 # (2) Map Reads:
   ${GSNAP} \
+    --gunzip \
     -d ${REF_NAME} \
     -D ${GMAPDB} \
     -N 1 -t 16 -B 4 -m 5 \
     --input-buffer-size=1000000 \
     --output-buffer-size=1000000 \
     -A sam \
-    ${READ_R1} | \
+    ${READ_R1} ${READ_R2} | \
     ${SAMTOOLS} view --threads 16 -bS - > ${OUT_BAM}
 
 # (3) Get feature counts
