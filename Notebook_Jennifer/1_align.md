@@ -417,7 +417,7 @@ GMAPDB=/project/project_name/software/gmapdb
 ${GMAP_BUILD} --gunzip -d ${GENOME_NAME} -D ${GMAPDB} ${GENOME_FASTA}
 ```
 
-* [gsnap_indexgenome.slurm](bin/gsnap_indexgenome.slurm) - needs to be updated...
+* [Maize_Runner.slurm](bin/Maize_Runner.slurm) - has been combined into one slurm script
 
 Notice how we can split the `gmap_build` command in 3 sections. 
 
