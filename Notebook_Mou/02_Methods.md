@@ -378,7 +378,6 @@ samtools sort - \
 Submitted job 136482
 ```
 
-<<<<<<< HEAD
 2. Run gsnap (adapted from `2021_workshop_transcriptomics/Notebook_Severin/Maize/02_gsnap.md` `gsnapScript.sh`)
 ```
 #!/bin/bash
@@ -458,10 +457,6 @@ done
 ```
 Submitted batch job 153966
 ```
-=======
-2. `SRR1573504_1_2.Aligned.sortedByCoord.out.bam` file is empty so far...
->>>>>>> e3441fb23c1ec3d7d6862510868df70be24ac3fa
-
 
 ### Bee -- miniconda3
 1. Create genome index and map RNA-seq reads to B. impatiens
