@@ -4,9 +4,7 @@ Written summary of methods performed in this repo. A lot of the steps described 
 
 ## Raw data
 * **Maize data:** https://www.ebi.ac.uk/ena/browser/view/PRJNA260793
-* **Maize reference (*Zea mays* B73), Version 5:**
-  * fna file: https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/902/167/145/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.fna.gz
-  * gff file: https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/902/167/145/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.gff.gz
+* **[Maize reference (*Zea mays* B73)](ftp://ftp.ensemblgenomes.org/pub/plants/release-49/fasta/zea_mays/dna/Zea_mays.B73_RefGen_v4.dna.*gz)**
 * **Bee data**
 * **Bee reference (*Bombia impatiens*):** https://hymenoptera.elsiklab.missouri.edu/genome_fasta<br /> Bombus_impatiens_GCF_000188095.3_BIMP_2.2_genomic.fa
 
@@ -263,7 +261,7 @@ featureCounts -v    #featureCounts version: v2.0.1
 set -e
 set -u
 set +eu
-source /home/k/miniconda3/etc/profile.d/conda.sh
+source /home/kathy.mou/miniconda3/etc/profile.d/conda.sh
 conda activate gsnap_env
 ## gsnap/samtools/featureCount commands here
 ```
@@ -360,122 +358,57 @@ samtools sort - \
 </details>
 
 ### Maize -- miniconda3
-1. Create genomic index with B73 reference genome version 5
+1. Mapping RNA-seq reads to B73
   ```
-  #! /usr/bin/env bash
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=16
-#SBATCH --time=24:00:00
-#SBATCH --job-name=gsnap
-#SBATCH --out=stdout.%j.%N.%x
-#SBATCH --error=stderr.%j.%N.%x
-#SBATCH --mail-user=myem@il.com
-#SBATCH --mail-type=begin
-#SBATCH --mail-type=end
-#SBATCH --account=fsepru
-set -e
-set -u
-
-# ==== Activate miniconda
-set +eu
-source /home/k/miniconda3/etc/profile.d/conda.sh
-conda activate gsnap_env
-
-# ==== Connect the executable (either local or miniconda)
-# GMAP_BUILD=/project/f/k/dot_files/software/gmap-2020-12-17/bin/gmap_build
-GMAP_BUILD=gmap_build
-
-# ==== Define Variables (this way you can swap out directories/input file)
-GENOME_NAME=b73
-GENOME_FASTA=/home/k/rnaseq/maize/reference_genome/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.fna
-GMAPDB=/project/f/k/dot_files/software/gmapdb
-
-# ==== Run gmap_build with Maize Reference Genome B73 to make genomic index. Used miniconda gsnap
-${GMAP_BUILD} -d ${GENOME_NAME} -D ${GMAPDB} ${GENOME_FASTA}
+  set -e
+  set -u
+  set +eu
+  source /home/kathy.mou/miniconda3/etc/profile.d/conda.sh
+  conda activate gsnap_env
+  # ==== Mapping RNA-seq reads. Use miniconda3
+  gsnap -d b73 -D /project/projectdirectory/mydirectory/dot_files/software/gmapdb/ \
+  -t 6 -M 2 -n 10 -N 1 \
+  --quality-protocol=sanger -w 200000 --pairmax-rna=200000 -E 1 -B 2 \
+  -A sam /project/projectdirectory/mydirectory/rnaseq/maize/raw_data/SRR1573504_1.fastq /project/projectdirectory/mydirectory/rnaseq/maize/raw_data/SRR1573504_2.fastq| \
+  samtools view -bS - | \
+  samtools sort - \
+  > /project/projectdirectory/mydirectory/rnaseq/maize/results/gsnap/SRR1573504_1_2.Aligned.sortedByCoord.out.bam
   ```
 ```
-Submitted job 151967
+Submitted job 136482
 ```
 
-2. Run gsnap (adapted from `2021_workshop_transcriptomics/Notebook_Severin/Maize/02_gsnap.md` `gsnapScript.sh`)
-```
-#!/bin/bash
-source /home/k/miniconda3/etc/profile.d/conda.sh
-conda activate gsnap_env
-export GMAPDB=/project/f/k/dot_files/software/gmapdb/b73/
-DB_NAME="NAMV5" #<= forgot to change this to b73
-# Note: "-N" option for detecting novel splice sites, remove if not needed (0=OFF; 1=ON)
-for file in /home/k/rnaseq/maize/raw_data/*_1.fastq
-  do
-    file2=$(echo $file|sed -r 's/\_1/\_2/g')
-    OUTFILE=$(basename ${file} | sed 's/_1.fastq$//g')
-#echo ${OUTFILE}
-    gsnap -d ${DB_NAME} -N 1 -t 8 -B 4 -m 5 --input-buffer-size=1000000 --output-buffer-size=1000000 -A sam --split-output=${DB_NAME}_${OUTFILE} ${file} ${file2}
-#echo $file
-#echo $file2
-done
-```
-```
-Submitted batch job 151969
-```
+2. `SRR1573504_1_2.Aligned.sortedByCoord.out.bam` file is empty so far...
+
 
 ### Bee -- miniconda3
 1. Create genome index and map RNA-seq reads to B. impatiens
   ```
   set +eu
-  source /home/k/miniconda3/etc/profile.d/conda.sh
+  source /home/mydirectory/miniconda3/etc/profile.d/conda.sh
   conda activate gsnap_env
   # ==== Connect the executable (either local or miniconda)
-  # GMAP_BUILD=/project/f/k/dot_files/software/gmap-2020-12-17/bin/gmap_build
+  # GMAP_BUILD=/project/projectdirectory/mydirectory/dot_files/software/gmap-2020-12-17/bin/gmap_build
   GMAP_BUILD=gmap_build
   # ==== Define input/output variables
   GENOME_NAME=B_impatiens
-  GENOME_FASTA=/project/f/k/rnaseq/bee/reference_genome_bee/Bombus_impatiens_GCF_000188095.3_BIMP_2.2_genomic.fa
-  GMAPDB=/project/f/k/dot_files/software/gmapdb
+  GENOME_FASTA=/project/projectdirectory/mydirectory/rnaseq/bee/reference_genome_bee/Bombus_impatiens_GCF_000188095.3_BIMP_2.2_genomic.fa
+  GMAPDB=/project/projectdirectory/mydirectory/dot_files/software/gmapdb
   # ==== Main Run
   ${GMAP_BUILD} -d ${GENOME_NAME} -D ${GMAPDB} ${GENOME_FASTA}
   # ==== Mapping RNA-seq reads. Use miniconda3
   gsnap -d ${GENOME_NAME} -D ${GMAPDB} \
   -t 6 -M 2 -n 10 -N 1 \
   --quality-protocol=sanger -w 200000 --pairmax-rna=200000 -E 1 -B 2 \
-  -A sam /project/f/k/rnaseq/bee/raw_data/1-A01-A1_S7_L002_R1_001.fastq | \
+  -A sam /project/projectdirectory/mydirectory/rnaseq/bee/raw_data/1-A01-A1_S7_L002_R1_001.fastq | \
   samtools view -bS - | \
   samtools sort - \
-  > /project/f/k/rnaseq/bee/results/gsnap/1-A01-A1_S7_L002_R1.Aligned.sortedByCoord.out.bam
+  > /project/projectdirectory/mydirectory/rnaseq/bee/results/gsnap/1-A01-A1_S7_L002_R1.Aligned.sortedByCoord.out.bam
   ```
 ```
 Submitted job 136483
 ```
-Job seemed to complete. Resulted in `1-A01-A1_S7_L002_R1.Aligned.sortedByCoord.out.bam` in `/f/k/rnaseq/bee/results/gsnap`
-
-2. Modified gsnap_bee.slurm `gsnap` step to loop and run `gsnap` on all raw fastq files
-```
-set -e
-set -u
-
-# ==== Activate miniconda
-set +eu
-source /home/k/miniconda3/etc/profile.d/conda.sh
-conda activate gsnap_env
-
-# ==== Mapping RNA-seq reads. Use miniconda3
-for readname in /home/k/rnaseq/bee/raw_data/test/*.fastq
-        do
-                OUTBAM=${readname}.Aligned.sortedByCoord.out.bam
-                gsnap -d ${GENOME_NAME} -D ${GMAPDB} \
-                        -t 6 -M 2 -n 10 -N 1 \
-                        --quality-protocol=sanger -w 200000 --pairmax-rna=200000 \
-                        -E 1 -B 2 \
-                        -A sam \
-                        ${readname} | \
-                        samtools view -bS - > ${OUTBAM}
-#               echo ${readname}
-#               echo ${OUTBAM}
-        done
-```
-```
-Submitted batch job 151965
-```
+Job seemed to complete. Resulted in `1-A01-A1_S7_L002_R1.Aligned.sortedByCoord.out.bam` in `/projectdirectory/mydirectory/rnaseq/bee/results/gsnap`
 
 #### Output files
 * `gmap_build`
