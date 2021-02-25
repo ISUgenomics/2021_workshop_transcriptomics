@@ -2,10 +2,10 @@
 
 ## To do
 1. Bee
-* check on latest job
+* check on featureCounts (job 153967) output. Run combine.R
 
 2. Maize
-* Ran maize gsnap, samtools (job 151969). Check the output
+* Ran gsnap, samtools, featurecounts (job 153966). Check the output. Run combine.R
 
 <details><summary>blah</summary>
 dfdfd

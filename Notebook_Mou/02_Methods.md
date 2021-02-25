@@ -378,7 +378,89 @@ samtools sort - \
 Submitted job 136482
 ```
 
+<<<<<<< HEAD
+2. Run gsnap (adapted from `2021_workshop_transcriptomics/Notebook_Severin/Maize/02_gsnap.md` `gsnapScript.sh`)
+```
+#!/bin/bash
+source /home/k/miniconda3/etc/profile.d/conda.sh
+conda activate gsnap_env
+export GMAPDB=/project/f/k/dot_files/software/gmapdb/b73/
+DB_NAME="NAMV5" #<= forgot to change this to b73
+# Note: "-N" option for detecting novel splice sites, remove if not needed (0=OFF; 1=ON)
+for file in /home/k/rnaseq/maize/raw_data/*_1.fastq
+  do
+    file2=$(echo $file|sed -r 's/\_1/\_2/g')
+    OUTFILE=$(basename ${file} | sed 's/_1.fastq$//g')
+#echo ${OUTFILE}
+    gsnap -d ${DB_NAME} -N 1 -t 8 -B 4 -m 5 --input-buffer-size=1000000 --output-buffer-size=1000000 -A sam --split-output=${DB_NAME}_${OUTFILE} ${file} ${file2}
+#echo $file
+#echo $file2
+done
+```
+```
+Submitted batch job 151969
+```
+Job failed because it couldn't find DB_NAME (I forgot to change NAMV5 to b73)
+
+3. Repeat gsnap and add featureCounts
+```
+#! /usr/bin/env bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=16
+#SBATCH --time=24:00:00
+#SBATCH --job-name=b73
+#SBATCH --out=stdout.%j.%N.%x
+#SBATCH --error=stderr.%j.%N.%x
+#SBATCH --mail-user=kathy.mou@usda.gov
+#SBATCH --mail-type=begin
+#SBATCH --mail-type=end
+#SBATCH --account=fsepru
+set -e
+set -u
+
+# ==== Activate miniconda
+set +eu
+source /home/k/miniconda3/etc/profile.d/conda.sh
+conda activate gsnap_env
+
+# ==== Define input/output variables
+REF_GFF=/home/k/rnaseq/maize/reference_genome/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.gff
+GMAPDB=/project/f/k/dot_files/software/gmapdb
+DB_NAME="b73" #<= was NAMV5, had forgotten to change this to b73
+
+# === Set working directory and in/out variables
+cd /project/f/k/rnaseq/maize/results/
+
+# ==== Mapping RNA-seq reads
+for file in /home/k/rnaseq/maize/raw_data/*_1.fastq
+  do
+    file2=$(echo $file|sed -r 's/\_1/\_2/g')
+    OUTFILE=$(basename ${file} | sed 's/_1\.fastq$//g')
+    #echo ${OUTFILE}
+    gsnap -d ${DB_NAME} -D ${GMAPDB} \
+    -N 1 -t 16 -B 4 -m 5 \
+    --input-buffer-size=1000000 \
+    --output-buffer-size=1000000 \
+    -A sam \
+    --split-output=${DB_NAME}_${OUTFILE} ${file} ${file2} | \
+    #echo $file
+    #echo $file2
+    samtools view --threads 16 -bS - > ${OUT_BAM}
+
+# ==== Gene Counts
+    OUT_COUNTS=${OUTFILE}_genecounts.txt
+    featureCounts -T 16 -t gene -g ID \
+      -a ${REF_GFF} \
+      -o ${OUT_COUNTS} \
+      ${OUT_BAM}
+done
+```
+```
+Submitted batch job 153966
+```
+=======
 2. `SRR1573504_1_2.Aligned.sortedByCoord.out.bam` file is empty so far...
+>>>>>>> e3441fb23c1ec3d7d6862510868df70be24ac3fa
 
 
 ### Bee -- miniconda3
@@ -410,18 +492,93 @@ Submitted job 136483
 ```
 Job seemed to complete. Resulted in `1-A01-A1_S7_L002_R1.Aligned.sortedByCoord.out.bam` in `/projectdirectory/mydirectory/rnaseq/bee/results/gsnap`
 
-#### Output files
+3. Run featureCounts
+```
+#! /usr/bin/env bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=16
+#SBATCH --time=24:00:00
+#SBATCH --job-name=bee
+#SBATCH --out=stdout.%j.%N.%x
+#SBATCH --error=stderr.%j.%N.%x
+#SBATCH --mail-user=kathy.mou@usda.gov
+#SBATCH --mail-type=begin
+#SBATCH --mail-type=end
+#SBATCH --account=fsepru
+set -e
+set -u
+
+# ==== Activate miniconda
+set +eu
+source /home/k/miniconda3/etc/profile.d/conda.sh
+conda activate gsnap_env
+
+# ==== Define input/output variables
+REF_NAME=B_impatiens
+#REF_FASTA=/project/f/k/rnaseq/bee/reference_genome_bee/Bombus_impatiens_GCF_000188095.3_BIMP_2.2_genomic.fa
+GMAPDB=/project/f/k/dot_files/software/gmapdb
+REF_GFF=/project/f/k/rnaseq/bee/reference_genome_bee/GCF_000188095.3_BIMP_2.2_genomic.gff.gz
+
+# === Set working directory and in/out variables
+cd /project/f/k/rnaseq/bee/results/
+
+# ==== Gene Counts
+for FILE in /home/k/rnaseq/bee/raw_data/test/*.bam
+  do
+    OUT_COUNTS=${FILE}_genecounts.txt
+    OUTBAM=${FILE}
+
+    featureCounts -T 16 -t gene -g ID \
+       -a ${REF_GFF} \
+       -o ${OUT_COUNTS} \
+       ${OUTBAM}
+done
+```
+```
+Submitted batch job 153967
+```
+Job ran successfully!
+
+### Output files
 * `gmap_build`
 ```
-b73.chromosome	    b73.contig.iit     b73.ref061regiondb	b73.version
-b73.chromosome.iit  b73.genomebits128  b73.ref153offsets64meta
-b73.chrsubset	    b73.genomecomp     b73.ref153offsets64strm
-b73.contig	    b73.maps	       b73.ref153positions
+B_impatiens.chromosome	    B_impatiens.contig.iit     B_impatiens.ref061regiondb	B_impatiens.version
+B_impatiens.chromosome.iit  B_impatiens.genomebits128  B_impatiens.ref153offsets64meta
+B_impatiens.chrsubset	    B_impatiens.genomecomp     B_impatiens.ref153offsets64strm
+B_impatiens.contig	    B_impatiens.maps	       B_impatiens.ref153positions
 ```
 
 * `gsnap`
+```
+*.fastq.Aligned.sortedByCoord.out.bam
+*.fastq
+```
 
+* `featureCounts`
+```
+*genecounts.txt
+*genecounts.txt.summary
+```
 
+## Counts
+### Bee counts
+1. Counts preview of bee data. Compared coordinates with Jennifer's `1-A01-A1_S7.aligned.out.bam` and the length column values are slightly different. Is this normal?
+```
+# Program:featureCounts v2.0.1; Command:"featureCounts" "-T" "16" "-t" "gene" "-g" "ID" "-a" "/project/f/k/rnaseq/bee/reference_genome_bee/GCF_000188095.3_BIMP_2.2_genomic.gff.gz" "-o" "/home/k/rnaseq/bee/raw_data/test/1-A01-A1_S7_L002_R1_001.fastq.Aligned.sortedByCoord.out.bam_genecounts.txt" "/home/k/rnaseq/bee/raw_data/test/1-A01-A1_S7_L002_R1_001.fastq.Aligned.sortedByCoord.out.bam"
+Geneid	Chr	Start	End	Strand	Length	/home/k/rnaseq/bee/raw_data/test/1-A01-A1_S7_L002_R1_001.fastq.Aligned.sortedByCoord.out.bam
+gene-LOC100740276	NT_176423.1	7	2256	+	2250	14
+gene-LOC100740157	NT_176423.1	2829	5996	+	3168	107
+gene-LOC100742884	NT_176427.1	27729	30739	+	3011	191
+gene-LOC100740399	NT_176427.1	32165	37261	+	5097	28
+gene-LOC100740519	NT_176427.1	38806	42290	-	3485	160
+gene-LOC100743001	NT_176427.1	42433	53365	+	10933	115
+gene-LOC100740639	NT_176427.1	54201	58114	+	3914	104
+gene-LOC100743123	NT_176427.1	58465	60894	-	2430	153
+```
+
+2. Run featureCounts output in `combine.R`.
+
+### Maize counts
 
 ## Differential expression with DESeq2
 ### Maize

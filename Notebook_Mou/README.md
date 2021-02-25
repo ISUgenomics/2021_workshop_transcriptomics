@@ -4,4 +4,7 @@
 
 | File Name | Description |
 | -- | -- |
-|00_rawdata.md | Getting the raw data |
+| 00_Literature.md | Literature to check out |
+| 02_Methods.md | Methods for analyzing maize and bee RNAseq data |
+| Notes.md | To-do list, miscellaneous notes|
+| `scripts/` | various scripts associated with maize and bee RNAseq analysis|
