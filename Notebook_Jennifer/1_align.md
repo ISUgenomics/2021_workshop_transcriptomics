@@ -82,6 +82,8 @@ module load singularity            #<= will load 3.7.1, since that has a "D" = d
 
 I'm not seeing GSNAP, samtools or featureCounts on the list...hmm, but there's `singularity` so we could install it via a singularity image. I'm surprised there isn't `miniconda` so we could install the python libraries. Mou and I worked on installing miniconda and GSNAP.
 
+Side Note: To request something to be installed on Atlas HPC, email: `help-usda@hpc.msstate.edu`. Several programs are available via `singularity/3.5.2` but not the latest `singularity/3.7.1` yet...not sure when this will be updated.
+
 <details><summary><b>Nova HPC</b> contained gsnap, samtools, and featureCounts</summary>
 
 * [Nova\_module\_list.txt](bin/nova_module_list.txt)
@@ -152,14 +154,14 @@ This is my general template for organizing folders and files on an HPC. Since th
                     |_ miniconda3/   #<= will eventually add this... do not add this yet, could also put this in software
 ```
 
-* `inbox` and `outbox`  are nice b.c. I can do ssh mylocalfile.tar.gz jenchang@atlas:inbox/.  and don't have to think about 5gb limit
+* `inbox` and `outbox`  are nice b.c. I can transfer files with `scp mylocalfile.tar.gz jenchang@atlas:inbox/.`  and don't have to think about 5gb limit
 * dotfiles (`.singularity`, `.conda`) are usually invisible folders that get large as you install conda packages, or singularity images. These can eat up your home folder ~5GB memory limit if they're not softlinked
 
 ---
 
 Initially we tried to install the programs natively, but eventually switched to `miniconda`
 
-<details><summary>Notes from a local **GSNAP** install</summary>
+<details><summary>Notes from a local <b>GSNAP</b> install - WORKED</summary>
 
 ## Local install of GSNAP
 
@@ -223,7 +225,7 @@ ls bin/
 
 </details>
 
-<details><summary>Notes from local install of **featureCounts**</summary>
+<details><summary>Notes from local install of <b>featureCounts</b> - WORKED</summary>
 
 ## Local install of featureCounts
 
@@ -415,7 +417,7 @@ GMAPDB=/project/project_name/software/gmapdb
 ${GMAP_BUILD} --gunzip -d ${GENOME_NAME} -D ${GMAPDB} ${GENOME_FASTA}
 ```
 
-* [gsnap_indexgenome.slurm](bin/gsnap_indexgenome.slurm) - needs to be updated...
+* [Maize_Runner.slurm](bin/Maize_Runner.slurm) - has been combined into one slurm script
 
 Notice how we can split the `gmap_build` command in 3 sections. 
 
@@ -571,6 +573,175 @@ featureCounts -T 16 -p -t gene -g ID -a augustus.gff3 -o filtered_1703-TM102_sor
 | -a | augustus.gff3 | annotation?|
 | -o | | output file name?|
 
+## Run the above 3 steps with Bee data
+
+* [Bee_Runner.slurm](bin/Bee_Runner.slurm)
+
+Followed Mou's method of looping across files, ran on Atlas HPC. The next step is splitting this across several slurm jobs to run in parallel. The final output are named similar to `readname_genecounts.txt` which can either be combined in bash or in R as input to DE analysis programs.
+
+```
+#! /usr/bin/env bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=16
+#SBATCH --time=24:00:00
+#SBATCH --job-name=Bees
+#SBATCH --output=R-%x.%J.out
+#SBATCH --error=R-%x.%J.err
+#SBATCH --mail-user=jenchang@iastate.edu
+#SBATCH --mail-type=begin
+#SBATCH --mail-type=end
+#SBATCH --account=isu_gif_vrsc
+
+set -e
+set -u
+
+start=`date +%s`
+
+# === Load Modules here and link executables
+
+# = Nova HPC
+# module load gmap-gsnap
+# module load samtools
+# module load subread
+
+# = Atlas HPC
+set +eu
+source /home/jennifer.chang/miniconda3/etc/profile.d/conda.sh
+conda activate gsnap_env
+GMAP_BUILD=gmap_build
+GSNAP=gsnap
+SAMTOOLS=samtools
+FEATURECOUNTS=featureCounts
+
+# === Set working directory and in/out variables
+cd ${SLURM_SUBMIT_DIR}
+
+# === Input / Output Variables
+REF_NAME=Bombus
+REF_FILE=data_bee/ref/GCF_000188095.3_BIMP_2.2_genomic.fna.gz
+REF_GFF=data_bee/ref/GCF_000188095.3_BIMP_2.2_genomic.gff.gz
+GMAPDB=gmapdb
+# See forloop for the directory of reads
+
+# === Main Program
+# (1) Index Genome
+${GMAP_BUILD} \
+  --gunzip \
+  -d ${REF_NAME} \
+  -D ${GMAPDB} \
+  ${REF_FILE}
+
+for FILE in data_bee/reads/*.fastq
+do
+  READ_NAME=$(basename ${FILE} | sed 's:_L002_R1_001.fastq::g')
+  DIR_NAME=$(dirname ${FILE})
+  READ_R1=${DIR_NAME}/${READ_NAME}_L002_R1_001.fastq
+  OUT_BAM=${READ_NAME}.aligned.out.bam
+  OUT_COUNTS=${READ_NAME}_genecounts.txt
+
+# (2) Map Reads:
+
+  ${GSNAP} \
+    -d ${REF_NAME} \
+    -D ${GMAPDB} \
+    -N 1 -t 16 -B 4 -m 5 \
+    --input-buffer-size=1000000 \
+    --output-buffer-size=1000000 \
+    -A sam \
+    ${READ_R1} | \
+    ${SAMTOOLS} view --threads 16 -bS - > ${OUT_BAM}
+
+# (3) Gene Counts
+  ${FEATURECOUNTS} -T 16 -t gene -g ID \
+    -a ${REF_GFF} \
+    -o ${OUT_COUNTS} \
+    ${OUT_BAM} 
+
+done
+
+end=`date +%s`
+
+# === Log msgs and resource use                          
+scontrol show job ${SLURM_JOB_ID}
+echo "ran gsnap.slurm: " `date` "; Execution time: " $((${end}-${start})) " seconds" >> LOGGER.txt
+```
+
 # Counts
 
 todo: describe final output here. Report basic stats, number of rows, etc. Do certain read pairs have more rows than others? Anything concerning about the data? Etc, etc.
+
+```
+# Program:featureCounts v2.0.1; Command:"featureCounts" "-T" "16" "-t" "gene" "-g" "ID" "-a" "data_bee/ref/GCF_000188095.3_BIMP_2.2_genomic.gff.gz" "-o" "1-A01-A1_S7_genecounts.txt" "1-A01-A1_S7.aligned.out.bam" 
+Geneid  Chr     Start   End     Strand  Length  1-A01-A1_S7.aligned.out.bam
+gene-LOC100740276       NT_176423.1     7       2256    +       2250    14
+gene-LOC100740157       NT_176423.1     2829    5996    +       3168    100
+gene-LOC100742884       NT_176427.1     27729   30739   +       3011    186
+gene-LOC100740399       NT_176427.1     32165   37261   +       5097    25
+gene-LOC100740519       NT_176427.1     38806   42290   -       3485    139
+gene-LOC100743001       NT_176427.1     42433   53365   +       10933   112
+gene-LOC100740639       NT_176427.1     54201   58114   +       3914    85
+gene-LOC100743123       NT_176427.1     58465   60894   -       2430    149
+...
+```
+
+Notice how the counts are in the final column.
+
+Can combine in R.
+
+* [combine.R](bin/combine.R)
+
+```
+#! /usr/bin/env Rscript
+# Auth: Jennifer Chang
+# Date: 2021/02/23
+# Desc: Combine featureCounts output (1st and last column) files
+
+# === Load Libraries
+library(tidyverse)
+library(magrittr)
+library(readxl)
+
+# === Get list of featureCount output files
+dir_org="bee"         # counts are in a "bee" or "maize" subdirectory
+featureCount_files <- list.files(path = dir_org, pattern = "*genecounts.txt$", full.names = TRUE)
+
+# === Read in 1st file
+data <- read_delim(featureCount_files[1], delim="\t", comment = "#" ) %>%
+  select(Geneid, ends_with(".bam")) %>%              # Get 1st and last column (column was named after bam file)
+  pivot_longer(cols=ends_with(".bam")) %>%           # Melt data (tidy data)
+  mutate(
+    name = gsub(".aligned.out.bam", "", name)        # No longer need the bam extension, easier to read
+  )
+
+# === Loop and append the rest
+for (count_file in featureCount_files[-1]){
+  print(count_file)
+  temp <- read_delim(count_file, delim="\t", comment = "#") %>%
+    select(Geneid, ends_with(".bam")) %>%
+    pivot_longer(cols=ends_with(".bam")) %>%
+    mutate(
+      name = gsub(".aligned.out.bam", "", name)
+    )
+  data = rbind(data, temp)
+}
+
+# === Convert to excell like data (wider)
+wide_data <- data %>%
+  pivot_wider(id_cols=Geneid)
+
+# === Save tab delimited file (smaller file size)
+write_delim(wide_data, 
+            paste(dir_org, "genecounts.txt", sep="_"), 
+            delim="\t")
+
+# === Save Excel file (can be easier to work with)
+writexl::write_xlsx(wide_data, 
+                    path=paste(dir_org, "genecounts.xlsx", sep="_"))
+```
+
+Final count files are in the following
+
+* [bee_genecounts.txt](bee_genecounts.txt)
+* [maize_genecounts.txt](maize_genecounts.txt)
+
+The above two files can be fed into DESeq2 or EdgeR.

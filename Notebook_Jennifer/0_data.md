@@ -151,17 +151,22 @@ For the Reference, we fetched the B73 Maize reference genome.
   rsync -azP raw atlas-dtn:inbox/bee/.
   ```
   
-4. For the Reference, we fetched the ... Bumblebee reference genome.
+4. For the Reference, we fetched the Bombus impatiens reference genome, found by `kemcelroy`.
 
-  [todo: add link and instructions here]
+  * [https://www.ncbi.nlm.nih.gov/genome/3415?genome\_assembly\_id=468201](https://www.ncbi.nlm.nih.gov/genome/3415?genome_assembly_id=468201)
+  
+  ```
+  wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/188/095/GCF_000188095.3_BIMP_2.2/GCF_000188095.3_BIMP_2.2_genomic.fna.gz
+  wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/188/095/GCF_000188095.3_BIMP_2.2/GCF_000188095.3_BIMP_2.2_genomic.gff.gz
+  ```
   
 ## Data Files
 
 * Maize 
-  * RNAseq reads = `/project/isu_gif_vrsc/2021-RNA_Workshop/data_maize/`
+  * RNAseq reads = `/project/isu_gif_vrsc/2021-RNA_Workshop/data_maize/reads/*{1,2}fastq.gz`
   * reference = `/project/isu_gif_vrsc/2021-RNA_Workshop/data_maize/ref/`
 * bumblebee 
-  * RNAseq reads = `/project/isu_gif_vrsc/2021-RNA_Workshop/data_bee/`
+  * RNAseq reads = `/project/isu_gif_vrsc/2021-RNA_Workshop/data_bee/reads/*.fastq`
   * reference = `/project/isu_gif_vrsc/2021-RNA_Workshop/data_bee/ref/`
 
 

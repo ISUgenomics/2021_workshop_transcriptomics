@@ -5,7 +5,9 @@
 | File Name | Description |
 | -- | -- |
 |[0_data.md](0_data.md) | Getting the raw data onto Atlas HPC|
-|[1_align.md](1_align.md) | GSNAP alignment... in progress |
+|[1_align.md](1_align.md) | GSNAP alignment|
+|[1\_align\_salmon.md](1_align_salmon.md) | Salmon alignment... in progress, ready to test |
+|[1\_align\_hisat2.md](1_align_hisat2.md) | HISAT2 alignment (with ballgown)... in progress, really rough|
 |[2\_DE\_analysis.md](2_DE_analysis.md) | Installing DESeq2 in R ... in progress |
 
 ## Timeline
@@ -121,6 +123,12 @@ Introduction of different technologies and their papers in chronological order. 
 
 * featureCount Website - [http://subread.sourceforge.net/](http://subread.sourceforge.net/)
 
+**2014** - Ballgown, originally on bioconductor in 2014 but the citation always moves to the latest version - type:DEanalysis
+
+* Fu J, Frazee AC, Collado-Torres L, Jaffe AE, Leek JT (2020). [ballgown: Flexible, isoform-level differential expression analysis](https://www.semanticscholar.org/paper/Flexible-isoform-level-differential-expression-with-Frazee-Per%E1%B9%ADea/810496b17d76fddb756108b15d6f6207896cd1a5). R package version 2.22.0.
+
+* Ballgown Bioconductor - [https://www.bioconductor.org/packages/release/bioc/html/ballgown.html](https://www.bioconductor.org/packages/release/bioc/html/ballgown.html)
+
 **2015** - NOISeq R - type:DEanalysis
 
 * Tarazona, S., Furió-Tarí, P., Turrà, D., Pietro, A.D., Nueda, M.J., Ferrer, A. and Conesa, A., 2015. [Data quality aware analysis of differential expression in RNA-seq with NOISeq R/Bioc package](https://www.semanticscholar.org/paper/Data-quality-aware-analysis-of-differential-in-with-Tarazona-Furi%C3%B3-Tar%C3%AD/432c172e73949fac6bdd8788115140553ceff26a). Nucleic acids research, 43(21), pp.e140-e140.
@@ -150,6 +158,8 @@ Introduction of different technologies and their papers in chronological order. 
   * [https://liorpachter.wordpress.com/2017/08/02/how-not-to-perform-a-differential-expression-analysis-or-science/](https://liorpachter.wordpress.com/2017/08/02/how-not-to-perform-a-differential-expression-analysis-or-science/)
 
 * Salmon Website - [https://combine-lab.github.io/salmon/](https://combine-lab.github.io/salmon/)
+
+
 
 **2018** - Ah...Hitzemann has a recent review paper:
 
