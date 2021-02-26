@@ -75,29 +75,18 @@ wget https://download.maizegdb.org/Zm-B73-REFERENCE-NAM-5.0/Zm-B73-REFERENCE-NAM
  #### Hisat2 index
 * Built genome index for both ver 4 and ver5(NAM)
  ```
- 1001  cd Ver4_release50/
- 1002  ls
- 1003  gunzip *
- 1004  ls
- 1005  module load hisat2
- 1006  hisat2-build -p18 Zea_mays_Ver4_50 >& ver4_build.log&
- 1007  ls
- 1008  more ver4_build.log
- 1009  hisat2-build -p18 Zea_mays.B73_RefGen_v4.dna.toplevel.fa Zea_mays_Ver4_50 >& ver4_build.log&
- 1010  cd ../ver5
- 1011  cd ../Ver5/
- 1012  ls
- 1013  gunzip 8
- 1014  gunzip *
- 1015  hisat2-build -p 18 Zm-B73-REFERENCE-NAM-5.0.fa Zm-B73-REFERENCE-NAM-ver5 >& ver5_build.log&
- 1016  jobs
- 1017  top
- 1018  history
+cd Ver4_release50/
+gunzip *
+module load hisat2
+hisat2-build -p18 Zea_mays.B73_RefGen_v4.dna.toplevel.fa Zea_mays_Ver4_50 >& ver4_build.log&
 
+ cd ../Ver5/
+gunzip *
+hisat2-build -p 18 Zm-B73-REFERENCE-NAM-5.0.fa Zm-B73-REFERENCE-NAM-ver5 >& ver5_build.log&
  ```
 
 
-* Version 4:
+* Version 4 Index details:
  ```
  Returning from HGFM constructor
 Headers:
@@ -128,7 +117,7 @@ Headers:
     linearFM: Yes
 Total time for call to driver() for forward index: 00:08:03
  ```
-* Version 5:
+* Version 5 Index Details:
  ```
  Headers:
     len: 2178268108
