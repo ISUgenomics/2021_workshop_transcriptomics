@@ -48,7 +48,7 @@ Searching 96 files..  [####################################]  100%
 Although
 
 ```
-![multiqc.html](Figures/multiqc_report_maize_ligule.html)
+
 
 #### Genome and Annotation
 `/work/gif/Siva/Transcriptomic_Worshop/Genome`
