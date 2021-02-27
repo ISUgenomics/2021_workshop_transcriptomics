@@ -94,6 +94,11 @@ data_bee <- read_delim("bee_genecounts.txt", delim="\t")
 
 # Diagnostic plots
 
+These are quick plots to look at the data and notice if any of the
+counts seem unusally high or low, or multimodal. It can indicate a
+problem with a sample, but does not necessarily mean there is a problem
+with a sample.
+
 ## Bee
 
 ``` r
@@ -125,7 +130,7 @@ melt_bee %>%
   theme(
     axis.text.x = element_text(angle=90)
   ) +
-  labs(title="GSNAP RNAseq Gene Profiles") +
+  labs(title="GSNAP distribution of gene counts by sample") +
   facet_wrap(~group, scales="free", drop=T)
 #> Warning: Removed 216873 rows containing non-finite values (stat_ydensity).
 ```
@@ -162,7 +167,7 @@ melt_maize %>%
   theme(
     axis.text.x = element_text(angle=90)
   ) +
-  labs(title="GSNAP RNAseq Gene Profiles")
+  labs(title="GSNAP distribution of gene counts by sample")
 #> Warning: Removed 473515 rows containing non-finite values (stat_ydensity).
 ```
 
@@ -175,3 +180,9 @@ melt_maize %>%
 Check if any of the replicates seem obviously different from the others.
 Mostly seems okay, `SRR1573509` and `SRR1573523` is a little low
 compared to others, `SRR1573513` seems a little high compared to others.
+
+## DESEQ2
+
+    library(DESeq2)
+
+STAR count
