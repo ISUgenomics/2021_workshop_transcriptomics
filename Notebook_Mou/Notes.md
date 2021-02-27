@@ -2,14 +2,12 @@
 
 ## To do
 1. Bee
-* Run fastqc and multiQC on fastq files
 * Run multiQC on `*txt.summary` files
 * Run combine.R
-* I noticed we already have mapping sam files for bee. Run through samtools and compare featurecounts of this with your featurecount summaries.
 
 2. Maize
-* Run multiQC on fastq files
-* Reran gsnap + featurecounts (job 154052) - how does output look?, run multiQC on `*txt.summary` files. Run combine.R
+* Run multiQC on fastq files -- Issues with installing multiQC on atlas with miniconda. Will reach out to vsrc.
+* Reran gsnap + featurecounts (job 154052) - how does output look? Run multiQC on `*txt.summary` files. Run combine.R
 
 3. Read MultiQC to assess read alignment (can try this on gsnap output): http://www.bea.ki.se/documents/Intro2RNAseq.pdf
 

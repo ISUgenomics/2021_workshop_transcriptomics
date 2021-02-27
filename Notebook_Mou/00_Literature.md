@@ -9,3 +9,5 @@ doi: 10.3389/fbioe.2020.00034
 
 3. FeatureCounts: http://www.bioconductor.org/packages/release/bioc/vignettes/Rsubread/inst/doc/SubreadUsersGuide.pdf
   * Understanding featurecounts (with nice diagram of ): https://www.mathworks.com/help/bioinfo/ref/featurecount.html
+
+4. Samtools tutorial: http://quinlanlab.org/tutorials/samtools/samtools.html
