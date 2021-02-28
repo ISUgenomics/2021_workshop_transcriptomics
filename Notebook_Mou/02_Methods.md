@@ -4,8 +4,9 @@ Written summary of methods performed in this repo. A lot of the steps described 
 
 ## Raw data
 * **Maize data:** https://www.ebi.ac.uk/ena/browser/view/PRJNA260793
-* **Maize reference (*Zea mays* B73):** ftp://ftp.ensemblgenomes.org/pub/plants/release-49/fasta/zea_mays/dna/Zea_mays.B73_RefGen_v4.dna.*gz
+* **[Maize reference (*Zea mays* B73)](ftp://ftp.ensemblgenomes.org/pub/plants/release-49/fasta/zea_mays/dna/Zea_mays.B73_RefGen_v4.dna.*gz)**
 * **Bee data**
+  * Already have FastQC and multiQC reports of bee fastq files
 * **Bee reference (*Bombia impatiens*):** https://hymenoptera.elsiklab.missouri.edu/genome_fasta<br /> Bombus_impatiens_GCF_000188095.3_BIMP_2.2_genomic.fa
 
 ## Data transfer to HPC (Atlas dtn node)
@@ -121,7 +122,10 @@ ProjectDirectory/
           |_logs/
           |_mapping/
           |_meta/
+          |_outbox/
           |_raw_data/
+              |_test/
+                  |_fastqc/
           |_reference_genome_bee/
           |_results/
               |_gsnap/
@@ -131,6 +135,7 @@ ProjectDirectory/
               |_b73_reference_gsnap/
           |_logs/
           |_metadata/
+          |_outbox/
           |_raw_data/
           |_reference_genome/
           |_results/    
@@ -261,9 +266,44 @@ featureCounts -v    #featureCounts version: v2.0.1
 set -e
 set -u
 set +eu
-source /home/kathy.mou/miniconda3/etc/profile.d/conda.sh
+source /h/k/miniconda3/etc/profile.d/conda.sh
 conda activate gsnap_env
 ## gsnap/samtools/featureCount commands here
+```
+
+## fastQC
+### Bee
+Already done by Toth group, sequences look good.
+
+### Maize
+1. Ran the following slurm script on Atlas
+```
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=16
+#SBATCH --time=24:00:00
+#SBATCH --job-name=Maizefastqc
+#SBATCH --out=stdout.%j.%N.%x
+#SBATCH --error=stderr.%j.%N.%x
+#SBATCH --mail-user=em@il.com
+#SBATCH --mail-type=begin
+#SBATCH --mail-type=end
+#SBATCH --account=f
+
+# Set working directory
+cd /h/k/rnaseq/maize/raw_data/
+
+module load fastqc
+fastqc -t 16 *.fastq
+```
+```
+Submitted batch job 154224
+```
+Moved fastqc files to subdirectory `fastqc/`
+
+2. multiqc
+```
+
 ```
 
 ## Alignment with gsnap
@@ -363,7 +403,7 @@ samtools sort - \
   set -e
   set -u
   set +eu
-  source /home/kathy.mou/miniconda3/etc/profile.d/conda.sh
+  source /h/k/miniconda3/etc/profile.d/conda.sh
   conda activate gsnap_env
   # ==== Mapping RNA-seq reads. Use miniconda3
   gsnap -d b73 -D /project/projectdirectory/mydirectory/dot_files/software/gmapdb/ \
@@ -378,14 +418,183 @@ samtools sort - \
 Submitted job 136482
 ```
 
-2. `SRR1573504_1_2.Aligned.sortedByCoord.out.bam` file is empty so far...
+2. Run gsnap (adapted from `2021_workshop_transcriptomics/Notebook_Severin/Maize/02_gsnap.md` `gsnapScript.sh`)
+```
+#!/bin/bash
+source /h/k/miniconda3/etc/profile.d/conda.sh
+conda activate gsnap_env
+export GMAPDB=/project/f/k/dot_files/software/gmapdb/b73/
+DB_NAME="NAMV5" #<= forgot to change this to b73
+# Note: "-N" option for detecting novel splice sites, remove if not needed (0=OFF; 1=ON)
+for file in /h/k/rnaseq/maize/raw_data/*_1.fastq
+  do
+    file2=$(echo $file|sed -r 's/\_1/\_2/g')
+    OUTFILE=$(basename ${file} | sed 's/_1.fastq$//g')
+#echo ${OUTFILE}
+    gsnap -d ${DB_NAME} -N 1 -t 8 -B 4 -m 5 --input-buffer-size=1000000 --output-buffer-size=1000000 -A sam --split-output=${DB_NAME}_${OUTFILE} ${file} ${file2}
+#echo $file
+#echo $file2
+done
+```
+```
+Submitted batch job 151969
+```
+Job failed because it couldn't find DB_NAME (I forgot to change NAMV5 to b73)
 
+3. Repeat gsnap and add featureCounts
+```
+#! /usr/bin/env bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=16
+#SBATCH --time=24:00:00
+#SBATCH --job-name=b73
+#SBATCH --out=stdout.%j.%N.%x
+#SBATCH --error=stderr.%j.%N.%x
+#SBATCH --mail-user=myem@il.com
+#SBATCH --mail-type=begin
+#SBATCH --mail-type=end
+#SBATCH --account=fsepru
+set -e
+set -u
+
+# ==== Activate miniconda
+set +eu
+source /h/k/miniconda3/etc/profile.d/conda.sh
+conda activate gsnap_env
+
+# ==== Define input/output variables
+REF_GFF=/h/k/rnaseq/maize/reference_genome/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.gff
+GMAPDB=/project/f/k/dot_files/software/gmapdb
+DB_NAME="b73" #<= was NAMV5, had forgotten to change this to b73
+
+# === Set working directory and in/out variables
+cd /project/f/k/rnaseq/maize/results/
+
+# ==== Mapping RNA-seq reads
+for file in /h/k/rnaseq/maize/raw_data/*_1.fastq
+  do
+    file2=$(echo $file|sed -r 's/\_1/\_2/g')
+    OUTFILE=$(basename ${file} | sed 's/_1\.fastq$//g')
+    #echo ${OUTFILE}
+    gsnap -d ${DB_NAME} -D ${GMAPDB} \
+    -N 1 -t 16 -B 4 -m 5 \
+    --input-buffer-size=1000000 \
+    --output-buffer-size=1000000 \
+    -A sam \
+    --split-output=${DB_NAME}_${OUTFILE} ${file} ${file2} | \
+    #echo $file
+    #echo $file2
+    samtools view --threads 16 -bS - > ${OUT_BAM}
+
+# ==== Gene Counts
+    OUT_COUNTS=${OUTFILE}_genecounts.txt
+    featureCounts -T 16 -t gene -g ID \
+      -a ${REF_GFF} \
+      -o ${OUT_COUNTS} \
+      ${OUT_BAM}
+done
+```
+```
+Submitted batch job 153966
+```
+Job failed because it didn't know where to put or grab the sam file. Also, the intermediate files Andrew made from `--split-output=${DB_NAME}_${OUTFILE} ${file} ${file2}` don't work with pipe onward to samtools. Renamed my `gsnap_maize.slurm` to `gsnap_maize_old.slurm`
+
+4. Ran Jennifer's `Maize_Runner.slurm` like so:
+```
+#! /usr/bin/env bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=16
+#SBATCH --time=24:00:00
+#SBATCH --job-name=Maize
+#SBATCH --out=stdout.%j.%N.%x
+#SBATCH --error=stderr.%j.%N.%x
+#SBATCH --mail-user=myem@il.com
+#SBATCH --mail-type=begin
+#SBATCH --mail-type=end
+#SBATCH --account=f
+
+set -e
+set -u
+
+start=`date +%s`
+
+# === Load Modules here and link executables
+
+# = Atlas HPC
+set +eu
+source /h/k/miniconda3/etc/profile.d/conda.sh
+conda activate gsnap_env
+GMAP_BUILD=gmap_build
+GSNAP=gsnap
+SAMTOOLS=samtools
+FEATURECOUNTS=featureCounts
+
+# === Set working directory and in/out variables
+cd /project/f/k/rnaseq/maize/results/
+
+# === Input / Output Variables
+REF_NAME=b73
+REF_FILE=/h/k/rnaseq/maize/reference_genome/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.fna
+REF_GFF=/h/k/rnaseq/maize/reference_genome/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.gff
+GMAPDB=/project/f/k/dot_files/software/gmapdb
+
+# === Main Program
+
+# # === Main Program
+# (1) Index Genome
+#${GMAP_BUILD} \
+#  --gunzip \
+#  -d ${REF_NAME} \
+#  -D ${GMAPDB} \
+#  ${REF_FILE}
+
+for FILE in /h/k/rnaseq/maize/raw_data/*_1.fastq
+do
+
+  READ_NAME=$(basename ${FILE} | sed 's:_1.fastq::g')
+  DIR_NAME=$(dirname ${FILE})
+  READ_R1=${DIR_NAME}/${READ_NAME}_1.fastq
+  READ_R2=${DIR_NAME}/${READ_NAME}_2.fastq
+  OUT_BAM=${READ_NAME}.aligned.out.bam
+  OUT_COUNTS=${READ_NAME}_genecounts.txt
+  echo "Processing ... ${READ_NAME}"
+
+# (2) Map Reads:
+  ${GSNAP} \
+    --gunzip \
+    -d ${REF_NAME} \
+    -D ${GMAPDB} \
+    -N 1 -t 16 -B 4 -m 5 \
+    --input-buffer-size=1000000 \
+    --output-buffer-size=1000000 \
+    -A sam \
+    ${READ_R1} ${READ_R2} | \
+    ${SAMTOOLS} view --threads 16 -bS - > ${OUT_BAM}
+
+# (3) Get feature counts
+  ${FEATURECOUNTS} -T 16 -t gene -g ID \
+    -a ${REF_GFF} \
+    -o ${OUT_COUNTS} \
+    ${OUT_BAM}
+
+done
+
+end=`date +%s`
+
+# === Log msgs and resource use
+scontrol show job ${SLURM_JOB_ID}
+echo "ran Bee_Runner.slurm: " `date` "; Execution time: " $((${end}-${start})) " seconds" >> LOGGER.txt
+```
+```
+Submitted batch job 154052
+```
+Job ran successfully! Generated 24 `*genecounts.txt` and `*genecounts.txt.summary` files.
 
 ### Bee -- miniconda3
 1. Create genome index and map RNA-seq reads to B. impatiens
   ```
   set +eu
-  source /home/mydirectory/miniconda3/etc/profile.d/conda.sh
+  source /h/mydirectory/miniconda3/etc/profile.d/conda.sh
   conda activate gsnap_env
   # ==== Connect the executable (either local or miniconda)
   # GMAP_BUILD=/project/projectdirectory/mydirectory/dot_files/software/gmap-2020-12-17/bin/gmap_build
@@ -410,18 +619,140 @@ Submitted job 136483
 ```
 Job seemed to complete. Resulted in `1-A01-A1_S7_L002_R1.Aligned.sortedByCoord.out.bam` in `/projectdirectory/mydirectory/rnaseq/bee/results/gsnap`
 
-#### Output files
+3. Run featureCounts
+```
+#! /usr/bin/env bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=16
+#SBATCH --time=24:00:00
+#SBATCH --job-name=bee
+#SBATCH --out=stdout.%j.%N.%x
+#SBATCH --error=stderr.%j.%N.%x
+#SBATCH --mail-user=myem@il.com
+#SBATCH --mail-type=begin
+#SBATCH --mail-type=end
+#SBATCH --account=fsepru
+set -e
+set -u
+
+# ==== Activate miniconda
+set +eu
+source /h/k/miniconda3/etc/profile.d/conda.sh
+conda activate gsnap_env
+
+# ==== Define input/output variables
+REF_NAME=B_impatiens
+#REF_FASTA=/project/f/k/rnaseq/bee/reference_genome_bee/Bombus_impatiens_GCF_000188095.3_BIMP_2.2_genomic.fa
+GMAPDB=/project/f/k/dot_files/software/gmapdb
+REF_GFF=/project/f/k/rnaseq/bee/reference_genome_bee/GCF_000188095.3_BIMP_2.2_genomic.gff.gz
+
+# === Set working directory and in/out variables
+cd /project/f/k/rnaseq/bee/results/
+
+# ==== Gene Counts
+for FILE in /h/k/rnaseq/bee/raw_data/test/*.bam
+  do
+    OUT_COUNTS=${FILE}_genecounts.txt
+    OUTBAM=${FILE}
+
+    featureCounts -T 16 -t gene -g ID \
+       -a ${REF_GFF} \
+       -o ${OUT_COUNTS} \
+       ${OUTBAM}
+done
+```
+```
+Submitted batch job 153967
+```
+Job ran successfully! Generated 59 `*genecounts.txt` and `*genecounts.txt.summary` files.
+
+4. Use `*genecounts.txt.summary` for multiqc or you can run `samtools flagstats`, give it bam file and it can do QC on alignment.
+
+5. I tried to run samtools on the sam files in `mapping/` to convert to bam files. Job failed with error message `[main_samview] fail to read the header from "-".` in job 154251. Give up!
+```
+#! /usr/bin/env bash
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=16
+#SBATCH --time=24:00:00
+#SBATCH --job-name=beemapping
+#SBATCH --out=stdout.%j.%N.%x
+#SBATCH --error=stderr.%j.%N.%x
+#SBATCH --mail-user=myem@il.com
+#SBATCH --mail-type=begin
+#SBATCH --mail-type=end
+#SBATCH --account=f
+set -e
+set -u
+
+# ==== Activate miniconda
+set +eu
+source /h/k/miniconda3/etc/profile.d/conda.sh
+conda activate gsnap_env
+
+# === Set working directory and in/out variables
+cd /h/k/rnaseq/bee/mapping
+
+# ==== Mapping RNA-seq Reads
+for readname in /h/k/rnaseq/bee/mapping/*.sam
+  do
+    OUT_BAM=${readname}.Aligned.sortedByCoord.out.bam
+    samtools view -bS - > ${OUT_BAM}
+#    featureCounts -T 16 -t gene -g ID \
+#      -a ${REF_GFF} \
+#      -o ${OUT_COUNTS} \
+#      ${OUT_BAM}
+done
+```
+
+
+
+### Output files
 * `gmap_build`
 ```
-b73.chromosome	    b73.contig.iit     b73.ref061regiondb	b73.version
-b73.chromosome.iit  b73.genomebits128  b73.ref153offsets64meta
-b73.chrsubset	    b73.genomecomp     b73.ref153offsets64strm
-b73.contig	    b73.maps	       b73.ref153positions
+B_impatiens.chromosome	    B_impatiens.contig.iit     B_impatiens.ref061regiondb	B_impatiens.version
+B_impatiens.chromosome.iit  B_impatiens.genomebits128  B_impatiens.ref153offsets64meta
+B_impatiens.chrsubset	    B_impatiens.genomecomp     B_impatiens.ref153offsets64strm
+B_impatiens.contig	    B_impatiens.maps	       B_impatiens.ref153positions
 ```
 
 * `gsnap`
+```
+*.fastq.Aligned.sortedByCoord.out.bam
+*.fastq
+```
 
+* `featureCounts`
+```
+*genecounts.txt
+*genecounts.txt.summary
+```
 
+## Counts
+### Useful references for understanding how FeatureCounts works:
+* FeatureCounts User Guide: http://www.bioconductor.org/packages/release/bioc/vignettes/Rsubread/inst/doc/SubreadUsersGuide.pdf
+* Nice diagram showing cases of the effect of `countmultioverlap` on `overlapmethod`: https://www.mathworks.com/help/bioinfo/ref/featurecount.html
+* Reads that map to multiple transcripts or align ambigiuously and not sure what strand they are (+ / -) aka ambiguous - problem with short reads
+* can ignore multimapped duplicates, ignore duplicates
+
+### Bee counts
+1. Counts preview of bee data. Compared coordinates with Jennifer's `1-A01-A1_S7.aligned.out.bam` and the length column values are slightly different. Is this normal?
+```
+# Program:featureCounts v2.0.1; Command:"featureCounts" "-T" "16" "-t" "gene" "-g" "ID" "-a" "/project/f/k/rnaseq/bee/reference_genome_bee/GCF_000188095.3_BIMP_2.2_genomic.gff.gz" "-o" "/h/k/rnaseq/bee/raw_data/test/1-A01-A1_S7_L002_R1_001.fastq.Aligned.sortedByCoord.out.bam_genecounts.txt" "/h/k/rnaseq/bee/raw_data/test/1-A01-A1_S7_L002_R1_001.fastq.Aligned.sortedByCoord.out.bam"
+Geneid	Chr	Start	End	Strand	Length	/h/k/rnaseq/bee/raw_data/test/1-A01-A1_S7_L002_R1_001.fastq.Aligned.sortedByCoord.out.bam
+gene-LOC100740276	NT_176423.1	7	2256	+	2250	14
+gene-LOC100740157	NT_176423.1	2829	5996	+	3168	107
+gene-LOC100742884	NT_176427.1	27729	30739	+	3011	191
+gene-LOC100740399	NT_176427.1	32165	37261	+	5097	28
+gene-LOC100740519	NT_176427.1	38806	42290	-	3485	160
+gene-LOC100743001	NT_176427.1	42433	53365	+	10933	115
+gene-LOC100740639	NT_176427.1	54201	58114	+	3914	104
+gene-LOC100743123	NT_176427.1	58465	60894	-	2430	153
+```
+
+2. Run featureCounts output in `combine.R`.
+
+### Maize counts
+1. Run featureCounts output in `combine.R`.
 
 ## Differential expression with DESeq2
 ### Maize

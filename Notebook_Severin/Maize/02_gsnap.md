@@ -30,7 +30,10 @@ wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/902/167/145/GCF_902167145.1_Zm
 *  /work/gif/TranscriptomicsWorkshop/severin/Maize/02_gsnap
 
 ```
-gmap_build -D Zea -d B73 Zea_All.fasta
+#module load gmap-gsnap/2019-05-12-zjqshxf
+salloc -N 1 -n 36 -p huge -t 4:00:00
+export PATH=/work/gif/TranscriptomicsWorkshop/severin/gmap-2020-12-17/src/:/work/gif/TranscriptomicsWorkshop/severin/gmap-2020-12-17/util/:$PATH
+#gmap_build -D Zea -d B73 Zea_All.fasta
 gmap_build -D Zea -d NAMV5 GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.fna
 ```
 
@@ -54,14 +57,15 @@ This script does the following
 ```
 #!/bin/bash
 
-module load gmap-gsnap/2018-07-04-gtu46xu
+#module load gmap-gsnap/2019-05-12-zjqshxf
+export PATH=/work/gif/TranscriptomicsWorkshop/severin/gmap-2020-12-17/src/:$PATH
 export GMAPDB=/work/gif/TranscriptomicsWorkshop/severin/Maize/02_gsnap/Zea/NAMV5/
 DB_NAME="NAMV5"
 FILE1="$1"
 FILE2="$2"
 OUTFILE=$(basename ${FILE1} | sed 's/_1.fastq$//g')
 # Note: "-N" option for detecting novel splice sites, remove if not needed (0=OFF; 1=ON)
-gsnap -d ${DB_NAME} -N 1 -t 8 -B 5 -m 5 --fails-as-input --input-buffer-size=1000000 --output-buffer-size=1000000 -A sam --split-output=${DB_NAME}_${OUTFILE} ${FILE1} ${FILE2}
+gsnap -d ${DB_NAME} -N 1 -t 8 -B 4 -m 5 --input-buffer-size=1000000 --output-buffer-size=1000000 -A sam --split-output=${DB_NAME}_${OUTFILE} ${FILE1} ${FILE2}
 ```
 
 #### run the script using nextflow parallel workflow
@@ -69,5 +73,34 @@ gsnap -d ${DB_NAME} -N 1 -t 8 -B 5 -m 5 --fails-as-input --input-buffer-size=100
 Parallel workflow requires the input files command which will be executed and placed in a queue that will be fed to the script parameter which in our case is the script above.
 
 ```
-nextflow run isugifNF/parallel --input "ls *fastq | paste - -" --script "gsnapScript.sh" --threads 8 -profile nova
+  nextflow run isugifNF/parallel --input "ls /work/gif/TranscriptomicsWorkshop/severin/Maize/02_gsnap/*fastq | paste - -" --script "/work/gif/TranscriptomicsWorkshop/severin/Maize/02_gsnap/gsnapScript.sh" --threads 8 -profile nova
+TranscriptomicsWorkshop/severin/Maize/02_gsnap/gsnapScript.sh" --threads 8 -profile nova
+N E X T F L O W  ~  version 20.07.1
+Launching `isugifNF/parallel` [scruffy_hoover] - revision: 101d292e2e [master]
+process finished for inFILE
+executor >  local (1), slurm (24)
+[3c/8064fe] process > createInput      [100%] 1 of 1 ✔
+[5a/10a85b] process > inputScript (17) [100%] 24 of 24 ✔
+Completed at: 17-Feb-2021 14:03:30
+Duration    : 2h 39m 27s
+CPU hours   : 10.4
+Succeeded   : 25
+```
+
+reran with latest version of gsnap and got unusual fails but appears to occur after gsnap completion
+```
+N E X T F L O W  ~  version 20.07.1
+Launching `isugifNF/parallel` [wise_mclean] - revision: 101d292e2e [master]
+process finished for inFILE
+executor >  local (1), slurm (24)
+[09/b51f5a] process > createInput      [100%] 1 of 1 ✔
+[d9/dcfb32] process > inputScript (17) [100%] 24 of 24, failed: 24 ✔
+[d9/dcfb32] NOTE: Process `inputScript (17)` terminated with an error exit status (9) -- Error is ignored
+
+Completed at: 24-Feb-2021 18:34:25
+Duration    : 10h 1m 49s
+CPU hours   : 28.0 (100% failed)
+Succeeded   : 1
+Ignored     : 24
+Failed      : 24
 ```

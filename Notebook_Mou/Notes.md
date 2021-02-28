@@ -2,10 +2,16 @@
 
 ## To do
 1. Bee
-* Ran bee gmap and gsnap (job 136483). Job completed ok, I think... I noticed there was no R2 fasta file for bee sequences... did I miss them when uploading fasta files to Atlas?
+* Run multiQC on `*txt.summary` files
+* Run combine.R
 
 2. Maize
-* Ran maize gsnap, samtools (job 136482). Saw maize bam file empty... it is still running so might take some time.
+* Run multiQC on fastq files -- Issues with installing multiQC on atlas with miniconda. Will reach out to vsrc.
+* Reran gsnap + featurecounts (job 154052) - how does output look? Run multiQC on `*txt.summary` files. Run combine.R
+
+3. Read MultiQC to assess read alignment (can try this on gsnap output): http://www.bea.ki.se/documents/Intro2RNAseq.pdf
+
+4. What parameter to use in gsnap to remove bad reads? (unassigned: unmapped, ambiguous, multimapping, no features)
 
 <details><summary>blah</summary>
 dfdfd
