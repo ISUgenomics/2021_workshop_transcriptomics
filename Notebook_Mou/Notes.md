@@ -2,10 +2,16 @@
 
 ## To do
 1. Bee
-* check on featureCounts (job 153967) output. Run combine.R
+* Run multiQC on `*txt.summary` files
+* Run combine.R
 
 2. Maize
-* Ran gsnap, samtools, featurecounts (job 153966). Check the output. Run combine.R
+* Run multiQC on fastq files -- Issues with installing multiQC on atlas with miniconda. Will reach out to vsrc.
+* Reran gsnap + featurecounts (job 154052) - how does output look? Run multiQC on `*txt.summary` files. Run combine.R
+
+3. Read MultiQC to assess read alignment (can try this on gsnap output): http://www.bea.ki.se/documents/Intro2RNAseq.pdf
+
+4. What parameter to use in gsnap to remove bad reads? (unassigned: unmapped, ambiguous, multimapping, no features)
 
 <details><summary>blah</summary>
 dfdfd

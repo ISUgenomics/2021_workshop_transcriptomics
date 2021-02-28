@@ -332,6 +332,10 @@ This is a family of cyst-forming apicomplexan protozoan parasites. Kraken could 
 grep "Sporisorium graminicola" *.report|awk '$2>0' |sed 's/_/\t/2'  |sed 's/: /\t/1'  |cut -f 1,3-|sed 's/[ ]*//g' |sed 's/graminicola/_graminicola/g' |less
 ```
 Not much information out there. The basidiomycete Sporisorium graminicola (formally Pseudozyma graminicola) strain CBS10092 was originally isolated from an herbaceous. Highly likely this is truly present in every sample, and not just a contaminant.
+
+[Paper -- Nectar Inhabiting Yeasts in Virginian Populations of Silene latifolia (Caryophyllaceae) and Coflowering Species ](https://bioone.org/journals/the-american-midland-naturalist/volume-169/issue-2/0003-0031-169.2.235/Nectar-Inhabiting-Yeasts-in-Virginian-Populations-of-Silene-latifolia-Caryophyllaceae/10.1674/0003-0031-169.2.235.short)
+
+Apparently it is a yeast that is commonly found in the nectar of Silene latifolia, a plant that commonly inhabits the north to north-central midwest.  
 <details>
 <p>
 
