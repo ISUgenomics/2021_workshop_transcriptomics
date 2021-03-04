@@ -274,3 +274,74 @@ summary(rld)
 ```
 
 ![](imgs/2_DE_analysispca_bee-1.png)<!-- -->
+
+## Other diagnostic plots
+
+Rough outline
+
+``` r
+ordered_trt = c(meta_df %>% subset(Condition=="ctrl") %>% {.$Sample},
+                meta_df %>% subset(Condition=="exposed") %>% {.$Sample})
+
+DEgenes <- resdata %>%
+  subset(padj < 0.05) %>%
+  select(-c(2:7)) %>%
+  pivot_longer(col=-1, names_to="treatment", values_to="expression") %>% 
+  separate(treatment, 
+           c(NA, "group", NA, NA), 
+           sep="-", 
+           remove=FALSE) %>%
+  mutate(
+    Condition = metadata[group,]$Trt,
+    Condition = factor(Condition, levels=c("ctrl", "exposed")),
+    treatment = factor(treatment, levels=ordered_trt)
+  )
+#> Warning: Expected 4 pieces. Missing pieces filled with `NA` in 20100 rows [1, 2,
+#> 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, ...].
+
+# Very rough draft, fix this later...
+DEgenes %>% ggplot(., aes(x=treatment, y=expression, group=Gene)) +
+  geom_line(alpha=0.5) +
+  geom_point(aes(color=Condition), size=0.5) +
+  theme_bw() + 
+  theme(
+    axis.text.x = element_text(angle=90)
+  )# +
+```
+
+![](imgs/2_DE_analysisbee_deline-1.png)<!-- -->
+
+``` r
+#  facet_wrap(~Condition, scales="free_x", drop=T)
+```
+
+Hmm… plot the top 20 differentially expressed genes (lowest padj
+values)… rough draft, go back and check on normalization and metadata…
+
+``` r
+top20 = resdata[c(1:20),] %>%
+  subset(padj < 0.05) %>%
+  select(-c(2:7)) %>%
+  pivot_longer(col=-1, names_to="treatment", values_to="expression") %>% 
+  separate(treatment, 
+           c(NA, "group", NA, NA), 
+           sep="-", 
+           remove=FALSE) %>%
+  mutate(
+    Condition = metadata[group,]$Trt,
+    Condition = factor(Condition, levels=c("ctrl", "exposed")),
+    treatment = factor(treatment, levels=ordered_trt)
+  )
+#> Warning: Expected 4 pieces. Missing pieces filled with `NA` in 1200 rows [1, 2,
+#> 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, ...].
+
+top20 %>% ggplot(., aes(x = as.factor(Gene), y = expression, fill=Condition))+
+  geom_boxplot() + 
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(angle=45, hjust = 1)
+  ) +
+  labs(x="Gene")
+```
+
+![](imgs/2_DE_analysisbee_top20-1.png)<!-- -->

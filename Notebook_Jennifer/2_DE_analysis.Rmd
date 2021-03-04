@@ -201,3 +201,61 @@ summary(rld)
     labs(x = "PC1", y="PC2")
 )
 ```
+
+## Other diagnostic plots
+
+Rough outline
+
+```{r bee_deline, fig.width=8, fig.height=4}
+ordered_trt = c(meta_df %>% subset(Condition=="ctrl") %>% {.$Sample},
+                meta_df %>% subset(Condition=="exposed") %>% {.$Sample})
+
+DEgenes <- resdata %>%
+  subset(padj < 0.05) %>%
+  select(-c(2:7)) %>%
+  pivot_longer(col=-1, names_to="treatment", values_to="expression") %>% 
+  separate(treatment, 
+           c(NA, "group", NA, NA), 
+           sep="-", 
+           remove=FALSE) %>%
+  mutate(
+    Condition = metadata[group,]$Trt,
+    Condition = factor(Condition, levels=c("ctrl", "exposed")),
+    treatment = factor(treatment, levels=ordered_trt)
+  )
+
+# Very rough draft, fix this later...
+DEgenes %>% ggplot(., aes(x=treatment, y=expression, group=Gene)) +
+  geom_line(alpha=0.5) +
+  geom_point(aes(color=Condition), size=0.5) +
+  theme_bw() + 
+  theme(
+    axis.text.x = element_text(angle=90)
+  )# +
+#  facet_wrap(~Condition, scales="free_x", drop=T)
+```
+Hmm... plot the top 20 differentially expressed genes (lowest padj values)... rough draft, go back and check on normalization and metadata...
+
+```{r bee_top20, fig.width=8, fig.height=4}
+top20 = resdata[c(1:20),] %>%
+  subset(padj < 0.05) %>%
+  select(-c(2:7)) %>%
+  pivot_longer(col=-1, names_to="treatment", values_to="expression") %>% 
+  separate(treatment, 
+           c(NA, "group", NA, NA), 
+           sep="-", 
+           remove=FALSE) %>%
+  mutate(
+    Condition = metadata[group,]$Trt,
+    Condition = factor(Condition, levels=c("ctrl", "exposed")),
+    treatment = factor(treatment, levels=ordered_trt)
+  )
+
+top20 %>% ggplot(., aes(x = as.factor(Gene), y = expression, fill=Condition))+
+  geom_boxplot() + 
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(angle=45, hjust = 1)
+  ) +
+  labs(x="Gene")
+```
