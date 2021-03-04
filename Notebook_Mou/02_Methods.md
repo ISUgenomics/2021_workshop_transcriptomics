@@ -707,6 +707,7 @@ B_impatiens.contig	    B_impatiens.maps	       B_impatiens.ref153positions
 * Reads that map to multiple transcripts or align ambigiuously and not sure what strand they are (+ / -) aka ambiguous - problem with short reads
 * can ignore multimapped duplicates, ignore duplicates - unique reads will be based on read count.
 * 7th column is the read count
+* Apparently you can run featureCounts on sam files (tested by Andrew Severin)
 
 ### Bee counts
 1. Counts preview of bee data. Compared coordinates with Jennifer's `1-A01-A1_S7.aligned.out.bam` and the length column values are slightly different. Is this normal?
@@ -751,12 +752,20 @@ pkgs_dirs:
 ```
 That fixed the issue and I was able to install multiQC and run it!
 
-2. Made `/p/f/k/rnaseq/bee/results/multiqc/` directory. Copied `/p/f/k/rnaseq/bee/raw_data/testing/*.summary` files to `multiqc/` and ran
-`multiqc .` It ran successfully, checked out the output file `bee.multiqc_report.html`. I noticed `1-E07-F5_S61_L002_R1_001` had the lowest number of assigned reads (223,397). All others had at least 1M reads. Used MultiQC Toolbox on html page to export `featureCounts_assignment_plot` image and saved as `Bee_featureCounts_multiqc_plot.png` in `results/`
+2. Made `/p/f/k/rnaseq/bee/results/multiqc/` directory.
+Copied `/p/f/k/rnaseq/bee/raw_data/testing/*.summary` files to `multiqc/` and ran
+`multiqc .`
+It ran successfully, checked out the output file `bee.multiqc_report.html`.
+I noticed `1-E07-F5_S61_L002_R1_001` had the lowest number of assigned reads (223,397). All others had at least 1M reads.
+Used MultiQC Toolbox on html page to export `featureCounts_assignment_plot` image and saved as `Bee_featureCounts_multiqc_plot.png` in `results/`
 ![](results/Bee_featureCounts_multiqc_plot.png)<!-- -->
 
-3. Made `/p/f/k/rnaseq/maize/results/multiqc/`. Copied `/p/f/k/rnaseq/maize/results/*.summary` files to `multiqc/` and ran
-`multiqc .` It ran successfully, checked out the output file `maize.multiqc_report.html`. I noticed SRR1573520 had a lot of unassigned_multimapping reads. Used MultiQC Toolbox on html page to export `featureCounts_assignment_plot` image and saved as `maize_featureCounts_multiqc_plot.png` in `results/`
+3. Made `/p/f/k/rnaseq/maize/results/multiqc/`.
+Copied `/p/f/k/rnaseq/maize/results/*.summary` files to `multiqc/` and ran
+`multiqc .`
+It ran successfully, checked out the output file `maize.multiqc_report.html`.
+I noticed SRR1573520 had a lot of unassigned_multimapping reads.
+Used MultiQC Toolbox on html page to export `featureCounts_assignment_plot` image and saved as `maize_featureCounts_multiqc_plot.png` in `results/`
 ![](results/maize_featureCounts_multiqc_plot.png)<!-- -->
 
 ### Output files:
@@ -845,13 +854,11 @@ That fixed the issue and I was able to install multiQC and run it!
 ```
 </details>
 
-
 #### Output files
 * `bee.genecounts.txt`
 * `bee.genecounts.xlsx`
 * `maize.genecounts.txt`
 * `maize.genecounts.xlsx`
-
 
 ## Differential expression with DESeq2
 * Sathesh says basemeans correlate with read counts: larger basemean values = more read counts
