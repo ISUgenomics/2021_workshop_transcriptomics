@@ -11,7 +11,7 @@
 
 3. Read MultiQC to assess read alignment (can try this on gsnap output): http://www.bea.ki.se/documents/Intro2RNAseq.pdf
 
-4. What parameter to use in gsnap to remove bad reads? (unassigned: unmapped, ambiguous, multimapping, no features)
+4. What parameter to use in gsnap to remove bad reads? (unassigned: unmapped, ambiguous, multimapping, no features) - don't need to, if run default, the uniquely read counts will be the mapped reads.
 
 <details><summary>blah</summary>
 dfdfd

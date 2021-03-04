@@ -8,6 +8,10 @@ Written summary of methods performed in this repo. A lot of the steps described 
 * **Bee data**
   * Already have FastQC and multiQC reports of bee fastq files
 * **Bee reference (*Bombia impatiens*):** https://hymenoptera.elsiklab.missouri.edu/genome_fasta<br /> Bombus_impatiens_GCF_000188095.3_BIMP_2.2_genomic.fa
+From group discussions asking which bee annotation to use (NCBI or Hymenoptera): Amy Toth recommends using Hymenoptera Base
+```
+For social insect genomes, usually the "Official Gene Set" is the one that is on Hymenoptera Base (Elsik Lab).  NCBI has their own annotation for each genome as well.  The NCBI annotations tend to have fewer genes but are usually very high quality annotations.  I think most people in the field go with the OGS for a given species unless they are comparing across species, in which case they might use NCBI for consistency.
+```
 
 ## Data transfer to HPC (Atlas dtn node)
 * `ssh username@Atlas-dtn.hpc.msstate.edu`
@@ -125,10 +129,10 @@ ProjectDirectory/
           |_outbox/
           |_raw_data/
               |_test/
-                  |_fastqc/
           |_reference_genome_bee/
           |_results/
               |_gsnap/
+              |_multiqc/
           |_scripts/
       |_maize/
           |_gsnap/
@@ -289,10 +293,8 @@ Already done by Toth group, sequences look good.
 #SBATCH --mail-type=begin
 #SBATCH --mail-type=end
 #SBATCH --account=f
-
 # Set working directory
 cd /h/k/rnaseq/maize/raw_data/
-
 module load fastqc
 fastqc -t 16 *.fastq
 ```
@@ -301,10 +303,9 @@ Submitted batch job 154224
 ```
 Moved fastqc files to subdirectory `fastqc/`
 
-2. multiqc
-```
-
-```
+### Output files:
+* `*.fastqc.html`
+* `*.fastqc.zip`
 
 ## Alignment with gsnap
 ### About gsnap
@@ -456,20 +457,16 @@ Job failed because it couldn't find DB_NAME (I forgot to change NAMV5 to b73)
 #SBATCH --account=fsepru
 set -e
 set -u
-
 # ==== Activate miniconda
 set +eu
 source /h/k/miniconda3/etc/profile.d/conda.sh
 conda activate gsnap_env
-
 # ==== Define input/output variables
 REF_GFF=/h/k/rnaseq/maize/reference_genome/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.gff
 GMAPDB=/project/f/k/dot_files/software/gmapdb
 DB_NAME="b73" #<= was NAMV5, had forgotten to change this to b73
-
 # === Set working directory and in/out variables
 cd /project/f/k/rnaseq/maize/results/
-
 # ==== Mapping RNA-seq reads
 for file in /h/k/rnaseq/maize/raw_data/*_1.fastq
   do
@@ -485,7 +482,6 @@ for file in /h/k/rnaseq/maize/raw_data/*_1.fastq
     #echo $file
     #echo $file2
     samtools view --threads 16 -bS - > ${OUT_BAM}
-
 # ==== Gene Counts
     OUT_COUNTS=${OUTFILE}_genecounts.txt
     featureCounts -T 16 -t gene -g ID \
@@ -512,14 +508,10 @@ Job failed because it didn't know where to put or grab the sam file. Also, the i
 #SBATCH --mail-type=begin
 #SBATCH --mail-type=end
 #SBATCH --account=f
-
 set -e
 set -u
-
 start=`date +%s`
-
 # === Load Modules here and link executables
-
 # = Atlas HPC
 set +eu
 source /h/k/miniconda3/etc/profile.d/conda.sh
@@ -528,18 +520,13 @@ GMAP_BUILD=gmap_build
 GSNAP=gsnap
 SAMTOOLS=samtools
 FEATURECOUNTS=featureCounts
-
 # === Set working directory and in/out variables
 cd /project/f/k/rnaseq/maize/results/
-
 # === Input / Output Variables
 REF_NAME=b73
 REF_FILE=/h/k/rnaseq/maize/reference_genome/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.fna
 REF_GFF=/h/k/rnaseq/maize/reference_genome/GCF_902167145.1_Zm-B73-REFERENCE-NAM-5.0_genomic.gff
 GMAPDB=/project/f/k/dot_files/software/gmapdb
-
-# === Main Program
-
 # # === Main Program
 # (1) Index Genome
 #${GMAP_BUILD} \
@@ -547,10 +534,8 @@ GMAPDB=/project/f/k/dot_files/software/gmapdb
 #  -d ${REF_NAME} \
 #  -D ${GMAPDB} \
 #  ${REF_FILE}
-
 for FILE in /h/k/rnaseq/maize/raw_data/*_1.fastq
 do
-
   READ_NAME=$(basename ${FILE} | sed 's:_1.fastq::g')
   DIR_NAME=$(dirname ${FILE})
   READ_R1=${DIR_NAME}/${READ_NAME}_1.fastq
@@ -558,7 +543,6 @@ do
   OUT_BAM=${READ_NAME}.aligned.out.bam
   OUT_COUNTS=${READ_NAME}_genecounts.txt
   echo "Processing ... ${READ_NAME}"
-
 # (2) Map Reads:
   ${GSNAP} \
     --gunzip \
@@ -570,17 +554,13 @@ do
     -A sam \
     ${READ_R1} ${READ_R2} | \
     ${SAMTOOLS} view --threads 16 -bS - > ${OUT_BAM}
-
 # (3) Get feature counts
   ${FEATURECOUNTS} -T 16 -t gene -g ID \
     -a ${REF_GFF} \
     -o ${OUT_COUNTS} \
     ${OUT_BAM}
-
 done
-
 end=`date +%s`
-
 # === Log msgs and resource use
 scontrol show job ${SLURM_JOB_ID}
 echo "ran Bee_Runner.slurm: " `date` "; Execution time: " $((${end}-${start})) " seconds" >> LOGGER.txt
@@ -634,21 +614,17 @@ Job seemed to complete. Resulted in `1-A01-A1_S7_L002_R1.Aligned.sortedByCoord.o
 #SBATCH --account=fsepru
 set -e
 set -u
-
 # ==== Activate miniconda
 set +eu
 source /h/k/miniconda3/etc/profile.d/conda.sh
 conda activate gsnap_env
-
 # ==== Define input/output variables
 REF_NAME=B_impatiens
 #REF_FASTA=/project/f/k/rnaseq/bee/reference_genome_bee/Bombus_impatiens_GCF_000188095.3_BIMP_2.2_genomic.fa
 GMAPDB=/project/f/k/dot_files/software/gmapdb
 REF_GFF=/project/f/k/rnaseq/bee/reference_genome_bee/GCF_000188095.3_BIMP_2.2_genomic.gff.gz
-
 # === Set working directory and in/out variables
 cd /project/f/k/rnaseq/bee/results/
-
 # ==== Gene Counts
 for FILE in /h/k/rnaseq/bee/raw_data/test/*.bam
   do
@@ -683,15 +659,12 @@ Job ran successfully! Generated 59 `*genecounts.txt` and `*genecounts.txt.summar
 #SBATCH --account=f
 set -e
 set -u
-
 # ==== Activate miniconda
 set +eu
 source /h/k/miniconda3/etc/profile.d/conda.sh
 conda activate gsnap_env
-
 # === Set working directory and in/out variables
 cd /h/k/rnaseq/bee/mapping
-
 # ==== Mapping RNA-seq Reads
 for readname in /h/k/rnaseq/bee/mapping/*.sam
   do
@@ -704,8 +677,6 @@ for readname in /h/k/rnaseq/bee/mapping/*.sam
 done
 ```
 
-
-
 ### Output files
 * `gmap_build`
 ```
@@ -716,12 +687,14 @@ B_impatiens.contig	    B_impatiens.maps	       B_impatiens.ref153positions
 ```
 
 * `gsnap`
+
 ```
 *.fastq.Aligned.sortedByCoord.out.bam
 *.fastq
 ```
 
 * `featureCounts`
+
 ```
 *genecounts.txt
 *genecounts.txt.summary
@@ -732,7 +705,8 @@ B_impatiens.contig	    B_impatiens.maps	       B_impatiens.ref153positions
 * FeatureCounts User Guide: http://www.bioconductor.org/packages/release/bioc/vignettes/Rsubread/inst/doc/SubreadUsersGuide.pdf
 * Nice diagram showing cases of the effect of `countmultioverlap` on `overlapmethod`: https://www.mathworks.com/help/bioinfo/ref/featurecount.html
 * Reads that map to multiple transcripts or align ambigiuously and not sure what strand they are (+ / -) aka ambiguous - problem with short reads
-* can ignore multimapped duplicates, ignore duplicates
+* can ignore multimapped duplicates, ignore duplicates - unique reads will be based on read count.
+* 7th column is the read count
 
 ### Bee counts
 1. Counts preview of bee data. Compared coordinates with Jennifer's `1-A01-A1_S7.aligned.out.bam` and the length column values are slightly different. Is this normal?
@@ -749,12 +723,141 @@ gene-LOC100740639	NT_176427.1	54201	58114	+	3914	104
 gene-LOC100743123	NT_176427.1	58465	60894	-	2430	153
 ```
 
-2. Run featureCounts output in `combine.R`.
+2. Run featureCounts output through `combine.R`. Made a few minor changes to original `combine.R` script.
+
+### Output files
+* `bee.genecounts.txt`
+* `bee.genecounts.xlsx`
 
 ### Maize counts
-1. Run featureCounts output in `combine.R`.
+1. Run featureCounts output through `combine.R`. Made a few minor changes to original `combine.R` script.
+
+### Output files
+`maize.genecounts.txt`
+`maize.genecounts.xlsx`
+
+## QC featureCounts with MultiQC
+* check out this [link](https://multiqc.info/docs/) on how to run multiQC with featureCounts `*.summary` files. This is another way to assess read alignment quality.
+
+1. I initially tried to run multiQC with miniconda on Atlas, but had issues with installing multiQC. I kept getting weird user permission issues. Atlas support staff (help-usda@hpc.msstate.edu) pointed out the following:
+```
+Looks like this is an issue with the directory configured for the shared package cache.
+It's pulling that directory from /h/k/.condarc. Change the location in that file to /home/k/miniconda3/pkgs to have it download the package info to a writable directory.
+```
+I went to the `.condarc` file in home directory and saw that it was listing `/project/my_proj/my_pkg_cache/`, which doesn't exist. I modified it to the following:
+```
+pkgs_dirs:
+- /p/f/k/my_pkg_cache
+```
+That fixed the issue and I was able to install multiQC and run it!
+
+2. Made `/p/f/k/rnaseq/bee/results/multiqc/` directory. Copied `/p/f/k/rnaseq/bee/raw_data/testing/*.summary` files to `multiqc/` and ran
+`multiqc .` It ran successfully, checked out the output file `bee.multiqc_report.html`. I noticed `1-E07-F5_S61_L002_R1_001` had the lowest number of assigned reads (223,397). All others had at least 1M reads. Used MultiQC Toolbox on html page to export `featureCounts_assignment_plot` image and saved as `Bee_featureCounts_multiqc_plot.png` in `results/`
+![](results/Bee_featureCounts_multiqc_plot.png)<!-- -->
+
+3. Made `/p/f/k/rnaseq/maize/results/multiqc/`. Copied `/p/f/k/rnaseq/maize/results/*.summary` files to `multiqc/` and ran
+`multiqc .` It ran successfully, checked out the output file `maize.multiqc_report.html`. I noticed SRR1573520 had a lot of unassigned_multimapping reads. Used MultiQC Toolbox on html page to export `featureCounts_assignment_plot` image and saved as `maize_featureCounts_multiqc_plot.png` in `results/`
+![](results/maize_featureCounts_multiqc_plot.png)<!-- -->
+
+### Output files:
+* `multiqc_data/` <= for both bee and maize
+* `bee.multiqc_report.html`
+* `maize.multiqc_report.html`
+
+## Re-format featureCounts text files for DESeq2 analysis
+1. Downloaded the `*.genecounts.txt` files from Atlas for Bee and Maize. Ran them through `combine.R` to generate text and excel files. Use the text files for DESeq2.
+
+<details><summary>2. Combine.R</summary>
+
+```
+#! /usr/bin/env Rscript
+  # Auth: Jennifer Chang & Mou
+  # Date: 2021/03/04
+  # Desc: Combine featureCounts output (1st and last column) files for Bee and Maize. The text files (*.genecounts.txt) generated from this script will be used for DESeq2.
+  # === Load Libraries
+  library(tidyverse)
+  library(magrittr)
+  library(readxl)
+  ###### BEE #######
+  # === Get list of featureCount output files
+  dir_org="~/Desktop/bee/"        # counts are in a "bee" or "maize" subdirectory
+  featureCount_files <- list.files(path = dir_org, pattern = "*genecounts.txt$", full.names = TRUE)
+  # === Read in 1st file
+  data <- read_delim(featureCount_files[1], delim="\t", comment = "#" ) %>%
+    select(Geneid, ends_with(".bam")) %>%              # Get 1st and last column (column was named after bam file)
+    pivot_longer(cols=ends_with(".bam")) %>%           # Melt data (tidy data)
+    mutate(
+      name = gsub(".Aligned.sortedByCoord.out.bam", "", name)        # No longer need the bam extension, easier to read
+    )
+  # === Loop and append the rest
+  for (count_file in featureCount_files[-1]){
+    print(count_file)
+    temp <- read_delim(count_file, delim="\t", comment = "#") %>%
+      select(Geneid, ends_with(".bam")) %>%
+      pivot_longer(cols=ends_with(".bam")) %>%
+      mutate(
+        name = gsub(".Aligned.sortedByCoord.out.bam", "", name)
+      )
+    data = rbind(data, temp)
+  }
+  # === Convert to excel like data (wider)
+  wide_data <- data %>%
+    pivot_wider(id_cols=Geneid)
+  # === Save tab delimited file (smaller file size)
+  write_delim(wide_data,
+              paste(dir_org, "bee.genecounts.txt"),
+              delim="\t")
+  # === Save Excel file (can be easier to work with)
+  writexl::write_xlsx(wide_data,
+                      path=paste(dir_org, "bee.genecounts.xlsx"))
+  ###### MAIZE #######
+  # === Get list of featureCount output files
+  dir_org="~/Desktop/maize/"        # counts are in a "bee" or "maize" subdirectory
+  featureCount_files <- list.files(path = dir_org, pattern = "*genecounts.txt$", full.names = TRUE)
+  # === Read in 1st file
+  data <- read_delim(featureCount_files[1], delim="\t", comment = "#" ) %>%
+    select(Geneid, ends_with(".bam")) %>%              # Get 1st and last column (column was named after bam file)
+    pivot_longer(cols=ends_with(".bam")) %>%           # Melt data (tidy data)
+    mutate(
+      name = gsub(".aligned.out.bam", "", name)        # No longer need the bam extension, easier to read
+    )
+  # === Loop and append the rest
+  for (count_file in featureCount_files[-1]){
+    print(count_file)
+    temp <- read_delim(count_file, delim="\t", comment = "#") %>%
+      select(Geneid, ends_with(".bam")) %>%
+      pivot_longer(cols=ends_with(".bam")) %>%
+      mutate(
+        name = gsub(".aligned.out.bam", "", name)
+      )
+    data = rbind(data, temp)
+  }
+  # === Convert to excel like data (wider)
+  wide_data <- data %>%
+    pivot_wider(id_cols=Geneid)
+  # === Save tab delimited file (smaller file size)
+  write_delim(wide_data,
+              paste(dir_org, "maize.genecounts.txt"),
+              delim="\t")
+  # === Save Excel file (can be easier to work with)
+  writexl::write_xlsx(wide_data,
+                      path=paste(dir_org, "maize.genecounts.xlsx"))
+```
+</details>
+
+
+#### Output files
+* `bee.genecounts.txt`
+* `bee.genecounts.xlsx`
+* `maize.genecounts.txt`
+* `maize.genecounts.xlsx`
+
 
 ## Differential expression with DESeq2
-### Maize
+* Sathesh says basemeans correlate with read counts: larger basemean values = more read counts
+
 ### Bee
+
+### Maize
+
 #### Output files
