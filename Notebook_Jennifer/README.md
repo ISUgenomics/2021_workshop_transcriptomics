@@ -170,6 +170,11 @@ Introduction of different technologies and their academic papers in chronologica
 
 * HiSat Website - [http://daehwankimlab.github.io/hisat2/](http://daehwankimlab.github.io/hisat2/)
 
+**2016** - Mango Graph Studio (altho this feels like self promotion), not restricted to biological networks, applied to literature mining in Cavatica - type:networks
+
+* Chang, J., Cho, H. and Chou, H.H., 2016. [Mango: combining and analyzing heterogeneous biological networks](https://api.semanticscholar.org/CorpusID:15220779). BioData mining, 9(1), pp.1-14.
+* Chang, J. and Chou, H.H., 2017, November. [Cavatica: A pipeline for identifying author adoption trends among software or methods](https://api.semanticscholar.org/CorpusID:659763). In 2017 IEEE International Conference on Bioinformatics and Biomedicine (BIBM) (pp. 2145-2150). IEEE.
+
 **2016** - Kallisto - type:workflow
 
 * Bray, N.L., Pimentel, H., Melsted, P. and Pachter, L., 2016. [Near-optimal probabilistic RNA-seq quantification](https://api.semanticscholar.org/CorpusID:205282743). Nature biotechnology, 34(5), pp.525-527.
