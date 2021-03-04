@@ -183,6 +183,165 @@ compared to others, `SRR1573513` seems a little high compared to others.
 
 ## DESEQ2
 
-    library(DESeq2)
+Most of these commands I got from Siva, working on the WGCNA tutorial
+and other notes from Siva.
 
-STAR count
+``` r
+# library(DESeq2)
+
+de_input = as.matrix(data_bee[-1])
+row.names(de_input) = data_bee$Geneid
+de_input[1:5,1:6]
+#>                   1-A01-A1_S7 1-A02-A2_S8 1-A03-A3_S9 1-A04-A4_S10 1-A05-A5_S11
+#> gene-LOC100740276          14           3          17           11            8
+#> gene-LOC100740157         100         108         103           75           74
+#> gene-LOC100742884         186         117         159          127          125
+#> gene-LOC100740399          25          19          12            5           11
+#> gene-LOC100740519         139          90          74           79           86
+#>                   1-A06-A6_S12
+#> gene-LOC100740276           21
+#> gene-LOC100740157          102
+#> gene-LOC100742884          120
+#> gene-LOC100740399           20
+#> gene-LOC100740519          118
+
+metadata <- readr::read_delim("../bumblebee_meta.csv", delim=",")
+#> 
+#> ── Column specification ────────────────────────────────────────────────────────
+#> cols(
+#>   Well_ID = col_character(),
+#>   Sample_Name = col_character(),
+#>   Trt = col_character(),
+#>   Nest = col_double()
+#> )
+row.names(metadata) = metadata$Well_ID
+#> Warning: Setting row names on a tibble is deprecated.
+
+meta_df <- data.frame( Sample = colnames(de_input)) %>%
+  separate(Sample, 
+           c(NA, "group", NA, NA), 
+           sep="-", 
+           remove=FALSE) %>%
+  mutate(
+    Condition = metadata[group,]$Trt,
+    Condition = factor(Condition, levels=c("ctrl", "exposed"))
+  )
+#> Warning: Expected 4 pieces. Missing pieces filled with `NA` in 60 rows [1, 2, 3,
+#> 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, ...].
+```
+
+Start DESeq2, modified from Masonbrink’s notes.
+
+``` r
+dds <- DESeqDataSetFromMatrix(
+  de_input,                # Gene counts
+  colData = meta_df,       # Metadata
+  design = ~Condition      # experimental design
+)
+#> converting counts to integer mode
+dds <- DESeq(dds)
+#> estimating size factors
+#> estimating dispersions
+#> gene-wise dispersion estimates
+#> mean-dispersion relationship
+#> final dispersion estimates
+#> fitting model and testing
+#> -- replacing outliers and refitting for 33 genes
+#> -- DESeq argument 'minReplicatesForReplace' = 7 
+#> -- original counts are preserved in counts(dds)
+#> estimating dispersions
+#> fitting model and testing
+res <- results(dds)
+table(res$padj<0.05)
+#> 
+#> FALSE  TRUE 
+#>  7947   335
+res <- res[order(res$padj), ]
+resdata <- merge(as.data.frame(res), as.data.frame(counts(dds, normalized=TRUE)), by="row.names", sort=FALSE)
+names(resdata)[1] <- "Gene"
+write.csv(resdata, file="AllExposedvsAllControlGene.csv",quote = FALSE,row.names = F)
+
+rld <- rlogTransformation(dds)
+#> rlog() may take a long time with 50 or more samples,
+#> vst() is a much faster transformation
+summary(rld)
+#> [1] "DESeqTransform object of length 12925 with 24 metadata columns"
+
+(p <- plotPCA(rld, intgroup="Condition") +
+    theme_bw() +
+    labs(x = "PC1", y="PC2")
+)
+```
+
+![](imgs/2_DE_analysispca_bee-1.png)<!-- -->
+
+## Other diagnostic plots
+
+Rough outline
+
+``` r
+ordered_trt = c(meta_df %>% subset(Condition=="ctrl") %>% {.$Sample},
+                meta_df %>% subset(Condition=="exposed") %>% {.$Sample})
+
+DEgenes <- resdata %>%
+  subset(padj < 0.05) %>%
+  select(-c(2:7)) %>%
+  pivot_longer(col=-1, names_to="treatment", values_to="expression") %>% 
+  separate(treatment, 
+           c(NA, "group", NA, NA), 
+           sep="-", 
+           remove=FALSE) %>%
+  mutate(
+    Condition = metadata[group,]$Trt,
+    Condition = factor(Condition, levels=c("ctrl", "exposed")),
+    treatment = factor(treatment, levels=ordered_trt)
+  )
+#> Warning: Expected 4 pieces. Missing pieces filled with `NA` in 20100 rows [1, 2,
+#> 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, ...].
+
+# Very rough draft, fix this later...
+DEgenes %>% ggplot(., aes(x=treatment, y=expression, group=Gene)) +
+  geom_line(alpha=0.5) +
+  geom_point(aes(color=Condition), size=0.5) +
+  theme_bw() + 
+  theme(
+    axis.text.x = element_text(angle=90)
+  )# +
+```
+
+![](imgs/2_DE_analysisbee_deline-1.png)<!-- -->
+
+``` r
+#  facet_wrap(~Condition, scales="free_x", drop=T)
+```
+
+Hmm… plot the top 20 differentially expressed genes (lowest padj
+values)… rough draft, go back and check on normalization and metadata…
+
+``` r
+top20 = resdata[c(1:20),] %>%
+  subset(padj < 0.05) %>%
+  select(-c(2:7)) %>%
+  pivot_longer(col=-1, names_to="treatment", values_to="expression") %>% 
+  separate(treatment, 
+           c(NA, "group", NA, NA), 
+           sep="-", 
+           remove=FALSE) %>%
+  mutate(
+    Condition = metadata[group,]$Trt,
+    Condition = factor(Condition, levels=c("ctrl", "exposed")),
+    treatment = factor(treatment, levels=ordered_trt)
+  )
+#> Warning: Expected 4 pieces. Missing pieces filled with `NA` in 1200 rows [1, 2,
+#> 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, ...].
+
+top20 %>% ggplot(., aes(x = as.factor(Gene), y = expression, fill=Condition))+
+  geom_boxplot() + 
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(angle=45, hjust = 1)
+  ) +
+  labs(x="Gene")
+```
+
+![](imgs/2_DE_analysisbee_top20-1.png)<!-- -->

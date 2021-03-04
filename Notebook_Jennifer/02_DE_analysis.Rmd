@@ -149,17 +149,113 @@ melt_maize %>%
   labs(title="GSNAP distribution of gene counts by sample")
 #  facet_wrap(~group, scales="free", drop=T)
 ```
+
 Check if any of the replicates seem obviously different from the others. Mostly seems okay, `SRR1573509` and `SRR1573523` is a little low compared to others, `SRR1573513` seems a little high compared to others.
 
 ## DESEQ2
 
-Most of these commands I got from Siva, working on the WGCNA tutorial.
+Most of these commands I got from Siva, working on the WGCNA tutorial and other notes from Siva.
 
-```
-library(DESeq2)
+```{r}
+# library(DESeq2)
 
 de_input = as.matrix(data_bee[-1])
+row.names(de_input) = data_bee$Geneid
+de_input[1:5,1:6]
 
+metadata <- readr::read_delim("../bumblebee_meta.csv", delim=",")
+row.names(metadata) = metadata$Well_ID
+
+meta_df <- data.frame( Sample = colnames(de_input)) %>%
+  separate(Sample, 
+           c(NA, "group", NA, NA), 
+           sep="-", 
+           remove=FALSE) %>%
+  mutate(
+    Condition = metadata[group,]$Trt,
+    Condition = factor(Condition, levels=c("ctrl", "exposed"))
+  )
 ```
 
-STAR count
+Start DESeq2, modified from Masonbrink's notes.
+
+```{r pca_bee, fig.width=5, fig.height=3}
+dds <- DESeqDataSetFromMatrix(
+  de_input,                # Gene counts
+  colData = meta_df,       # Metadata
+  design = ~Condition      # experimental design
+)
+dds <- DESeq(dds)
+res <- results(dds)
+table(res$padj<0.05)
+res <- res[order(res$padj), ]
+resdata <- merge(as.data.frame(res), as.data.frame(counts(dds, normalized=TRUE)), by="row.names", sort=FALSE)
+names(resdata)[1] <- "Gene"
+write.csv(resdata, file="AllExposedvsAllControlGene.csv",quote = FALSE,row.names = F)
+
+rld <- rlogTransformation(dds)
+summary(rld)
+
+(p <- plotPCA(rld, intgroup="Condition") +
+    theme_bw() +
+    labs(x = "PC1", y="PC2")
+)
+```
+
+## Other diagnostic plots
+
+Rough outline
+
+```{r bee_deline, fig.width=8, fig.height=4}
+ordered_trt = c(meta_df %>% subset(Condition=="ctrl") %>% {.$Sample},
+                meta_df %>% subset(Condition=="exposed") %>% {.$Sample})
+
+DEgenes <- resdata %>%
+  subset(padj < 0.05) %>%
+  select(-c(2:7)) %>%
+  pivot_longer(col=-1, names_to="treatment", values_to="expression") %>% 
+  separate(treatment, 
+           c(NA, "group", NA, NA), 
+           sep="-", 
+           remove=FALSE) %>%
+  mutate(
+    Condition = metadata[group,]$Trt,
+    Condition = factor(Condition, levels=c("ctrl", "exposed")),
+    treatment = factor(treatment, levels=ordered_trt)
+  )
+
+# Very rough draft, fix this later...
+DEgenes %>% ggplot(., aes(x=treatment, y=expression, group=Gene)) +
+  geom_line(alpha=0.5) +
+  geom_point(aes(color=Condition), size=0.5) +
+  theme_bw() + 
+  theme(
+    axis.text.x = element_text(angle=90)
+  )# +
+#  facet_wrap(~Condition, scales="free_x", drop=T)
+```
+Hmm... plot the top 20 differentially expressed genes (lowest padj values)... rough draft, go back and check on normalization and metadata...
+
+```{r bee_top20, fig.width=8, fig.height=4}
+top20 = resdata[c(1:20),] %>%
+  subset(padj < 0.05) %>%
+  select(-c(2:7)) %>%
+  pivot_longer(col=-1, names_to="treatment", values_to="expression") %>% 
+  separate(treatment, 
+           c(NA, "group", NA, NA), 
+           sep="-", 
+           remove=FALSE) %>%
+  mutate(
+    Condition = metadata[group,]$Trt,
+    Condition = factor(Condition, levels=c("ctrl", "exposed")),
+    treatment = factor(treatment, levels=ordered_trt)
+  )
+
+top20 %>% ggplot(., aes(x = as.factor(Gene), y = expression, fill=Condition))+
+  geom_boxplot() + 
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(angle=45, hjust = 1)
+  ) +
+  labs(x="Gene")
+```

@@ -295,6 +295,10 @@ source ~/.bashrc
 conda -version
 ```
 
+Instead of moving the `miniconda3` folder, there are options of using the `--prefix` and `source activate path`.
+
+* For more info - https://stackoverflow.com/questions/46929791/activating-conda-environment-with-its-full-path
+
 ## Install samtools, gmap, subread (featureCounts)
 
 1. Create an environment file, save it as `gsnap_env.yml`.
