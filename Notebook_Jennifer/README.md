@@ -9,6 +9,8 @@
 |[01\_align\_salmon.md](01_align_salmon.md) | Salmon alignment... in progress, ready to test | 2017 |
 |[01\_align\_hisat2.md](01_align_hisat2.md) | HISAT2 alignment (with ballgown)... in progress| 2015 |
 |[02\_DE\_analysis.md](02_DE_analysis.md) | Installing DESeq2 in R ... in progress | 2014 |
+|[03\_Normalization.md](02_Normalization.md) | placeholder for normalization methods |  |
+|[04\_WGCNA.md](04_WGCNA.md) | WGCNA (networks) | 2008 |
 
 ## Timeline
 
