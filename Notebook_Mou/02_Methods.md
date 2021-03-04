@@ -700,7 +700,7 @@ B_impatiens.contig	    B_impatiens.maps	       B_impatiens.ref153positions
 *genecounts.txt.summary
 ```
 
-## Counts
+## Counts with featureCounts
 ### Useful references for understanding how FeatureCounts works:
 * FeatureCounts User Guide: http://www.bioconductor.org/packages/release/bioc/vignettes/Rsubread/inst/doc/SubreadUsersGuide.pdf
 * Nice diagram showing cases of the effect of `countmultioverlap` on `overlapmethod`: https://www.mathworks.com/help/bioinfo/ref/featurecount.html
@@ -709,7 +709,7 @@ B_impatiens.contig	    B_impatiens.maps	       B_impatiens.ref153positions
 * 7th column is the read count
 * Apparently you can run featureCounts on sam files (tested by Andrew Severin)
 
-### Bee counts
+### Bee
 1. Counts preview of bee data. Compared coordinates with Jennifer's `1-A01-A1_S7.aligned.out.bam` and the length column values are slightly different. Is this normal?
 ```
 # Program:featureCounts v2.0.1; Command:"featureCounts" "-T" "16" "-t" "gene" "-g" "ID" "-a" "/project/f/k/rnaseq/bee/reference_genome_bee/GCF_000188095.3_BIMP_2.2_genomic.gff.gz" "-o" "/h/k/rnaseq/bee/raw_data/test/1-A01-A1_S7_L002_R1_001.fastq.Aligned.sortedByCoord.out.bam_genecounts.txt" "/h/k/rnaseq/bee/raw_data/test/1-A01-A1_S7_L002_R1_001.fastq.Aligned.sortedByCoord.out.bam"
@@ -726,16 +726,14 @@ gene-LOC100743123	NT_176427.1	58465	60894	-	2430	153
 
 2. Run featureCounts output through `combine.R`. Made a few minor changes to original `combine.R` script.
 
-### Output files
-* `bee.genecounts.txt`
-* `bee.genecounts.xlsx`
-
-### Maize counts
+### Maize
 1. Run featureCounts output through `combine.R`. Made a few minor changes to original `combine.R` script.
 
 ### Output files
-`maize.genecounts.txt`
-`maize.genecounts.xlsx`
+* `bee.genecounts.txt`
+* `bee.genecounts.xlsx`
+* `maize.genecounts.txt`
+* `maize.genecounts.xlsx`
 
 ## QC featureCounts with MultiQC
 * check out this [link](https://multiqc.info/docs/) on how to run multiQC with featureCounts `*.summary` files. This is another way to assess read alignment quality.
@@ -752,19 +750,18 @@ pkgs_dirs:
 ```
 That fixed the issue and I was able to install multiQC and run it!
 
-2. Made `/p/f/k/rnaseq/bee/results/multiqc/` directory.
-Copied `/p/f/k/rnaseq/bee/raw_data/testing/*.summary` files to `multiqc/` and ran
-`multiqc .`
+2. Made `/p/f/k/rnaseq/bee/results/multiqc/` directory. <br />
+Copied `/p/f/k/rnaseq/bee/raw_data/testing/*.summary` files to `multiqc/` and ran `multiqc .` <br />
 It ran successfully, checked out the output file `bee.multiqc_report.html`.
-I noticed `1-E07-F5_S61_L002_R1_001` had the lowest number of assigned reads (223,397). All others had at least 1M reads.
+I noticed `1-E07-F5_S61_L002_R1_001` had the lowest number of assigned reads (223,397). All others had at least 1M reads. <br />
 Used MultiQC Toolbox on html page to export `featureCounts_assignment_plot` image and saved as `Bee_featureCounts_multiqc_plot.png` in `results/`
 ![](results/Bee_featureCounts_multiqc_plot.png)<!-- -->
 
-3. Made `/p/f/k/rnaseq/maize/results/multiqc/`.
+3. Made `/p/f/k/rnaseq/maize/results/multiqc/`. <br />
 Copied `/p/f/k/rnaseq/maize/results/*.summary` files to `multiqc/` and ran
-`multiqc .`
-It ran successfully, checked out the output file `maize.multiqc_report.html`.
-I noticed SRR1573520 had a lot of unassigned_multimapping reads.
+`multiqc .` <br />
+It ran successfully, checked out the output file `maize.multiqc_report.html`. <br />
+I noticed SRR1573520 had a lot of unassigned_multimapping reads. <br />
 Used MultiQC Toolbox on html page to export `featureCounts_assignment_plot` image and saved as `maize_featureCounts_multiqc_plot.png` in `results/`
 ![](results/maize_featureCounts_multiqc_plot.png)<!-- -->
 
