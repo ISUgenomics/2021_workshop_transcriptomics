@@ -772,6 +772,10 @@ Used MultiQC Toolbox on html page to export `featureCounts_assignment_plot` imag
 
 ## Re-format featureCounts text files for DESeq2 analysis
 1. Downloaded the `*.genecounts.txt` files from Atlas for Bee and Maize. Ran them through `combine.R` to generate text and excel files. Use the text files for DESeq2.
+2. Notes:
+  * `(featureCount_files <- list.files(path = dir_org, pattern = "*genecounts.txt$", full.names = TRUE))`
+    * This includes "/" and directory of *genecounts.txt file. $ = end of string (regular expression). The outside () prints out object (`featureCount_files`)
+  * `writexl::write_xlsx` = package::function, writexl is the package, write_xlsx is the function within writexl package. Simple way to call a function without having to hassle with installing and loading new packages.
 
 <details><summary>2. Combine.R</summary>
 
@@ -861,7 +865,21 @@ Used MultiQC Toolbox on html page to export `featureCounts_assignment_plot` imag
 * Sathesh says basemeans correlate with read counts: larger basemean values = more read counts
 
 ### Bee
+1. Ran `bee_deseq2.Rmd` with Jennifer. Generated `Bee_AllExposedvsAllControlGene.csv` file, saved in `results/`. Made notes in Rmd file.
+2. A few things to look for:
+  * `eval=FALSE` was added within `{r}` in each code chunk so that when I ran Knit, I don't have to have maize data to generate markdown file and output.
+  * line 71: try boxplot with group (GSNAP RNA Gene Profiles) as "x" within ggplot function
+  * take out 1_E07 sample since it had very low reads
+  * line 141: test out the mutate function when creating `meta_df` object
+  * line 167: test out `res <- res[order(res$padj), ]`
+  * line 183:
+  ```
+  PCA by Nest + treatment
+ANOVA stats to look at treatment, nest effects on variation (only genes with large fold-change, p<0.05)
+  ```
+  * line 207: expression = normalized read count? Why does 1-B11 have super high #? Same with 1-E07
 
 ### Maize
 
 #### Output files
+* `Bee_AllExposedvsAllControlGene.csv`

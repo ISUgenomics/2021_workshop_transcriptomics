@@ -12,14 +12,17 @@ library(readxl)
 
 # === Get list of featureCount output files
 dir_org="~/Desktop/bee/"        # counts are in a "bee" or "maize" subdirectory
-featureCount_files <- list.files(path = dir_org, pattern = "*genecounts.txt$", full.names = TRUE)
+(featureCount_files <- list.files(path = dir_org, pattern = "*genecounts.txt$", full.names = TRUE)) #includes "/" and directory of *genecounts.txt file, $ = end of string
+#(featureCount_files2 <- list.files(path = dir_org, pattern = "*genecounts.txt$")) #only file name
 
 # === Read in 1st file
-data <- read_delim(featureCount_files[1], delim="\t", comment = "#" ) %>%
-  select(Geneid, ends_with(".bam")) %>%              # Get 1st and last column (column was named after bam file)
+data <- read_delim(featureCount_files[1], delim="\t", comment = "#" )  %>%
+  select(Geneid, ends_with(".bam"))  %>%              # Get 1st and last column (column was named after bam file)
   pivot_longer(cols=ends_with(".bam")) %>%           # Melt data (tidy data)
   mutate(
     name = gsub(".Aligned.sortedByCoord.out.bam", "", name)        # No longer need the bam extension, easier to read
+  ) %>% 
+  mutate(name = gsub("/home/kathy.mou/rnaseq/bee/raw_data/test/", "", name)        # No longer need the bam extension, easier to read
   )
 
 # === Loop and append the rest
@@ -30,7 +33,8 @@ for (count_file in featureCount_files[-1]){
     pivot_longer(cols=ends_with(".bam")) %>%
     mutate(
       name = gsub(".Aligned.sortedByCoord.out.bam", "", name)
-    )
+    ) %>% 
+    mutate(name = gsub("/home/kathy.mou/rnaseq/bee/raw_data/test/", "", name))       
   data = rbind(data, temp)
 }
 
@@ -40,23 +44,25 @@ wide_data <- data %>%
 
 # === Save tab delimited file (smaller file size)
 write_delim(wide_data,
-            paste(dir_org, "bee.genecounts.txt"),
+            paste(dir_org, "/bee.genecounts.out.txt", sep = ""),
             delim="\t")
 
 # === Save Excel file (can be easier to work with)
 writexl::write_xlsx(wide_data,
-                    path=paste(dir_org, "bee.genecounts.xlsx"))
+                    path=paste(dir_org, "/bee.genecounts.xlsx", sep = ""))
+#package :: function
 
 
 ###### MAIZE #######
 
 # === Get list of featureCount output files
 dir_org="~/Desktop/maize/"        # counts are in a "bee" or "maize" subdirectory
-featureCount_files <- list.files(path = dir_org, pattern = "*genecounts.txt$", full.names = TRUE)
+(featureCount_files <- list.files(path = dir_org, pattern = "*genecounts.txt$", full.names = TRUE)) #includes "/" and directory of *genecounts.txt file, $ = end of string
+#(featureCount_files2 <- list.files(path = dir_org, pattern = "*genecounts.txt$")) #only file name
 
 # === Read in 1st file
-data <- read_delim(featureCount_files[1], delim="\t", comment = "#" ) %>%
-  select(Geneid, ends_with(".bam")) %>%              # Get 1st and last column (column was named after bam file)
+data <- read_delim(featureCount_files[1], delim="\t", comment = "#" )  %>%
+  select(Geneid, ends_with(".bam"))  %>%              # Get 1st and last column (column was named after bam file)
   pivot_longer(cols=ends_with(".bam")) %>%           # Melt data (tidy data)
   mutate(
     name = gsub(".aligned.out.bam", "", name)        # No longer need the bam extension, easier to read
@@ -69,8 +75,7 @@ for (count_file in featureCount_files[-1]){
     select(Geneid, ends_with(".bam")) %>%
     pivot_longer(cols=ends_with(".bam")) %>%
     mutate(
-      name = gsub(".aligned.out.bam", "", name)
-    )
+      name = gsub(".aligned.out.bam", "", name))       
   data = rbind(data, temp)
 }
 
@@ -80,9 +85,9 @@ wide_data <- data %>%
 
 # === Save tab delimited file (smaller file size)
 write_delim(wide_data,
-            paste(dir_org, "maize.genecounts.txt"),
+            paste(dir_org, "/maize.genecounts.out.txt", sep = ""),
             delim="\t")
 
 # === Save Excel file (can be easier to work with)
 writexl::write_xlsx(wide_data,
-                    path=paste(dir_org, "maize.genecounts.xlsx"))
+                    path=paste(dir_org, "/maize.genecounts.xlsx", sep = ""))
