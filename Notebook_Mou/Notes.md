@@ -2,17 +2,18 @@
 
 ## To do
 1. Bee
-* Run multiQC on `*txt.summary` files
-* Run combine.R
+* Toss out the one sample and run deseq2, see how that looks in R script QC section
+* Look through gff file for annotation of gene locus names: https://github.com/ISUgenomics/2021_workshop_transcriptomics/blob/main/Notebook_Masonbrink/02_Bumblebee/07_FeatureTable.md
 
 2. Maize
-* Run multiQC on fastq files -- Issues with installing multiQC on atlas with miniconda. Will reach out to vsrc.
-* Reran gsnap + featurecounts (job 154052) - how does output look? Run multiQC on `*txt.summary` files. Run combine.R
+* Run deseq2, look at QC and deseq2 results
 
-3. Read MultiQC to assess read alignment (can try this on gsnap output): http://www.bea.ki.se/documents/Intro2RNAseq.pdf
-
-4. What parameter to use in gsnap to remove bad reads? (unassigned: unmapped, ambiguous, multimapping, no features) - don't need to, if run default, the uniquely read counts will be the mapped reads.
+3. PCIT articles:
+  * https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1000382#s4
+  * https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0128350
 
 <details><summary>blah</summary>
 dfdfd
 </details>
+
+* Run PCA of only diff expressed genes to get better clustering (if only a few genes diff. expressed, would not see clear clusters - get the scatter that Rick saw)

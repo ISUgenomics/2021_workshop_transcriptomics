@@ -1,6 +1,6 @@
 # Methods
 
-Written summary of methods performed in this repo. A lot of the steps described here were copied from Jennifer's notebook - thanks Jennifer!! I added more details to help myself in the future since I'm a newbie ^_^
+Written summary of methods performed in this repo. A lot of the steps described here were copied from Jennifer's notebook - thanks Jennifer!! I added more details to help newbies like myself ^_^
 
 ## Raw data
 * **Maize data:** https://www.ebi.ac.uk/ena/browser/view/PRJNA260793
@@ -8,10 +8,11 @@ Written summary of methods performed in this repo. A lot of the steps described 
 * **Bee data**
   * Already have FastQC and multiQC reports of bee fastq files
 * **Bee reference (*Bombia impatiens*):** https://hymenoptera.elsiklab.missouri.edu/genome_fasta<br /> Bombus_impatiens_GCF_000188095.3_BIMP_2.2_genomic.fa
-From group discussions asking which bee annotation to use (NCBI or Hymenoptera): Amy Toth recommends using Hymenoptera Base
-```
-For social insect genomes, usually the "Official Gene Set" is the one that is on Hymenoptera Base (Elsik Lab).  NCBI has their own annotation for each genome as well.  The NCBI annotations tend to have fewer genes but are usually very high quality annotations.  I think most people in the field go with the OGS for a given species unless they are comparing across species, in which case they might use NCBI for consistency.
-```
+  * QuantSeq 3'-generated data
+  * From group discussions asking which bee annotation to use (NCBI or Hymenoptera): Amy Toth recommends using Hymenoptera Base
+  ```
+  For social insect genomes, usually the "Official Gene Set" is the one that is on Hymenoptera Base (Elsik Lab).  NCBI has their own annotation for each genome as well.  The NCBI annotations tend to have fewer genes but are usually very high quality annotations.  I think most people in the field go with the OGS for a given species unless they are comparing across species, in which case they might use NCBI for consistency.
+  ```
 
 ## Data transfer to HPC (Atlas dtn node)
 * `ssh username@Atlas-dtn.hpc.msstate.edu`
@@ -737,6 +738,8 @@ gene-LOC100743123	NT_176427.1	58465	60894	-	2430	153
 
 ## QC featureCounts with MultiQC
 * check out this [link](https://multiqc.info/docs/) on how to run multiQC with featureCounts `*.summary` files. This is another way to assess read alignment quality.
+* Read MultiQC to assess read alignment (can try this on gsnap output): http://www.bea.ki.se/documents/Intro2RNAseq.pdf
+* What parameter to use in gsnap to remove bad reads? (unassigned: unmapped, ambiguous, multimapping, no features) - don't need to, if run default, the uniquely read counts will be the mapped reads.
 
 1. I initially tried to run multiQC with miniconda on Atlas, but had issues with installing multiQC. I kept getting weird user permission issues. Atlas support staff (help-usda@hpc.msstate.edu) pointed out the following:
 ```
