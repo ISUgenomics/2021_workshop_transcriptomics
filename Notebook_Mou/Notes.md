@@ -6,7 +6,7 @@
 * Look through gff file for annotation of gene locus names: https://github.com/ISUgenomics/2021_workshop_transcriptomics/blob/main/Notebook_Masonbrink/02_Bumblebee/07_FeatureTable.md
 
 2. Maize
-* Run deseq2, look at QC and deseq2 results
+* Need to edit metadata (`metadatam`) dataframe and then can run deseq
 
 3. PCIT articles:
   * https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1000382#s4
