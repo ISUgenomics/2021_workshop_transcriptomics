@@ -14,7 +14,7 @@ Comparing different alignments and DGE identifying Methods
 |Maize 	|gsnap |	|EdgeR 	|Severin|| 
 |Bee 	|Star |	|EdgeR 	|Sathesh and Katie| | 
 |Maize	|Star |	|EdgeR 	|Sathesh and Katie| | 
-|Bee 	|Hisat2 |	|EdgeR |	Ryan and Siva|| 
+|Bee 	|Hisat2 |[featureCounts](https://github.com/ISUgenomics/2021_workshop_transcriptomics/blob/main/data/counts/Ryan_Bee_count_table.txt)	|EdgeR |	Ryan and Siva|| 
 |Maize	|Hisat2 |	|EdgeR |	Ryan and Siva|| 
 |Bee 	|Hisat2 |	|Stringtie/Ballgown 	|Siva and Jennifer|| 
 |Maize	|Hisat2 |	|Stringtie/Ballgown 	|Siva and Jennifer||
