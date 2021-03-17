@@ -8,8 +8,8 @@ Comparing different alignments and DGE identifying Methods
 |Maize 	|Star | featureCounts|DESeq2 	|Maryam and Ambi| | 
 |Bee 	|Hisat2 |	|DESeq2 	|Rick and Alex|| 
 |Maize 	|Hisat2 |	|DESeq2 	|Rick and Alex|| 
-|Bee 	|gsnap |[jen:featureCounts](Notebook_Jennifer/bee_genecounts.txt)	|DESeq2 	|Jennifer and Kathy||
-|Maize 	|gsnap |[jen:featureCounts](Notebook_Jennifer/maize_genecounts.txt)	|DESeq2 	|Jennifer and Kathy||
+|Bee 	|gsnap |[featureCounts](Notebook_Jennifer/bee_genecounts.txt)	|DESeq2 	|Jennifer and Kathy||
+|Maize 	|gsnap |[featureCounts](Notebook_Jennifer/maize_genecounts.txt)	|DESeq2 	|Jennifer and Kathy||
 |Bee 	|gsnap |	|EdgeR 	|Severin|| 
 |Maize 	|gsnap |	|EdgeR 	|Severin|| 
 |Bee 	|Star |	|EdgeR 	|Sathesh and Katie| | 
