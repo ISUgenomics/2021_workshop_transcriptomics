@@ -211,7 +211,7 @@ table(res$padj<0.05) #looking at which ones are sig. diff. from control at 95% C
 res <- res[order(res$padj), ] #come back to this later (take it apart). Order orders it in ascending order
 resdata <- merge(as.data.frame(res), as.data.frame(counts(dds, normalized=TRUE)), by="row.names", sort=FALSE)
 names(resdata)[1] <- "Gene"
-write.csv(resdata, file="Bee_AllExposedvsAllControlGene.csv",quote = FALSE,row.names = F)
+write.csv(resdata, file="Bee_AllExposedvsAllControlGene_DESeq2.csv",quote = FALSE,row.names = F)
 
 rld <- rlogTransformation(dds) #vst() much faster transformation ... check it out
 summary(rld)
@@ -265,7 +265,7 @@ table(resm$padj<0.05) #looking at which ones are sig. diff. from control at 95% 
 resm <- resm[order(resm$padj), ] #come back to this later (take it apart). Order orders it in ascending order
 resdatam <- merge(as.data.frame(resm), as.data.frame(counts(ddsm, normalized=TRUE)), by="row.names", sort=FALSE)
 names(resdatam)[1] <- "Gene"
-write.csv(resdatam, file="Maize_DeSeq2Results.csv",quote = FALSE,row.names = F)
+write.csv(resdatam, file="Maize_Tissue_DeSeq2.csv",quote = FALSE,row.names = F)
 
 rldm <- rlogTransformation(ddsm) #vst() much faster transformation ... check it out
 summary(rldm)

@@ -13,6 +13,8 @@
   * https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1000382#s4
   * https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0128350
 
+4. Ask for more details on bee study design (how bees were collected, all bees came from same source, how was heavy metal treatment administered, how they collected bees)
+
 <details><summary>ClickIfYouDare</summary>
 surprise!
 </details>
