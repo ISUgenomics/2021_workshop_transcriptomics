@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 
 ## R Markdown
 
-This is a placeholder to store any analysis in R (edgeR, DESeq2). Also a way to look at the underlying assumptions (RNASeq distribution functions and how it behaves in an analysis pipeline. Is the distribution realistic?)
+RNA analysis in DESeq2 on bee and maize data.
 
 ## Install any required libraries
 
@@ -31,17 +31,9 @@ This is a placeholder to store any analysis in R (edgeR, DESeq2). Also a way to 
 # == Install any Bioconductor packages
 # bioc_pkgs <- c("edgeR", "baySeq", "DESeq2", "ballgown", "NOISeq", "limma")
 # BiocManager::install(bioc_pkgs)
-
-# ====================   Year of development
 library(tidyverse)
 library(magrittr)
-#library(edgeR)         # 2010
-#library(baySeq)        # 2010
-#library(QuasiSeq)      # 2012
-library(DESeq2)        # 2014    # <= actually a bit strange that DESeq2 & edgeR tend to be equivalent, despite being 4yrs later
-#library(ballgown)      # 2014
-#library(NOISeq)        # 2015
-#library(limma)         # 2015
+library(DESeq2) 
 ```
 
 
@@ -60,7 +52,6 @@ data_bee <- read_delim("~/Desktop/bee/bee.genecounts.out.txt", delim="\t")
 These are quick plots to look at the data and notice if any of the counts seem unusally high or low, or multimodal. It can indicate a problem with a sample, but does not necessarily mean there is a problem with a sample.
 
 ## Bee
-
 ```{r bee_linechart, fig.width=8, fig.height=5}
 melt_bee <- data_bee %>%
   pivot_longer(!Geneid, names_to = "replicate", values_to = "count")  %>%
@@ -78,9 +69,7 @@ melt_bee %>%
   labs(title="GSNAP RNAseq Bee Gene Profiles") #try boxplot with group?
 ```
 
-Distribution, violin plot
-
-```{r violin, fig.width=11, fig.height=8}
+```{r bee_violin, fig.width=11, fig.height=8}
 melt_bee %>% 
   ggplot(., aes(x=replicate,y=log(count))) +       # <= log transformed as a rough normalization... we will use DESeq2's normalization eventually
   geom_violin(alpha=0.5) +
@@ -95,7 +84,6 @@ melt_bee %>%
 Check if any of the replicates seem obviously different from the others. Mostly seems fine, `1-E07-F5-S61` (exposed) is a little low compared to others, missing `1-B03-A16_S21` (control).
 
 ## Maize
-
 ```{r maize_linechart, fig.width=8, fig.height=5,eval=FALSE}
 melt_maize <- data_maize %>%
   pivot_longer(!Geneid, names_to = "replicate", values_to = "count")
@@ -124,15 +112,15 @@ melt_maize %>%
 
 Check if any of the replicates seem obviously different from the others. Mostly seems okay, `SRR1573523` and `SRR1573525` is a little low compared to others, `SRR1573513` seems a little high compared to others.
 
-## DESEQ2
+# DESEQ2
 
 Most of these commands Jennifer got from Siva, working on the WGCNA tutorial and other notes from Siva.
 
+##  Bee and Maize
 ```{r}
-# library(DESeq2)
+#library(DESeq2)
 
 # bee
-
 de_input = as.matrix(data_bee[-1])
 row.names(de_input) = data_bee$Geneid
 de_input[1:5,1:6]
@@ -168,46 +156,22 @@ test4 <- test3[-c(6)] #drop SampleName column
 
 
 # maize
-
 de_inputm = as.matrix(data_maize[-1])
 row.names(de_inputm) = data_maize$Geneid
 de_inputm[1:5,1:6]
 
-# Need metadata for maize!
-metadatam <- readr::read_delim("~/Desktop/maize/maize_meta.csv", delim=",")
-row.names(metadatam) = metadatam$run_accession
-
-#remove all columns except for sample_title, run_accession
-
-meta_dfm <- data.frame( Sample = colnames(de_inputm)) %>%
-  separate(Sample, 
-           c(NA, "group", NA, NA), #NA doesn't create column
-           sep="-", 
-           remove=FALSE) %>%
-  mutate(
-    Condition = metadatam[group,]$Trt,
-    Condition = factor(Condition, levels=c("ctrl", "exposed"))) # factor help save memory, string saved as numbers. Deseq2 will take first factor as "wildtype"); can tell ggplot what order to list groups in legend
-# ignore missing pieces
-# metadata["A01",]$Trt <= gives you "ctrl"
-# metadata["B07",]$Trt <= gives you "exposed"
-
-# Played around with mutate function, seeing what happens when I change metadata[group,]$Trt to metadata[Well_ID,]$Nest. 
-# Then decided to merge test2 and metadata dataframes to get Trt and Nest columns in test2 dataframe 
-test <- data.frame( Sample = colnames(de_input)) %>%
-  separate(Sample, 
-           c(NA, NA, "SampleName"), #NA doesn't create column
-           sep="-", 
-           remove=FALSE) 
-test2 <- test %>% separate(SampleName,
-                  c("Sample_Name", NA, NA, NA, NA),
-                  sep = "_",
-                  remove = FALSE)
-test3 <- merge(metadata, test2, by = "Sample_Name")
-test4 <- test3[-c(6)] #drop SampleName column
+# Modify metadata for maize
+# download metadata as tsv from https://www.ebi.ac.uk/ena/browser/view/PRJNA260793
+# modify metadata so that the sample_tissue entries are converted to the letters only (B-3 becomes B, L-4 becomes L, wtL-1 becomes wtL, L_L1.3 becomes L_L)
+metadatam <- readr::read_delim("~/Desktop/maize/maize_metadata.csv", delim=",") 
+#row.names(metadatam) = metadatam$run_accession 
+names(metadatam)[names(metadatam) == "run_accession"] <- "replicate"  #rename column to match with melt_maize
+meta_maize <- merge(metadatam, melt_maize, by = "replicate")
 ```
 
 Start DESeq2, modified from Masonbrink's notes.
 
+## Bee PCA by treatment group
 ```{r pca_bee, fig.width=5, fig.height=3}
 # bee
 dds <- DESeqDataSetFromMatrix(
@@ -258,13 +222,70 @@ summary(rld)
 )
 ```
 
-## Other diagnostic plots
+## Bee PCA by nest
+```{r pca_bee_nest, fig.width=5, fig.height=3}
+# experimental design by nest
+ddsnest <- DESeqDataSetFromMatrix(
+  de_input,                # Gene counts
+  colData = test4,       # Metadata
+  design = ~Nest      # experimental design
+) #set up specialized object
+ddsnest <- DESeq(ddsnest) #actually running deseq
+resnest <- results(ddsnest)
+table(resnest$padj<0.05) #looking at which ones are sig. diff. from control at 95% CI
+#TRUE = 256 genes are diff. expressed
+#FALSE = 9080
+resnest <- resnest[order(resnest$padj), ] #come back to this later (take it apart). Order orders it in ascending order
+resdatanest <- merge(as.data.frame(resnest), as.data.frame(counts(ddsnest, normalized=TRUE)), by="row.names", sort=FALSE)
+names(resdatanest)[1] <- "Gene"
+write.csv(resdata, file="Bee_Nest_DESeq2.csv",quote = FALSE,row.names = F)
 
-PCA by Nest + treatment
+rldnest <- rlogTransformation(ddsnest) #vst() much faster transformation ... check it out
+summary(rldnest)
+# "DESeqTransform object of length 12925 with 24 metadata columns"
+# PCA by nest
+(pnest <- plotPCA(rldnest, intgroup="Nest") +
+    theme_bw()
+)
+```
+
+## Maize PCA
+```{r pca_maize, fig.width=5, fig.height=3}
+# maize
+ddsm <- DESeqDataSetFromMatrix(
+  de_inputm,                # Gene counts
+  colData = metadatam,       # Metadata
+  design = ~Tissue      # experimental design
+) #set up specialized object
+ddsm <- DESeq(ddsm) #actually running deseq
+resm <- results(ddsm)
+table(resm$padj<0.05) #looking at which ones are sig. diff. from control at 95% CI
+#FALSE  20274 
+#TRUE 3189  
+resm <- resm[order(resm$padj), ] #come back to this later (take it apart). Order orders it in ascending order
+resdatam <- merge(as.data.frame(resm), as.data.frame(counts(ddsm, normalized=TRUE)), by="row.names", sort=FALSE)
+names(resdatam)[1] <- "Gene"
+write.csv(resdatam, file="Maize_DeSeq2Results.csv",quote = FALSE,row.names = F)
+
+rldm <- rlogTransformation(ddsm) #vst() much faster transformation ... check it out
+summary(rldm)
+# "DESeqTransform object of length 12925 with 24 metadata columns"
+(pm <- plotPCA(rldm, intgroup="Tissue") +
+    theme_bw() +
+    labs(x = "PC1", y="PC2")
+) #without PC1, PC2 % variance axes labels
+
+(pm2 <- plotPCA(rldm, intgroup="Tissue") +
+    theme_bw()) #with PC1, PC2 variance % axes labels
+```
+
+Other things to try:
 ANOVA stats to look at treatment, nest effects on variation (only genes with large fold-change, p<0.05)
 
-Rough outline
 
+# Other diagnostic plots
+
+## Bee differentially expressed genes line plot
 ```{r bee_deline, fig.width=8, fig.height=4}
 # bee
 ordered_trt = c(meta_df %>% subset(Condition=="ctrl") %>% {.$Sample},
@@ -294,8 +315,37 @@ DEgenes %>% ggplot(., aes(x=treatment, y=expression, group=Gene)) +
   )# +
 #  facet_wrap(~Condition, scales="free_x", drop=T)
 ```
-Hmm... plot the top 20 differentially expressed genes (lowest padj values)... rough draft, go back and check on normalization and metadata...
 
+## Maize differentially expressed genes line plot
+```{r maize_deline, fig.width=8, fig.height=4}
+# maize
+ordered_trtm = c(metadatam %>% subset(Tissue=="B") %>% {.$replicate},
+                metadatam %>% subset(Tissue=="L") %>% {.$replicate},
+                metadatam %>% subset(Tissue=="S") %>% {.$replicate},
+                metadatam %>% subset(Tissue=="wtL") %>% {.$replicate},
+                metadatam %>% subset(Tissue=="B_L") %>% {.$replicate},
+                metadatam %>% subset(Tissue=="L_L") %>% {.$replicate},
+                metadatam %>% subset(Tissue=="S_L") %>% {.$replicate}
+               ) # subset samples from each tissue
+DEgenesm <- resdatam %>%
+  subset(padj < 0.05) %>%
+  select(-c(2:7)) %>%
+  pivot_longer(col=-1, names_to="replicate", values_to="expression")
+datam <-  merge(metadatam, DEgenesm, by = "replicate")
+datam %>% ggplot(., aes(x=Tissue, y=expression, group=Gene)) +
+  geom_line(alpha=0.5) +
+  geom_point(aes(color=Tissue), size=0.5) +
+  theme_bw() + 
+  theme(
+    axis.text.x = element_text(angle=90)
+  )# +
+#  facet_wrap(~Condition, scales="free_x", drop=T)
+```
+
+
+Next: plot the top 20 differentially expressed genes (lowest padj values)... go back and check on normalization and metadata...
+
+## Bee top 20 differentially expressed genes line plot
 ```{r bee_top20, fig.width=8, fig.height=4}
 # bee
 top20 = resdata[c(1:20),] %>%
@@ -313,6 +363,23 @@ top20 = resdata[c(1:20),] %>%
   )
 
 top20 %>% ggplot(., aes(x = as.factor(Gene), y = expression, fill=Condition))+
+  geom_boxplot() + 
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(angle=45, hjust = 1)
+  ) +
+  labs(x="Gene")
+```
+
+## Maize top 20 differentially expressed genes line plot
+```{r maize_top20, fig.width=8, fig.height=4}
+# maize
+top20m = resdatam[c(1:20),] %>%
+  subset(padj < 0.05) %>%
+  select(-c(2:7)) %>%
+  pivot_longer(col=-1, names_to="replicate", values_to="expression")
+top20m2 <-  merge(metadatam, top20m, by = "replicate")
+top20m2 %>% ggplot(., aes(x=as.factor(Gene), y=expression, fill=Tissue)) +
   geom_boxplot() + 
   theme_bw() +
   theme(

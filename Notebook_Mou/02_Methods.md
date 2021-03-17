@@ -7,12 +7,18 @@ Written summary of methods performed in this repo. A lot of the steps described 
 * **[Maize reference (*Zea mays* B73)](ftp://ftp.ensemblgenomes.org/pub/plants/release-49/fasta/zea_mays/dna/Zea_mays.B73_RefGen_v4.dna.*gz)**
 * **Bee data**
   * Already have FastQC and multiQC reports of bee fastq files
+  * All females, foraging range 2km, unsure how bees were treated (test soil for heavy metal concentration or test bees known to be exposed to heavy metal), soil high in lead and 3 other heavy metals associated with soils in urban areas. How does urbanization affect environment and these bees
 * **Bee reference (*Bombia impatiens*):** https://hymenoptera.elsiklab.missouri.edu/genome_fasta<br /> Bombus_impatiens_GCF_000188095.3_BIMP_2.2_genomic.fa
   * QuantSeq 3'-generated data
   * From group discussions asking which bee annotation to use (NCBI or Hymenoptera): Amy Toth recommends using Hymenoptera Base
   ```
   For social insect genomes, usually the "Official Gene Set" is the one that is on Hymenoptera Base (Elsik Lab).  NCBI has their own annotation for each genome as well.  The NCBI annotations tend to have fewer genes but are usually very high quality annotations.  I think most people in the field go with the OGS for a given species unless they are comparing across species, in which case they might use NCBI for consistency.
   ```
+* HiSat2 (gene-level alignment), Kallisto (transcript-level alignment)
+* Nests are confounding factors because there is no nest that spans both treatments. Can't tease out nest from treatments.
+* Is there clustering by nests? See if there's nesting effect
+* Ctrl_NestA, Ctrl_NestC, Exposed_NestB, etc.
+* See if there's difference between Control nest A, nest C; Exposed Nest B, and others.
 
 ## Data transfer to HPC (Atlas dtn node)
 * `ssh username@Atlas-dtn.hpc.msstate.edu`
@@ -883,8 +889,20 @@ ANOVA stats to look at treatment, nest effects on variation (only genes with lar
   * line 207: expression = normalized read count? Why does 1-B11 have super high #? Same with 1-E07
 
 ### Maize
-1. Ran `bee_maize_deseq2.Rmd` up to adding metadata csv file. Found maize metadata here: https://www.ebi.ac.uk/ena/browser/view/PRJNA260793. Downloaded report (tsv file). Most important columns are run_accession (sample IDs) and sample_title (groups).
-2. 
+1. Ran `bee_maize_deseq2.Rmd` up to adding metadata csv file. Found maize metadata here: https://www.ebi.ac.uk/ena/browser/view/PRJNA260793. Downloaded report (tsv file). Most important columns are run_accession (sample IDs) and sample_title (groups). Saved as `maize_metadata_All_Info.csv`.
+2. Made a new metadata file `maize_metadata.csv` so that it only includes the columns `run_accession` and `Tissue`. `Tissue` derived from `sample_title`. I converted like the following:
+| sample_title | Tissue |
+| -- | -- |
+| B-3 | B |
+| L-3 | L |
+| S-3 | S|
+| wtL-1 | wtL |
+| lg1-1 | lg |
+| B_L1.1 | B_L |
+| L_L1.1 | L_L |
+| S_L1.1 | S_L |
+
+3.
 
 #### Output files
 * `Bee_AllExposedvsAllControlGene.csv`
