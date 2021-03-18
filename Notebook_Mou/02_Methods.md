@@ -872,6 +872,7 @@ Used MultiQC Toolbox on html page to export `featureCounts_assignment_plot` imag
 
 ## Differential expression with DESeq2
 * Sathesh says basemeans correlate with read counts: larger basemean values = more read counts
+* DESeq2 reference guide: http://www.bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#altshrink
 
 ### Bee
 1. Ran `bee_maize_deseq2.Rmd` with Jennifer. Generated `Bee_AllExposedvsAllControlGene.csv` file, saved in `results/`. Made notes in Rmd file.
@@ -896,10 +897,14 @@ ANOVA stats to look at treatment, nest effects on variation (only genes with lar
 ![](results/Bee_AllGenes_PCA_ExposedvsControl.png)<!-- -->
 
 5. Subset by nest `Bee_Nest_DESeq2.csv`, but list of genes and p-values do not appear to be different from `Bee_AllExposedvsAllControlGene.csv`.
-6. Made PCA of all genes, subset by nest. Didn't see any particular clustering by nest, though I couldn't figure out how to change color scheme with the plotPCA function.
+6. Made PCA of all genes, subset by nest. Didn't see any particular clustering by nest.
 ![](results/Bee_AllGenes_PCA_Nest.png)<!-- -->
 
-7. Need to run PCA with only list of differentially expressed genes at nest or treatment group level to see how they cluster.
+7. To do next:
+* Need to run PCA with only list of differentially expressed genes at nest or treatment group level to see how they cluster.
+* Apply shrinkage estimator `lfcShrink(dds, coef="Trt_exposed_vs_ctrl", type = "apeglm")`
+* Apply count outlier detection with Cook's distance `res$stat`
+* Make heatmap of count matrix (`rld` dataset) and sample clustering
 
 ### Maize
 1. Ran `bee_maize_deseq2.Rmd` up to adding metadata csv file. Found maize metadata here: https://www.ebi.ac.uk/ena/browser/view/PRJNA260793. Downloaded report (tsv file). Most important columns are run_accession (sample IDs) and sample_title (groups). Saved as `maize_metadata_All_Info.csv`.

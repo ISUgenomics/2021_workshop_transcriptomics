@@ -34,6 +34,7 @@ RNA analysis in DESeq2 on bee and maize data.
 library(tidyverse)
 library(magrittr)
 library(DESeq2) 
+library(wesanderson)
 ```
 
 
@@ -157,7 +158,7 @@ test2 <- test %>% separate(SampleName,
                   remove = FALSE)
 test3 <- merge(metadata, test2, by = "Sample_Name")
 test4 <- test3[-c(6)] #drop SampleName column
-
+test4$Trt <- factor(test4$Trt, levels = c("ctrl", "exposed"))
 
 # maize
 de_inputm = as.matrix(data_maize[-1])
@@ -191,8 +192,9 @@ table(res$padj<0.05) #looking at which ones are sig. diff. from control at 95% C
 res <- res[order(res$padj), ] #come back to this later (take it apart). Order orders it in ascending order
 resdata <- merge(as.data.frame(res), as.data.frame(counts(dds, normalized=TRUE)), by="row.names", sort=FALSE)
 names(resdata)[1] <- "Gene"
-write.csv(resdata, file="AllExposedvsAllControlGene.csv",quote = FALSE,row.names = F)
+write.csv(resdata, file="Bee_AllExposedvsAllControlGene_DeSeq2.csv",quote = FALSE,row.names = F)
 
+resultsNames(dds) #"Intercept"           "Trt_exposed_vs_ctrl"
 rld <- rlogTransformation(dds) #vst() much faster transformation ... check it out
 summary(rld)
 # "DESeqTransform object of length 12925 with 24 metadata columns"
@@ -214,7 +216,7 @@ table(res$padj<0.05) #looking at which ones are sig. diff. from control at 95% C
 res <- res[order(res$padj), ] #come back to this later (take it apart). Order orders it in ascending order
 resdata <- merge(as.data.frame(res), as.data.frame(counts(dds, normalized=TRUE)), by="row.names", sort=FALSE)
 names(resdata)[1] <- "Gene"
-write.csv(resdata, file="Bee_AllExposedvsAllControlGene_DESeq2.csv",quote = FALSE,row.names = F)
+write.csv(resdata, file="Bee_AllExposedvsAllControlGene_DESeq2_2.csv",quote = FALSE,row.names = F)
 
 rld <- rlogTransformation(dds) #vst() much faster transformation ... check it out
 summary(rld)
@@ -222,6 +224,10 @@ summary(rld)
 (p <- plotPCA(rld, intgroup="Trt") +
     theme_bw()
 )
+a <- plotPCA(rld, intgroup="Trt", returnData=TRUE)
+ggplot(a, aes(PC1, PC2, color=group)) +
+  geom_point(size=3) +
+  coord_fixed()
 ```
 
 ## Bee PCA by nest
@@ -246,9 +252,15 @@ rldnest <- rlogTransformation(ddsnest) #vst() much faster transformation ... che
 summary(rldnest)
 # "DESeqTransform object of length 12925 with 24 metadata columns"
 # PCA by nest
-(pnest <- plotPCA(rldnest, intgroup="Nest") +
-    theme_bw()
-)
+b <- plotPCA(rldnest, intgroup="Nest", returnData=TRUE)
+percentVar <- round(100 * attr(b, "percentVar")) #To add % variance for PC1 and PC2 @ plot axes
+ggplot(b, aes(PC1, PC2, color=as.factor(group))) +
+  geom_point(size=3) +
+  xlab(paste0("PC1: ",percentVar[1],"% variance")) +
+  ylab(paste0("PC2: ",percentVar[2],"% variance")) + 
+  coord_fixed() +
+  scale_color_brewer(palette = "Dark2") +
+  labs(color = "Nest")
 ggsave("Bee_AllGenes_PCA_Nest.png")
 ```
 
