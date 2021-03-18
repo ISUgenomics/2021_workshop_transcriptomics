@@ -7,7 +7,7 @@ Written summary of methods performed in this repo. A lot of the steps described 
 * **[Maize reference (*Zea mays* B73)](ftp://ftp.ensemblgenomes.org/pub/plants/release-49/fasta/zea_mays/dna/Zea_mays.B73_RefGen_v4.dna.*gz)**
 * **Bee data**
   * Already have FastQC and multiQC reports of bee fastq files
-  * All females, foraging range 2km, unsure how bees were treated (test soil for heavy metal concentration or test bees known to be exposed to heavy metal), soil high in lead and 3 other heavy metals associated with soils in urban areas. How does urbanization affect environment and these bees
+  * All females, foraging range 2km, exposed group of bees treated with heavy metals, soil high in lead and 3 other heavy metals associated with soils in urban areas. How does urbanization affect environment and these bees
 * **Bee reference (*Bombia impatiens*):** https://hymenoptera.elsiklab.missouri.edu/genome_fasta<br /> Bombus_impatiens_GCF_000188095.3_BIMP_2.2_genomic.fa
   * QuantSeq 3'-generated data
   * From group discussions asking which bee annotation to use (NCBI or Hymenoptera): Amy Toth recommends using Hymenoptera Base
@@ -717,7 +717,8 @@ B_impatiens.contig	    B_impatiens.maps	       B_impatiens.ref153positions
 * Apparently you can run featureCounts on sam files (tested by Andrew Severin)
 
 ### Bee
-1. Counts preview of bee data. Compared coordinates with Jennifer's `1-A01-A1_S7.aligned.out.bam` and the length column values are slightly different. Is this normal?
+1. Downloaded featureCount output files from Atlas.
+2. Counts preview of bee data. Compared coordinates with Jennifer's `1-A01-A1_S7.aligned.out.bam` and the length column values are slightly different. Is this normal?
 ```
 # Program:featureCounts v2.0.1; Command:"featureCounts" "-T" "16" "-t" "gene" "-g" "ID" "-a" "/project/f/k/rnaseq/bee/reference_genome_bee/GCF_000188095.3_BIMP_2.2_genomic.gff.gz" "-o" "/h/k/rnaseq/bee/raw_data/test/1-A01-A1_S7_L002_R1_001.fastq.Aligned.sortedByCoord.out.bam_genecounts.txt" "/h/k/rnaseq/bee/raw_data/test/1-A01-A1_S7_L002_R1_001.fastq.Aligned.sortedByCoord.out.bam"
 Geneid	Chr	Start	End	Strand	Length	/h/k/rnaseq/bee/raw_data/test/1-A01-A1_S7_L002_R1_001.fastq.Aligned.sortedByCoord.out.bam
@@ -731,16 +732,14 @@ gene-LOC100740639	NT_176427.1	54201	58114	+	3914	104
 gene-LOC100743123	NT_176427.1	58465	60894	-	2430	153
 ```
 
-2. Run featureCounts output through `combine.R`. Made a few minor changes to original `combine.R` script.
+2. Run featureCounts output through `combine.R`. See `Re-format featureCounts text files for DESeq2 analysis` for more info.
 
 ### Maize
-1. Run featureCounts output through `combine.R`. Made a few minor changes to original `combine.R` script.
+1. Downloaded featureCount output files from Atlas.
+2. Run featureCounts output through `combine.R`. See `Re-format featureCounts text files for DESeq2 analysis` for more info.
 
 ### Output files
-* `bee.genecounts.txt`
-* `bee.genecounts.xlsx`
-* `maize.genecounts.txt`
-* `maize.genecounts.xlsx`
+* `*.genecounts.txt`
 
 ## QC featureCounts with MultiQC
 * check out this [link](https://multiqc.info/docs/) on how to run multiQC with featureCounts `*.summary` files. This is another way to assess read alignment quality.
@@ -753,10 +752,11 @@ Looks like this is an issue with the directory configured for the shared package
 It's pulling that directory from /h/k/.condarc. Change the location in that file to /home/k/miniconda3/pkgs to have it download the package info to a writable directory.
 ```
 I went to the `.condarc` file in home directory and saw that it was listing `/project/my_proj/my_pkg_cache/`, which doesn't exist. I modified it to the following:
-```
-pkgs_dirs:
-- /p/f/k/my_pkg_cache
-```
+
+  ```
+  pkgs_dirs:
+  - /p/f/k/my_pkg_cache
+  ```
 That fixed the issue and I was able to install multiQC and run it!
 
 2. Made `/p/f/k/rnaseq/bee/results/multiqc/` directory. <br />
@@ -865,9 +865,9 @@ Used MultiQC Toolbox on html page to export `featureCounts_assignment_plot` imag
 </details>
 
 #### Output files
-* `bee.genecounts.txt`
+* `bee.genecounts.out.txt`
 * `bee.genecounts.xlsx`
-* `maize.genecounts.txt`
+* `maize.genecounts.out.txt`
 * `maize.genecounts.xlsx`
 
 ## Differential expression with DESeq2
@@ -887,6 +887,19 @@ Used MultiQC Toolbox on html page to export `featureCounts_assignment_plot` imag
 ANOVA stats to look at treatment, nest effects on variation (only genes with large fold-change, p<0.05)
   ```
   * line 207: expression = normalized read count? Why does 1-B11 have super high #? Same with 1-E07
+3. Ran a couple diagnostic plots: linechart and violin plots of count data
+![](results/Bee_GSNAP_RNAseq_CountProfiles_Linechart.png)<!-- -->
+
+![](results/Bee_GSNAP_RNAseq_LogCountProfiles_ViolinPlot.png)<!-- -->
+
+4. Made PCA of all genes , subset by Treatment group (Exposed vs Control). Looks exactly like Rick's PCA except flipped upside down.
+![](results/Bee_AllGenes_PCA_ExposedvsControl.png)<!-- -->
+
+5. Subset by nest `Bee_Nest_DESeq2.csv`, but list of genes and p-values do not appear to be different from `Bee_AllExposedvsAllControlGene.csv`.
+6. Made PCA of all genes, subset by nest. Didn't see any particular clustering by nest, though I couldn't figure out how to change color scheme with the plotPCA function.
+![](results/Bee_AllGenes_PCA_Nest.png)<!-- -->
+
+7. Need to run PCA with only list of differentially expressed genes at nest or treatment group level to see how they cluster.
 
 ### Maize
 1. Ran `bee_maize_deseq2.Rmd` up to adding metadata csv file. Found maize metadata here: https://www.ebi.ac.uk/ena/browser/view/PRJNA260793. Downloaded report (tsv file). Most important columns are run_accession (sample IDs) and sample_title (groups). Saved as `maize_metadata_All_Info.csv`.
@@ -901,8 +914,25 @@ ANOVA stats to look at treatment, nest effects on variation (only genes with lar
 | B_L1.1 | B_L |
 | L_L1.1 | L_L |
 | S_L1.1 | S_L |
+3. Ran a couple diagnostic plots: linechart and violin plots of count data
+![](results/Maize_GSNAP_RNAseq_CountProfiles_Linechart.png)<!-- -->
 
-3.
+![](results/Maize_GSNAP_RNAseq_LogCountProfiles_ViolinPlot.png)<!-- -->
+
+4. Subset by tissue `Maize_Tissue_DeSeq2.csv`.
+
+5. Made PCA of all genes, subset by Tissue type.
+![](results/Maize_AllGenes_PCA_Tissue.png)<!-- -->
 
 #### Output files
 * `Bee_AllExposedvsAllControlGene.csv`
+* `Bee_Nest_DESeq2.csv`
+* `Maize_Tissue_DeSeq2.csv`
+
+## Network analysis with WGCNA
+* which count table to use?
+* use list of differentially expressed genes only
+* Gene ontology enrichment analysis: Pretty easy as long as you have gene annotation (gff?); blastp to most related organism (find most recent bumblebee ontology papers for GO assignments, blast results) , blast2GO
+* other options: goseq (R package), find GO file from other bee RNAseq papers (are they pulling the most recent GO - go to their source code and modify if necessary)
+* create a correlation network (spearman)
+* Cytoscape

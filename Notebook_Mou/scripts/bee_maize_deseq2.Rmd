@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
   echo = TRUE,
   collapse = TRUE,
   comment = "#>",
-  fig.path = "imgs/2_DE_analysis"
+  fig.path = "imgs/DESeq2_analysis"
 )
 ```
 
@@ -66,7 +66,8 @@ melt_bee %>%
   theme(
     axis.text.x = element_text(angle=90, vjust=0.5)
   ) +
-  labs(title="GSNAP RNAseq Bee Gene Profiles") #try boxplot with group?
+  labs(title="GSNAP RNAseq Bee Count Profiles") #try boxplot with group?
+ggsave("Bee_GSNAP_RNAseq_CountProfiles_Linechart.png")
 ```
 
 ```{r bee_violin, fig.width=11, fig.height=8}
@@ -79,6 +80,7 @@ melt_bee %>%
   ) +
   labs(title="GSNAP distribution of bee gene counts by sample") +
   facet_wrap(~group, scales="free", drop=T)
+ggsave("Bee_GSNAP_RNAseq_LogCountProfiles_ViolinPlot.png")
 ```
 
 Check if any of the replicates seem obviously different from the others. Mostly seems fine, `1-E07-F5-S61` (exposed) is a little low compared to others, missing `1-B03-A16_S21` (control).
@@ -95,7 +97,8 @@ melt_maize %>%
   theme(
     axis.text.x = element_text(angle=90, vjust=0.5)
   ) +
-  labs(title="GSNAP RNAseq Maize Gene Profiles")
+  labs(title="GSNAP RNAseq Maize Count Profiles")
+ggsave("Maize_GSNAP_RNAseq_CountProfiles_Linechart.png")
 ```
 
 ```{r maize_violin, fig.width=8, fig.height=4, eval=FALSE}
@@ -108,6 +111,7 @@ melt_maize %>%
   ) +
   labs(title="GSNAP distribution of maize gene counts by sample")
 #  facet_wrap(~group, scales="free", drop=T)
+ggsave("Maize_GSNAP_RNAseq_LogCountProfiles_ViolinPlot.png")
 ```
 
 Check if any of the replicates seem obviously different from the others. Mostly seems okay, `SRR1573523` and `SRR1573525` is a little low compared to others, `SRR1573513` seems a little high compared to others.
@@ -193,9 +197,8 @@ rld <- rlogTransformation(dds) #vst() much faster transformation ... check it ou
 summary(rld)
 # "DESeqTransform object of length 12925 with 24 metadata columns"
 (p <- plotPCA(rld, intgroup="Condition") +
-    theme_bw() +
-    labs(x = "PC1", y="PC2")
-)
+    theme_bw())
+ggsave("Bee_AllGenes_PCA_ExposedvsControl.png")
 
 # with test4 file - it works! Got same results as dds above
 dds <- DESeqDataSetFromMatrix(
@@ -217,8 +220,7 @@ rld <- rlogTransformation(dds) #vst() much faster transformation ... check it ou
 summary(rld)
 # "DESeqTransform object of length 12925 with 24 metadata columns"
 (p <- plotPCA(rld, intgroup="Trt") +
-    theme_bw() +
-    labs(x = "PC1", y="PC2")
+    theme_bw()
 )
 ```
 
@@ -247,6 +249,7 @@ summary(rldnest)
 (pnest <- plotPCA(rldnest, intgroup="Nest") +
     theme_bw()
 )
+ggsave("Bee_AllGenes_PCA_Nest.png")
 ```
 
 ## Maize PCA
@@ -269,7 +272,7 @@ write.csv(resdatam, file="Maize_Tissue_DeSeq2.csv",quote = FALSE,row.names = F)
 
 rldm <- rlogTransformation(ddsm) #vst() much faster transformation ... check it out
 summary(rldm)
-# "DESeqTransform object of length 12925 with 24 metadata columns"
+# "DESeqTransform object of length 44703 with 47 metadata columns"
 (pm <- plotPCA(rldm, intgroup="Tissue") +
     theme_bw() +
     labs(x = "PC1", y="PC2")
@@ -277,6 +280,7 @@ summary(rldm)
 
 (pm2 <- plotPCA(rldm, intgroup="Tissue") +
     theme_bw()) #with PC1, PC2 variance % axes labels
+ggsave("Maize_AllGenes_PCA_Tissue.png")
 ```
 
 Other things to try:
