@@ -10,7 +10,7 @@ Comparing different alignments and DGE identifying Methods
 |Bee 	|Hisat2 |	|DESeq2 	|Rick and Alex||
 |Maize 	|Hisat2 |	|DESeq2 	|Rick and Alex||
 |Bee 	|gsnap |[featureCounts](Notebook_Jennifer/Bumblebee/results/gsnap_counts.xlsx), [featureCounts2](Notebook_Mou/results/bee.genecounts.out.txt)	|DESeq2 	|Jennifer and Kathy||
-|Maize 	|gsnap |[featureCounts](Notebook_Jennifer/maize_genecounts.txt), [featureCounts2](Notebook_Mou/results/maize.genecounts.out.txt)	|DESeq2 	|Jennifer and Kathy||
+|Maize 	|gsnap |[featureCounts](Notebook_Jennifer/Maize/results/gsnap_counts.xlsx), [featureCounts2](Notebook_Mou/results/maize.genecounts.out.txt)	|DESeq2 	|Jennifer and Kathy||
 |Bee 	|gsnap |	|EdgeR 	|Severin||
 |Maize 	|gsnap |	|EdgeR 	|Severin||
 |Bee 	|Star |	|EdgeR 	|Sathesh and Katie| |
@@ -22,6 +22,6 @@ Comparing different alignments and DGE identifying Methods
 |Bee 	|Kallisto |	|EdgeR 	|Severin/Kyle||
 |Maize	|Kallisto |	|EdgeR 	|Severin/Kyle||
 |Bee |Kallisto | [kallisto_counts.xlsx](Notebook_Jennifer/Bumblebee/results/kallisto_counts.xlsx) |EdgeR | Jennifer ||
-|Bee |Kallisto | [kallisto_counts.xlsx](Notebook_Jennifer/Maize/results/kallisto_counts.xlsx) |EdgeR | Jennifer ||
+|Maize |Kallisto | [kallisto_counts.xlsx](Notebook_Jennifer/Maize/results/kallisto_counts.xlsx) |EdgeR | Jennifer ||
 |Bee 	|Salmon| [salmon_counts.xlsx](Notebook_Jennifer/Bumblebee/results/salmon_counts.xlsx) 	|EdgeR 	|Jennifer/Kyle||
 |Maize 	|Salmon| [salmon_counts.xlsx](Notebook_Jennifer/Maize/results/salmon_counts.xlsx)	|EdgeR 	|Jennifer/Kyle||
