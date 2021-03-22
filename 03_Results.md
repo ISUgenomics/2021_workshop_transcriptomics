@@ -22,5 +22,6 @@ Comparing different alignments and DGE identifying Methods
 |Bee 	|Kallisto |	|EdgeR 	|Severin/Kyle||
 |Maize	|Kallisto |	|EdgeR 	|Severin/Kyle||
 |Bee |Kallisto | [kallisto_counts.xlsx](Notebook_Jennifer/Bumblebee/results/kallisto_counts.xlsx) |EdgeR | Jennifer ||
+|Bee |Kallisto | [kallisto_counts.xlsx](Notebook_Jennifer/Maize/results/kallisto_counts.xlsx) |EdgeR | Jennifer ||
 |Bee 	|Salmon| [salmon_counts.xlsx](Notebook_Jennifer/Bumblebee/results/salmon_counts.xlsx) 	|EdgeR 	|Jennifer/Kyle||
-|Maize 	|Salmon| 	|EdgeR 	|Jennifer/Kyle||
+|Maize 	|Salmon| [salmon_counts.xlsx](Notebook_Jennifer/Maize/results/salmon_counts.xlsx)	|EdgeR 	|Jennifer/Kyle||

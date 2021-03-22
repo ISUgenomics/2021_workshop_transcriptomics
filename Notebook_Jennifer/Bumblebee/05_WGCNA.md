@@ -134,4 +134,19 @@ mME %>% ggplot(., aes(x=treatment, y=name, fill=value)) +
 
 ```
 TOM = TOMsimilarityFromExpr(wgcna_input, power = picked_power)
+row.names(TOM) = row.names(expr_normalized)
+colnames(TOM) = row.names(expr_normalized)
+edge_list = data.frame(TOM) %>%
+  mutate(
+    gene1 = row.names(.)
+  ) %>%
+  pivot_longer(-gene1) %>%
+  dplyr::rename(gene2 = name, correlation = value) %>%
+  unique() %>%
+  subset(!(gene1==gene2)) %>%
+  mutate(
+    module1 = module_df[gene1,]$colors,
+    module2 = module_df[gene2,]$colors
+  )
+write_delim(edge_list, "wgcna_edgelist_gene.txt", delim="\t")
 ```
