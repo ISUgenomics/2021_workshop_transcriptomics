@@ -12,13 +12,15 @@ library(magrittr)
 (2) Load and normalize data
 
 ```
-data <- read_delim("bee_genecounts.txt", delim="\t")
-
+data <- read_excel("gsnap_counts.xlsx", sheet="geneMult")  # gene/mRNA/geneMult   
 de_input = as.matrix(data[,-1])
-row.names(de_input)=data$Geneid
+row.names(de_input) = data$Geneid
+
+metadata <- read_excel("gsnap_counts.xlsx", sheet="metadata")
+row.names(metadata)=metadata$sample
 
 # === Normalize with DESeq2 for now, can swap this out for a different method
-dds <- DESeqDataSetFromMatrix(de_input, colData=meta_df, design = ~condition)
+dds <- DESeqDataSetFromMatrix(de_input, colData=metadata, design = ~condition)
 dds <- DESeq(dds)
 vsd <- varianceStabilizingTransformation(dds)
 expr_normalized <- getVarianceStabilizedData(dds)
@@ -58,10 +60,16 @@ text(sft$fitIndices[, 1],
      cex = cex1, col = "red")
 ```
 
+| <b>gene</b> | <b>mRNA</b> |
+|:-:|:-:|
+| ![](results/assets/wgcna_power_gene.png)| ![](results/assets/wgcna_power_mRNA.png) |
+|<b>geneMult</b> | |
+|![](results/assets/wgcna_power_geneMult.png)||
+
 (4) Run WGCNA
 
 ```
-picked_power = 16
+picked_power = 6
 temp_cor <- cor
 cor <- WGCNA::cor
 netwk <- blockwiseModules(wgcna_input, power = picked_power, networkType = "signed", 
@@ -79,20 +87,18 @@ plotDendroAndColors(
   guideHang = 0.05 )
 ```
 
+| <b>gene</b> | <b>mRNA</b> |
+|:-:|:-:|
+| ![](results/assets/wgcna_gene.png)| ![](results/assets/wgcna_mRNA.png) |
+|<b>geneMult</b> | |
+|![](results/assets/wgcna_geneMult.png)||
+
 (5) Write modules to file
 
 ```
 module_df <- data.frame( gene_id = names(netwk$colors), colors = labels2colors(netwk$colors))
 
-module_df[1:5,]
-#>             gene_id colors
-#> 1 gene-LOC100740276  green
-#> 2 gene-LOC100740157   blue
-#> 3 gene-LOC100742884   blue
-#> 4 gene-LOC100740399   blue
-#> 5 gene-LOC100740519   blue
-
-write_delim(module_df, file = "bee_gene_modules.txt", delim = "\t")
+write_delim(module_df, file = "wgcna_modules_gene.txt", delim = "\t")
 ```
 
 (6) Relate modules to treatment
@@ -118,3 +124,14 @@ mME %>% ggplot(., aes(x=treatment, y=name, fill=value)) +
   labs(title = "Module-trait Relationships", y = "Modules", fill="corr")
 ```
 
+| <b>gene</b> | <b>mRNA</b>|
+|:-:|:-:|
+| ![](results/assets/wgcna_m2c_gene.png)| ![](results/assets/wgcna_m2c_mRNA.png) |
+|<b>geneMult</b> | |
+|![](results/assets/wgcna_m2c_geneMult.png)||
+
+**(7) Export network**
+
+```
+TOM = TOMsimilarityFromExpr(wgcna_input, power = picked_power)
+```
