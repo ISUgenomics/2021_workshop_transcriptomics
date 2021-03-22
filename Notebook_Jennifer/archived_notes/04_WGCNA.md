@@ -195,7 +195,7 @@ text(sft$fitIndices[, 1],
      cex = cex1, col = "red")
 ```
 
-![](imgs/4_WGCNAsoftpower-1.png)<!-- -->
+![](4_WGCNAsoftpower-1.png)<!-- -->
 
 Maybe a power of 8 or 9.
 
@@ -295,7 +295,7 @@ plotDendroAndColors(
   guideHang = 0.05 )
 ```
 
-![](imgs/4_WGCNAdendrogram-1.png)<!-- -->
+![](4_WGCNAdendrogram-1.png)<!-- -->
 
 Write modules to file
 
@@ -353,4 +353,4 @@ mME %>% ggplot(., aes(x=treatment, y=name, fill=value)) +
   labs(title = "Module-trait Relationships", y = "Modules", fill="corr")
 ```
 
-![](imgs/4_WGCNAmoduletraits-1.png)<!-- -->
+![](4_WGCNAmoduletraits-1.png)<!-- -->

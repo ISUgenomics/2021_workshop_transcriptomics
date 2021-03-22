@@ -118,7 +118,7 @@ melt_bee %>%
   labs(title="GSNAP RNAseq Gene Profiles")
 ```
 
-![](imgs/2_DE_analysisbee_linechart-1.png)<!-- -->
+![](2_DE_analysisbee_linechart-1.png)<!-- -->
 
 Distribution, violin plot
 
@@ -135,7 +135,7 @@ melt_bee %>%
 #> Warning: Removed 216873 rows containing non-finite values (stat_ydensity).
 ```
 
-![](imgs/2_DE_analysisviolin-1.png)<!-- -->
+![](2_DE_analysisviolin-1.png)<!-- -->
 
 Check if any of the replicates seem obviously different from the others.
 Mostly seems fine, `1-E07-F3-S59 distribution` is a little low compared
@@ -157,7 +157,7 @@ melt_maize %>%
   labs(title="GSNAP RNAseq Gene Profiles")
 ```
 
-![](imgs/2_DE_analysismaize_linechart-1.png)<!-- -->
+![](2_DE_analysismaize_linechart-1.png)<!-- -->
 
 ``` r
 melt_maize %>% 
@@ -171,7 +171,7 @@ melt_maize %>%
 #> Warning: Removed 473515 rows containing non-finite values (stat_ydensity).
 ```
 
-![](imgs/2_DE_analysismaize_violin-1.png)<!-- -->
+![](2_DE_analysismaize_violin-1.png)<!-- -->
 
 ``` r
 #  facet_wrap(~group, scales="free", drop=T)
@@ -273,7 +273,7 @@ summary(rld)
 )
 ```
 
-![](imgs/2_DE_analysispca_bee-1.png)<!-- -->
+![](2_DE_analysispca_bee-1.png)<!-- -->
 
 ## Other diagnostic plots
 
@@ -309,7 +309,7 @@ DEgenes %>% ggplot(., aes(x=treatment, y=expression, group=Gene)) +
   )# +
 ```
 
-![](imgs/2_DE_analysisbee_deline-1.png)<!-- -->
+![](2_DE_analysisbee_deline-1.png)<!-- -->
 
 ``` r
 #  facet_wrap(~Condition, scales="free_x", drop=T)
@@ -344,4 +344,4 @@ top20 %>% ggplot(., aes(x = as.factor(Gene), y = expression, fill=Condition))+
   labs(x="Gene")
 ```
 
-![](imgs/2_DE_analysisbee_top20-1.png)<!-- -->
+![](2_DE_analysisbee_top20-1.png)<!-- -->

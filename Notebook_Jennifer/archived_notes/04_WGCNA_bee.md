@@ -202,7 +202,7 @@ text(sft$fitIndices[, 1],
      cex = cex1, col = "red")
 ```
 
-![](imgs/4_WGCNA_beesoftpower-1.png)<!-- -->
+![](4_WGCNA_beesoftpower-1.png)<!-- -->
 
 Maybe a power of 14 or 16.
 
@@ -320,7 +320,7 @@ plotDendroAndColors(
   guideHang = 0.05 )
 ```
 
-![](imgs/4_WGCNA_beedendrogram-1.png)<!-- -->
+![](4_WGCNA_beedendrogram-1.png)<!-- -->
 
 Write modules to file
 
@@ -378,4 +378,4 @@ mME %>% ggplot(., aes(x=treatment, y=name, fill=value)) +
   labs(title = "Module-trait Relationships", y = "Modules", fill="corr")
 ```
 
-![](imgs/4_WGCNA_beemoduletraits-1.png)<!-- -->
+![](4_WGCNA_beemoduletraits-1.png)<!-- -->
