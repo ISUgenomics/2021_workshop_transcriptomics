@@ -1,0 +1,570 @@
+<!doctype html>
+<!--
+  ~ Copyright 2013-2019, Centre for Genomic Regulation (CRG)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<script type="text/javascript">
+var prot = (("https:" == document.location.protocol) ? "https://" : "http://");
+document.write(unescape("%3Cscript src='" + prot + "code.jquery.com/jquery-latest.min.js' type='text/javascript' %3E%3C/script%3E"));
+document.write(unescape("%3Cscript src='" + prot + "d3js.org/d3.v3.min.js' charset='utf-8' type='text/javascript' %3E%3C/script%3E"));
+document.write(unescape("%3Cscript src='" + prot + "cdn.rawgit.com/nextflow-io/d3-timeline/82622c4cc35bac7283b3a317826b0709ac1ae476/src/d3-timeline.js' type='text/javascript' %3E%3C/script%3E"));
+</script>
+<style type="text/css">
+* {
+  font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+.axis path,
+.axis line {
+fill: none;
+  stroke: black;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  font-size: 10px;
+}
+
+div#timeline g text {
+  font-size: 13px;
+}
+
+text.timeline-label {
+  font-size: 13px;
+}
+
+#timeline2 .axis {
+  transform: translate(0px,30px);
+  -ms-transform: translate(0px,30px); /* IE 9 */
+  -webkit-transform: translate(0px,30px); /* Safari and Chrome */
+  -o-transform: translate(0px,30px); /* Opera */
+  -moz-transform: translate(0px,30px); /* Firefox */
+}
+
+.coloredDiv {
+  height:20px; width:20px; float:left;
+}
+
+#footer {
+  padding-top: 3em; color: #bfbfbf; font-size: 13px;
+}
+
+#footer a:visited {
+  color: #bfbfbf;
+  text-decoration: underline;
+}
+</style>
+<script type="text/javascript">
+var handler=null;
+// see https://github.com/mbostock/d3/wiki/Ordinal-Scales#category20c
+var colors = d3.scale.category20c().domain(d3.range(0,20)).range()
+
+function c0(index) { return "#9c9c9c"; }
+function c1(index) { return "#bdbdbd"; }
+function c2(index) { return colors[index % 16]; } // <-- note: uses only the first 16 colors
+
+var elapsed="27m 12s"
+var beginningMillis=1616269950804;
+var endingMillis=1616271582883;
+var data=[
+{"label": "fastqc (batched)", "times": [{"starting_time": 1616269952108, "ending_time": 1616269956711, "color":c1(0)}, {"starting_time": 1616269956711, "ending_time": 1616269985020, "color":c2(0), "label": "34.6s \/ 954.1 MB"}, {"starting_time": 1616269985020, "ending_time": 1616269986740, "color":c1(0)}]},
+{"label": "fastqc (batched)", "times": [{"starting_time": 1616269952156, "ending_time": 1616269956749, "color":c1(0)}, {"starting_time": 1616269956749, "ending_time": 1616269989023, "color":c2(0), "label": "34.6s \/ 1.8 GB"}]},
+{"label": "fastqc (batched)", "times": [{"starting_time": 1616269952198, "ending_time": 1616269956752, "color":c1(0)}, {"starting_time": 1616269956752, "ending_time": 1616270030910, "color":c2(0), "label": "1m 20s \/ 1.8 GB"}, {"starting_time": 1616270030910, "ending_time": 1616270031759, "color":c1(0)}]},
+{"label": "fastqc (batched)", "times": [{"starting_time": 1616269952234, "ending_time": 1616269956754, "color":c1(0)}, {"starting_time": 1616269956754, "ending_time": 1616269981805, "color":c2(0), "label": "29.5s \/ 1.8 GB"}]},
+{"label": "kallisto_index (GCF_000188095.3_BIMP_2.2_rna.fna.gz)", "times": [{"starting_time": 1616269952277, "ending_time": 1616269956757, "color":c1(1)}, {"starting_time": 1616269956757, "ending_time": 1616270023768, "color":c2(1), "label": "1m 10s \/ 2.3 GB"}]},
+{"label": "fastqc (batched)", "times": [{"starting_time": 1616269952312, "ending_time": 1616269956759, "color":c1(0)}, {"starting_time": 1616269956759, "ending_time": 1616269981755, "color":c2(0), "label": "29.6s \/ 1.9 GB"}, {"starting_time": 1616269981755, "ending_time": 1616269981882, "color":c1(0)}]},
+{"label": "fastqc (batched)", "times": [{"starting_time": 1616269952345, "ending_time": 1616269956761, "color":c1(0)}, {"starting_time": 1616269956761, "ending_time": 1616269981605, "color":c2(0), "label": "29.6s \/ 1.8 GB"}, {"starting_time": 1616269981605, "ending_time": 1616269981928, "color":c1(0)}]},
+{"label": "salmon_index (GCF_000188095.3_BIMP_2.2_rna.fna.gz)", "times": [{"starting_time": 1616269952442, "ending_time": 1616269956764, "color":c1(2)}, {"starting_time": 1616269956764, "ending_time": 1616270501656, "color":c2(2), "label": "9m 10s \/ 1.6 GB"}, {"starting_time": 1616270501656, "ending_time": 1616270501974, "color":c1(2)}]},
+{"label": "gsnap_index (GCF_000188095)", "times": [{"starting_time": 1616269952538, "ending_time": 1616269956766, "color":c1(3)}, {"starting_time": 1616269956766, "ending_time": 1616270082864, "color":c2(3), "label": "2m 14s \/ 986.6 MB"}, {"starting_time": 1616270082864, "ending_time": 1616270086813, "color":c1(3)}]},
+{"label": "fastqc (batched)", "times": [{"starting_time": 1616269952627, "ending_time": 1616269956768, "color":c1(0)}, {"starting_time": 1616269956768, "ending_time": 1616269991971, "color":c2(0), "label": "44.1s \/ 2 GB"}, {"starting_time": 1616269991971, "ending_time": 1616269996752, "color":c1(0)}]},
+{"label": "fastqc (batched)", "times": [{"starting_time": 1616269952727, "ending_time": 1616269956770, "color":c1(0)}, {"starting_time": 1616269956770, "ending_time": 1616269982836, "color":c2(0), "label": "34.1s \/ 1.9 GB"}, {"starting_time": 1616269982836, "ending_time": 1616269986825, "color":c1(0)}]},
+{"label": "kallisto_quant (1-D11-E7_S53_L002_R1_001)", "times": [{"starting_time": 1616270021857, "ending_time": 1616270026743, "color":c1(4)}, {"starting_time": 1616270026743, "ending_time": 1616270040300, "color":c2(4), "label": "19.9s \/ 1.8 GB"}, {"starting_time": 1616270040300, "ending_time": 1616270041765, "color":c1(4)}]},
+{"label": "kallisto_quant (1-E03-F1_S57_L002_R1_001)", "times": [{"starting_time": 1616270021898, "ending_time": 1616270026745, "color":c1(4)}, {"starting_time": 1616270026745, "ending_time": 1616270042611, "color":c2(4), "label": "19.9s \/ 1.8 GB"}]},
+{"label": "kallisto_quant (1-D07-D11_S49_L002_R1_001)", "times": [{"starting_time": 1616270021925, "ending_time": 1616270026746, "color":c1(4)}, {"starting_time": 1616270026746, "ending_time": 1616270056348, "color":c2(4), "label": "34.9s \/ 1.8 GB"}, {"starting_time": 1616270056348, "ending_time": 1616270056777, "color":c1(4)}]},
+{"label": "kallisto_quant (1-D04-D8_S46_L002_R1_001)", "times": [{"starting_time": 1616270021958, "ending_time": 1616270026748, "color":c1(4)}, {"starting_time": 1616270026748, "ending_time": 1616270040448, "color":c2(4), "label": "19.9s \/ 1.7 GB"}, {"starting_time": 1616270040448, "ending_time": 1616270041853, "color":c1(4)}]},
+{"label": "kallisto_quant (1-C08-C7_S38_L002_R1_001)", "times": [{"starting_time": 1616270021995, "ending_time": 1616270026750, "color":c1(4)}, {"starting_time": 1616270026750, "ending_time": 1616270042769, "color":c2(4), "label": "19.9s \/ 1.8 GB"}]},
+{"label": "kallisto_quant (1-A02-A2_S8_L002_R1_001)", "times": [{"starting_time": 1616270022030, "ending_time": 1616270026751, "color":c1(4)}, {"starting_time": 1616270026751, "ending_time": 1616270041414, "color":c2(4), "label": "19.9s \/ 1.8 GB"}, {"starting_time": 1616270041414, "ending_time": 1616270041891, "color":c1(4)}]},
+{"label": "kallisto_quant (1-E10-F8_S64_L002_R1_001)", "times": [{"starting_time": 1616270022064, "ending_time": 1616270026753, "color":c1(4)}, {"starting_time": 1616270026753, "ending_time": 1616270040827, "color":c2(4), "label": "19.9s \/ 1.8 GB"}, {"starting_time": 1616270040827, "ending_time": 1616270041921, "color":c1(4)}]},
+{"label": "kallisto_quant (1-B08-B3_S26_L002_R1_001)", "times": [{"starting_time": 1616270022095, "ending_time": 1616270026754, "color":c1(4)}, {"starting_time": 1616270026754, "ending_time": 1616270050030, "color":c2(4), "label": "24.7s \/ 1.8 GB"}]},
+{"label": "kallisto_quant (1-A08-A8_S14_L002_R1_001)", "times": [{"starting_time": 1616270022127, "ending_time": 1616270026756, "color":c1(4)}, {"starting_time": 1616270026756, "ending_time": 1616270043808, "color":c2(4), "label": "19.8s \/ 1.8 GB"}]},
+{"label": "kallisto_quant (1-C11-D1_S41_L002_R1_001)", "times": [{"starting_time": 1616270022158, "ending_time": 1616270026757, "color":c1(4)}, {"starting_time": 1616270026757, "ending_time": 1616270043475, "color":c2(4), "label": "19.9s \/ 1.8 GB"}]},
+{"label": "kallisto_quant (1-A12-A12_S18_L002_R1_001)", "times": [{"starting_time": 1616270022191, "ending_time": 1616270026759, "color":c1(4)}, {"starting_time": 1616270026759, "ending_time": 1616270043489, "color":c2(4), "label": "19.9s \/ 1.8 GB"}]},
+{"label": "kallisto_quant (1-C04-C2_S34_L002_R1_001)", "times": [{"starting_time": 1616270022226, "ending_time": 1616270026761, "color":c1(4)}, {"starting_time": 1616270026761, "ending_time": 1616270054439, "color":c2(4), "label": "29.6s \/ 1.8 GB"}]},
+{"label": "kallisto_quant (1-E12-F10_S66_L002_R1_001)", "times": [{"starting_time": 1616270022258, "ending_time": 1616270026763, "color":c1(4)}, {"starting_time": 1616270026763, "ending_time": 1616270043106, "color":c2(4), "label": "19.8s \/ 1.8 GB"}]},
+{"label": "kallisto_quant (1-E04-F2_S58_L002_R1_001)", "times": [{"starting_time": 1616270022289, "ending_time": 1616270026764, "color":c1(4)}, {"starting_time": 1616270026764, "ending_time": 1616270047696, "color":c2(4), "label": "24.5s \/ 1.8 GB"}]},
+{"label": "kallisto_quant (1-E08-F6_S62_L002_R1_001)", "times": [{"starting_time": 1616270022322, "ending_time": 1616270026766, "color":c1(4)}, {"starting_time": 1616270026766, "ending_time": 1616270042825, "color":c2(4), "label": "19.8s \/ 1.8 GB"}]},
+{"label": "kallisto_quant (1-D05-D9_S47_L002_R1_001)", "times": [{"starting_time": 1616270022359, "ending_time": 1616270026768, "color":c1(4)}, {"starting_time": 1616270026768, "ending_time": 1616270058540, "color":c2(4), "label": "34.4s \/ 1.7 GB"}]},
+{"label": "kallisto_quant (1-E02-E10_S56_L002_R1_001)", "times": [{"starting_time": 1616270022459, "ending_time": 1616270026769, "color":c1(4)}, {"starting_time": 1616270026769, "ending_time": 1616270057234, "color":c2(4), "label": "34.4s \/ 1.8 GB"}]},
+{"label": "kallisto_quant (1-A11-A11_S17_L002_R1_001)", "times": [{"starting_time": 1616270022559, "ending_time": 1616270026771, "color":c1(4)}, {"starting_time": 1616270026771, "ending_time": 1616270043321, "color":c2(4), "label": "19.6s \/ 1.7 GB"}]},
+{"label": "kallisto_quant (1-C01-B8_S31_L002_R1_001)", "times": [{"starting_time": 1616270022659, "ending_time": 1616270026772, "color":c1(4)}, {"starting_time": 1616270026772, "ending_time": 1616270055445, "color":c2(4), "label": "34.2s \/ 1.8 GB"}, {"starting_time": 1616270055445, "ending_time": 1616270056850, "color":c1(4)}]},
+{"label": "kallisto_quant (1-D10-E5_S52_L002_R1_001)", "times": [{"starting_time": 1616270022760, "ending_time": 1616270026774, "color":c1(4)}, {"starting_time": 1616270026774, "ending_time": 1616270042439, "color":c2(4), "label": "19.4s \/ 1.7 GB"}]},
+{"label": "kallisto_quant (1-A04-A4_S10_L002_R1_001)", "times": [{"starting_time": 1616270022900, "ending_time": 1616270026776, "color":c1(4)}, {"starting_time": 1616270026776, "ending_time": 1616270042839, "color":c2(4), "label": "19.3s \/ 1.7 GB"}]},
+{"label": "kallisto_quant (1-D06-D10_S48_L002_R1_001)", "times": [{"starting_time": 1616270022973, "ending_time": 1616270026777, "color":c1(4)}, {"starting_time": 1616270026777, "ending_time": 1616270042224, "color":c2(4), "label": "19.2s \/ 1.8 GB"}]},
+{"label": "kallisto_quant (1-E11-F9_S65_L002_R1_001)", "times": [{"starting_time": 1616270023060, "ending_time": 1616270026779, "color":c1(4)}, {"starting_time": 1616270026779, "ending_time": 1616270042884, "color":c2(4), "label": "19.2s \/ 1.7 GB"}]},
+{"label": "kallisto_quant (1-B05-A18_S23_L002_R1_001)", "times": [{"starting_time": 1616270023159, "ending_time": 1616270026781, "color":c1(4)}, {"starting_time": 1616270026781, "ending_time": 1616270040954, "color":c2(4), "label": "19.1s \/ 1.7 GB"}, {"starting_time": 1616270040954, "ending_time": 1616270042228, "color":c1(4)}]},
+{"label": "kallisto_quant (1-E01-E9_S55_L002_R1_001)", "times": [{"starting_time": 1616270023258, "ending_time": 1616270026782, "color":c1(4)}, {"starting_time": 1616270026782, "ending_time": 1616270041897, "color":c2(4), "label": "19s \/ 1.7 GB"}, {"starting_time": 1616270041897, "ending_time": 1616270042241, "color":c1(4)}]},
+{"label": "kallisto_quant (1-A01-A1_S7_L002_R1_001)", "times": [{"starting_time": 1616270023359, "ending_time": 1616270026784, "color":c1(4)}, {"starting_time": 1616270026784, "ending_time": 1616270044381, "color":c2(4), "label": "18.9s \/ 1.8 GB"}]},
+{"label": "kallisto_quant (1-E06-F4_S60_L002_R1_001)", "times": [{"starting_time": 1616270023458, "ending_time": 1616270026785, "color":c1(4)}, {"starting_time": 1616270026785, "ending_time": 1616270041362, "color":c2(4), "label": "18.8s \/ 1.7 GB"}, {"starting_time": 1616270041362, "ending_time": 1616270042275, "color":c1(4)}]},
+{"label": "kallisto_quant (1-A10-A10_S16_L002_R1_001)", "times": [{"starting_time": 1616270023559, "ending_time": 1616270026787, "color":c1(4)}, {"starting_time": 1616270026787, "ending_time": 1616270043268, "color":c2(4), "label": "18.7s \/ 1.7 GB"}]},
+{"label": "kallisto_quant (1-A03-A3_S9_L002_R1_001)", "times": [{"starting_time": 1616270023659, "ending_time": 1616270026788, "color":c1(4)}, {"starting_time": 1616270026788, "ending_time": 1616270041797, "color":c2(4), "label": "18.6s \/ 1.7 GB"}, {"starting_time": 1616270041797, "ending_time": 1616270042307, "color":c1(4)}]},
+{"label": "kallisto_quant (1-C09-C8_S39_L002_R1_001)", "times": [{"starting_time": 1616270023797, "ending_time": 1616270026790, "color":c1(4)}, {"starting_time": 1616270026790, "ending_time": 1616270059011, "color":c2(4), "label": "38s \/ 1.7 GB"}, {"starting_time": 1616270059011, "ending_time": 1616270061800, "color":c1(4)}]},
+{"label": "kallisto_quant (1-A06-A6_S12_L002_R1_001)", "times": [{"starting_time": 1616270023858, "ending_time": 1616270026792, "color":c1(4)}, {"starting_time": 1616270026792, "ending_time": 1616270042109, "color":c2(4), "label": "18.5s \/ 1.7 GB"}, {"starting_time": 1616270042109, "ending_time": 1616270042325, "color":c1(4)}]},
+{"label": "kallisto_quant (1-D03-D7_S45_L002_R1_001)", "times": [{"starting_time": 1616270023957, "ending_time": 1616270026793, "color":c1(4)}, {"starting_time": 1616270026793, "ending_time": 1616270041915, "color":c2(4), "label": "18.4s \/ 1.8 GB"}, {"starting_time": 1616270041915, "ending_time": 1616270042345, "color":c1(4)}]},
+{"label": "kallisto_quant (1-B07-B2_S25_L002_R1_001)", "times": [{"starting_time": 1616270024060, "ending_time": 1616270026795, "color":c1(4)}, {"starting_time": 1616270026795, "ending_time": 1616270073438, "color":c2(4), "label": "52.8s \/ 1.7 GB"}, {"starting_time": 1616270073438, "ending_time": 1616270076817, "color":c1(4)}]},
+{"label": "kallisto_quant (1-B10-B5_S28_L002_R1_001)", "times": [{"starting_time": 1616270024158, "ending_time": 1616270026796, "color":c1(4)}, {"starting_time": 1616270026796, "ending_time": 1616270042712, "color":c2(4), "label": "18.2s \/ 1.8 GB"}]},
+{"label": "kallisto_quant (1-B11-B6_S29_L002_R1_001)", "times": [{"starting_time": 1616270024261, "ending_time": 1616270026798, "color":c1(4)}, {"starting_time": 1616270026798, "ending_time": 1616270039633, "color":c2(4), "label": "18.2s \/ 1.8 GB"}, {"starting_time": 1616270039633, "ending_time": 1616270042415, "color":c1(4)}]},
+{"label": "kallisto_quant (1-D12-E8_S54_L002_R1_001)", "times": [{"starting_time": 1616270024359, "ending_time": 1616270026800, "color":c1(4)}, {"starting_time": 1616270026800, "ending_time": 1616270043146, "color":c2(4), "label": "22.5s \/ 1.8 GB"}, {"starting_time": 1616270043146, "ending_time": 1616270046849, "color":c1(4)}]},
+{"label": "kallisto_quant (1-A05-A5_S11_L002_R1_001)", "times": [{"starting_time": 1616270024459, "ending_time": 1616270026801, "color":c1(4)}, {"starting_time": 1616270026801, "ending_time": 1616270040821, "color":c2(4), "label": "18s \/ 1.8 GB"}, {"starting_time": 1616270040821, "ending_time": 1616270042431, "color":c1(4)}]},
+{"label": "kallisto_quant (1-C07-C6_S37_L002_R1_001)", "times": [{"starting_time": 1616270024558, "ending_time": 1616270026803, "color":c1(4)}, {"starting_time": 1616270026803, "ending_time": 1616270065202, "color":c2(4), "label": "42.2s \/ 1.8 GB"}, {"starting_time": 1616270065202, "ending_time": 1616270066785, "color":c1(4)}]},
+{"label": "kallisto_quant (1-E09-F7_S63_L002_R1_001)", "times": [{"starting_time": 1616270024659, "ending_time": 1616270026804, "color":c1(4)}, {"starting_time": 1616270026804, "ending_time": 1616270041790, "color":c2(4), "label": "17.8s \/ 1.8 GB"}, {"starting_time": 1616270041790, "ending_time": 1616270042446, "color":c1(4)}]},
+{"label": "kallisto_quant (1-D01-D5_S43_L002_R1_001)", "times": [{"starting_time": 1616270024759, "ending_time": 1616270026806, "color":c1(4)}, {"starting_time": 1616270026806, "ending_time": 1616270043044, "color":c2(4), "label": "22.1s \/ 1.7 GB"}, {"starting_time": 1616270043044, "ending_time": 1616270046866, "color":c1(4)}]},
+{"label": "kallisto_quant (1-A07-A7_S13_L002_R1_001)", "times": [{"starting_time": 1616270024859, "ending_time": 1616270026807, "color":c1(4)}, {"starting_time": 1616270026807, "ending_time": 1616270043246, "color":c2(4), "label": "22.1s \/ 1.8 GB"}, {"starting_time": 1616270043246, "ending_time": 1616270046949, "color":c1(4)}]},
+{"label": "kallisto_quant (1-C06-C4_S36_L002_R1_001)", "times": [{"starting_time": 1616270024959, "ending_time": 1616270026809, "color":c1(4)}, {"starting_time": 1616270026809, "ending_time": 1616270042146, "color":c2(4), "label": "17.5s \/ 1.7 GB"}, {"starting_time": 1616270042146, "ending_time": 1616270042483, "color":c1(4)}]},
+{"label": "kallisto_quant (1-E07-F5_S61_L002_R1_001)", "times": [{"starting_time": 1616270025075, "ending_time": 1616270026811, "color":c1(4)}, {"starting_time": 1616270026811, "ending_time": 1616270038035, "color":c2(4), "label": "17.4s \/ 1.7 GB"}, {"starting_time": 1616270038035, "ending_time": 1616270042499, "color":c1(4)}]},
+{"label": "kallisto_quant (1-B09-B4_S27_L002_R1_001)", "times": [{"starting_time": 1616270025160, "ending_time": 1616270026813, "color":c1(4)}, {"starting_time": 1616270026813, "ending_time": 1616270041409, "color":c2(4), "label": "17.4s \/ 1.8 GB"}, {"starting_time": 1616270041409, "ending_time": 1616270042516, "color":c1(4)}]},
+{"label": "kallisto_quant (1-B04-A17_S22_L002_R1_001)", "times": [{"starting_time": 1616270025259, "ending_time": 1616270026815, "color":c1(4)}, {"starting_time": 1616270026815, "ending_time": 1616270040766, "color":c2(4), "label": "17.3s \/ 1.8 GB"}, {"starting_time": 1616270040766, "ending_time": 1616270042529, "color":c1(4)}]},
+{"label": "kallisto_quant (1-D02-D6_S44_L002_R1_001)", "times": [{"starting_time": 1616270025372, "ending_time": 1616270026816, "color":c1(4)}, {"starting_time": 1616270026816, "ending_time": 1616270040831, "color":c2(4), "label": "17.2s \/ 1.8 GB"}, {"starting_time": 1616270040831, "ending_time": 1616270042547, "color":c1(4)}]},
+{"label": "kallisto_quant (1-C02-B10_S32_L002_R1_001)", "times": [{"starting_time": 1616270025457, "ending_time": 1616270026818, "color":c1(4)}, {"starting_time": 1616270026818, "ending_time": 1616270041535, "color":c2(4), "label": "17.1s \/ 1.8 GB"}, {"starting_time": 1616270041535, "ending_time": 1616270042562, "color":c1(4)}]},
+{"label": "kallisto_quant (1-B01-A13_S19_L002_R1_001)", "times": [{"starting_time": 1616270031858, "ending_time": 1616270036765, "color":c1(4)}, {"starting_time": 1616270036765, "ending_time": 1616270050091, "color":c2(4), "label": "15.1s \/ 1.8 GB"}]},
+{"label": "kallisto_quant (1-C10-C9_S40_L002_R1_001)", "times": [{"starting_time": 1616270041795, "ending_time": 1616270046996, "color":c1(4)}, {"starting_time": 1616270046996, "ending_time": 1616270058075, "color":c2(4), "label": "15.1s \/ 1.8 GB"}]},
+{"label": "kallisto_quant (1-B03-A16_S21_L002_R1_001)", "times": [{"starting_time": 1616270041870, "ending_time": 1616270046997, "color":c1(4)}, {"starting_time": 1616270046997, "ending_time": 1616270075002, "color":c2(4), "label": "29.9s \/ 1.8 GB"}]},
+{"label": "kallisto_quant (1-C05-C3_S35_L002_R1_001)", "times": [{"starting_time": 1616270041957, "ending_time": 1616270046999, "color":c1(4)}, {"starting_time": 1616270046999, "ending_time": 1616270056520, "color":c2(4), "label": "14.9s \/ 1.7 GB"}, {"starting_time": 1616270056520, "ending_time": 1616270056884, "color":c1(4)}]},
+{"label": "kallisto_quant (1-B02-A14_S20_L002_R1_001)", "times": [{"starting_time": 1616270042057, "ending_time": 1616270047000, "color":c1(4)}, {"starting_time": 1616270047000, "ending_time": 1616270056073, "color":c2(4), "label": "9.8s \/ 1.8 GB"}]},
+{"label": "kallisto_quant (1-E05-F3_S59_L002_R1_001)", "times": [{"starting_time": 1616270042173, "ending_time": 1616270047002, "color":c1(4)}, {"starting_time": 1616270047002, "ending_time": 1616270054941, "color":c2(4), "label": "9.8s \/ 1.8 GB"}]},
+{"label": "kallisto_quant (1-D08-E1_S50_L002_R1_001)", "times": [{"starting_time": 1616270042263, "ending_time": 1616270047003, "color":c1(4)}, {"starting_time": 1616270047003, "ending_time": 1616270057099, "color":c2(4), "label": "14.6s \/ 1.8 GB"}]},
+{"label": "kallisto_quant (1-C12-D2_S42_L002_R1_001)", "times": [{"starting_time": 1616270042351, "ending_time": 1616270047005, "color":c1(4)}, {"starting_time": 1616270047005, "ending_time": 1616270056863, "color":c2(4), "label": "14.6s \/ 1.8 GB"}, {"starting_time": 1616270056863, "ending_time": 1616270056950, "color":c1(4)}]},
+{"label": "multiqc", "times": [{"starting_time": 1616270042474, "ending_time": 1616270047007, "color":c1(5)}, {"starting_time": 1616270047007, "ending_time": 1616270088760, "color":c2(5), "label": "44.4s \/ 124 MB"}]},
+{"label": "kallisto_quant (1-B06-A19_S24_L002_R1_001)", "times": [{"starting_time": 1616270042557, "ending_time": 1616270047008, "color":c1(4)}, {"starting_time": 1616270047008, "ending_time": 1616270057992, "color":c2(4), "label": "14.4s \/ 1.8 GB"}]},
+{"label": "kallisto_quant (1-D09-E2_S51_L002_R1_001)", "times": [{"starting_time": 1616270042657, "ending_time": 1616270047010, "color":c1(4)}, {"starting_time": 1616270047010, "ending_time": 1616270057095, "color":c2(4), "label": "14.3s \/ 1.8 GB"}]},
+{"label": "kallisto_quant (1-C03-C1_S33_L002_R1_001)", "times": [{"starting_time": 1616270042759, "ending_time": 1616270047012, "color":c1(4)}, {"starting_time": 1616270047012, "ending_time": 1616270056421, "color":c2(4), "label": "14.3s \/ 1.8 GB"}, {"starting_time": 1616270056421, "ending_time": 1616270057014, "color":c1(4)}]},
+{"label": "kallisto_quant (1-A09-A9_S15_L002_R1_001)", "times": [{"starting_time": 1616270042858, "ending_time": 1616270047013, "color":c1(4)}, {"starting_time": 1616270047013, "ending_time": 1616270058619, "color":c2(4), "label": "14.2s \/ 1.8 GB"}]},
+{"label": "kallisto_quant (1-B12-B7_S30_L002_R1_001)", "times": [{"starting_time": 1616270042959, "ending_time": 1616270047015, "color":c1(4)}, {"starting_time": 1616270047015, "ending_time": 1616270059635, "color":c2(4), "label": "14.1s \/ 1.8 GB"}]},
+{"label": "gsnap_quant (1-A04-A4_S10_L002_R1_001)", "times": [{"starting_time": 1616270086904, "ending_time": 1616270091796, "color":c1(6)}, {"starting_time": 1616270091796, "ending_time": 1616270233519, "color":c2(6), "label": "2m 25s \/ 5.6 GB"}]},
+{"label": "gsnap_quant (1-C04-C2_S34_L002_R1_001)", "times": [{"starting_time": 1616270086934, "ending_time": 1616270091798, "color":c1(6)}, {"starting_time": 1616270091798, "ending_time": 1616270141814, "color":c2(6), "label": "54.9s \/ 4.4 GB"}, {"starting_time": 1616270141814, "ending_time": 1616270141866, "color":c1(6)}]},
+{"label": "gsnap_quant (1-A02-A2_S8_L002_R1_001)", "times": [{"starting_time": 1616270086964, "ending_time": 1616270091800, "color":c1(6)}, {"starting_time": 1616270091800, "ending_time": 1616270170558, "color":c2(6), "label": "1m 20s \/ 4.7 GB"}]},
+{"label": "gsnap_quant (1-D11-E7_S53_L002_R1_001)", "times": [{"starting_time": 1616270086994, "ending_time": 1616270091802, "color":c1(6)}, {"starting_time": 1616270091802, "ending_time": 1616270155263, "color":c2(6), "label": "1m 5s \/ 4.2 GB"}]},
+{"label": "gsnap_quant (1-C08-C7_S38_L002_R1_001)", "times": [{"starting_time": 1616270087024, "ending_time": 1616270091803, "color":c1(6)}, {"starting_time": 1616270091803, "ending_time": 1616270172103, "color":c2(6), "label": "1m 25s \/ 4.7 GB"}]},
+{"label": "gsnap_quant (1-A12-A12_S18_L002_R1_001)", "times": [{"starting_time": 1616270087054, "ending_time": 1616270091805, "color":c1(6)}, {"starting_time": 1616270091805, "ending_time": 1616270466195, "color":c2(6), "label": "6m 20s \/ 5.4 GB"}, {"starting_time": 1616270466195, "ending_time": 1616270466972, "color":c1(6)}]},
+{"label": "gsnap_quant (1-E12-F10_S66_L002_R1_001)", "times": [{"starting_time": 1616270087083, "ending_time": 1616270091806, "color":c1(6)}, {"starting_time": 1616270091806, "ending_time": 1616270230631, "color":c2(6), "label": "2m 20s \/ 5.4 GB"}]},
+{"label": "gsnap_quant (1-D05-D9_S47_L002_R1_001)", "times": [{"starting_time": 1616270087112, "ending_time": 1616270091807, "color":c1(6)}, {"starting_time": 1616270091807, "ending_time": 1616270177375, "color":c2(6), "label": "1m 30s \/ 4.8 GB"}]},
+{"label": "gsnap_quant (1-E03-F1_S57_L002_R1_001)", "times": [{"starting_time": 1616270087147, "ending_time": 1616270091809, "color":c1(6)}, {"starting_time": 1616270091809, "ending_time": 1616270178233, "color":c2(6), "label": "1m 30s \/ 5.8 GB"}]},
+{"label": "gsnap_quant (1-B08-B3_S26_L002_R1_001)", "times": [{"starting_time": 1616270087176, "ending_time": 1616270091810, "color":c1(6)}, {"starting_time": 1616270091810, "ending_time": 1616270184708, "color":c2(6), "label": "1m 35s \/ 5 GB"}]},
+{"label": "gsnap_quant (1-E08-F6_S62_L002_R1_001)", "times": [{"starting_time": 1616270087205, "ending_time": 1616270091812, "color":c1(6)}, {"starting_time": 1616270091812, "ending_time": 1616270177331, "color":c2(6), "label": "1m 30s \/ 5.3 GB"}]},
+{"label": "gsnap_quant (1-C01-B8_S31_L002_R1_001)", "times": [{"starting_time": 1616270087233, "ending_time": 1616270091813, "color":c1(6)}, {"starting_time": 1616270091813, "ending_time": 1616270220561, "color":c2(6), "label": "2m 10s \/ 5.3 GB"}]},
+{"label": "gsnap_quant (1-D04-D8_S46_L002_R1_001)", "times": [{"starting_time": 1616270087263, "ending_time": 1616270091815, "color":c1(6)}, {"starting_time": 1616270091815, "ending_time": 1616270176560, "color":c2(6), "label": "1m 30s \/ 4.5 GB"}, {"starting_time": 1616270176560, "ending_time": 1616270176971, "color":c1(6)}]},
+{"label": "gsnap_quant (1-A11-A11_S17_L002_R1_001)", "times": [{"starting_time": 1616270087292, "ending_time": 1616270091816, "color":c1(6)}, {"starting_time": 1616270091816, "ending_time": 1616270279250, "color":c2(6), "label": "3m 10s \/ 5.9 GB"}]},
+{"label": "gsnap_quant (1-D07-D11_S49_L002_R1_001)", "times": [{"starting_time": 1616270087321, "ending_time": 1616270091817, "color":c1(6)}, {"starting_time": 1616270091817, "ending_time": 1616270214376, "color":c2(6), "label": "2m 5s \/ 6.5 GB"}]},
+{"label": "gsnap_quant (1-E10-F8_S64_L002_R1_001)", "times": [{"starting_time": 1616270087417, "ending_time": 1616270091819, "color":c1(6)}, {"starting_time": 1616270091819, "ending_time": 1616270206385, "color":c2(6), "label": "1m 59s \/ 4.8 GB"}, {"starting_time": 1616270206385, "ending_time": 1616270206872, "color":c1(6)}]},
+{"label": "gsnap_quant (1-E04-F2_S58_L002_R1_001)", "times": [{"starting_time": 1616270087488, "ending_time": 1616270091820, "color":c1(6)}, {"starting_time": 1616270091820, "ending_time": 1616270446359, "color":c2(6), "label": "6m \/ 7.1 GB"}, {"starting_time": 1616270446359, "ending_time": 1616270447009, "color":c1(6)}]},
+{"label": "gsnap_quant (1-C11-D1_S41_L002_R1_001)", "times": [{"starting_time": 1616270087587, "ending_time": 1616270091822, "color":c1(6)}, {"starting_time": 1616270091822, "ending_time": 1616270277579, "color":c2(6), "label": "3m 9s \/ 5.7 GB"}]},
+{"label": "gsnap_quant (1-E02-E10_S56_L002_R1_001)", "times": [{"starting_time": 1616270087688, "ending_time": 1616270091823, "color":c1(6)}, {"starting_time": 1616270091823, "ending_time": 1616270201263, "color":c2(6), "label": "1m 54s \/ 5.6 GB"}, {"starting_time": 1616270201263, "ending_time": 1616270201900, "color":c1(6)}]},
+{"label": "gsnap_quant (1-D06-D10_S48_L002_R1_001)", "times": [{"starting_time": 1616270087786, "ending_time": 1616270091824, "color":c1(6)}, {"starting_time": 1616270091824, "ending_time": 1616270235235, "color":c2(6), "label": "2m 29s \/ 5.2 GB"}, {"starting_time": 1616270235235, "ending_time": 1616270236886, "color":c1(6)}]},
+{"label": "gsnap_quant (1-E06-F4_S60_L002_R1_001)", "times": [{"starting_time": 1616270087887, "ending_time": 1616270091826, "color":c1(6)}, {"starting_time": 1616270091826, "ending_time": 1616270159367, "color":c2(6), "label": "1m 14s \/ 4.6 GB"}, {"starting_time": 1616270159367, "ending_time": 1616270161832, "color":c1(6)}]},
+{"label": "gsnap_quant (1-D10-E5_S52_L002_R1_001)", "times": [{"starting_time": 1616270087988, "ending_time": 1616270091827, "color":c1(6)}, {"starting_time": 1616270091827, "ending_time": 1616270356656, "color":c2(6), "label": "4m 29s \/ 5.2 GB"}, {"starting_time": 1616270356656, "ending_time": 1616270356938, "color":c1(6)}]},
+{"label": "gsnap_quant (1-B05-A18_S23_L002_R1_001)", "times": [{"starting_time": 1616270088088, "ending_time": 1616270091829, "color":c1(6)}, {"starting_time": 1616270091829, "ending_time": 1616270146595, "color":c2(6), "label": "58.7s \/ 4.4 GB"}, {"starting_time": 1616270146595, "ending_time": 1616270146833, "color":c1(6)}]},
+{"label": "gsnap_quant (1-D03-D7_S45_L002_R1_001)", "times": [{"starting_time": 1616270088188, "ending_time": 1616270091830, "color":c1(6)}, {"starting_time": 1616270091830, "ending_time": 1616270197651, "color":c2(6), "label": "1m 49s \/ 5.3 GB"}]},
+{"label": "gsnap_quant (1-C09-C8_S39_L002_R1_001)", "times": [{"starting_time": 1616270088288, "ending_time": 1616270091832, "color":c1(6)}, {"starting_time": 1616270091832, "ending_time": 1616270226631, "color":c2(6), "label": "2m 19s \/ 5.6 GB"}, {"starting_time": 1616270226631, "ending_time": 1616270226926, "color":c1(6)}]},
+{"label": "gsnap_quant (1-C07-C6_S37_L002_R1_001)", "times": [{"starting_time": 1616270088388, "ending_time": 1616270091834, "color":c1(6)}, {"starting_time": 1616270091834, "ending_time": 1616270172675, "color":c2(6), "label": "1m 23s \/ 4.8 GB"}]},
+{"label": "gsnap_quant (1-A10-A10_S16_L002_R1_001)", "times": [{"starting_time": 1616270088488, "ending_time": 1616270091835, "color":c1(6)}, {"starting_time": 1616270091835, "ending_time": 1616270181696, "color":c2(6), "label": "1m 33s \/ 5.4 GB"}, {"starting_time": 1616270181696, "ending_time": 1616270181880, "color":c1(6)}]},
+{"label": "gsnap_quant (1-A01-A1_S7_L002_R1_001)", "times": [{"starting_time": 1616270088587, "ending_time": 1616270091837, "color":c1(6)}, {"starting_time": 1616270091837, "ending_time": 1616270201995, "color":c2(6), "label": "1m 53s \/ 5.7 GB"}]},
+{"label": "gsnap_quant (1-B11-B6_S29_L002_R1_001)", "times": [{"starting_time": 1616270088687, "ending_time": 1616270091838, "color":c1(6)}, {"starting_time": 1616270091838, "ending_time": 1616270220613, "color":c2(6), "label": "2m 13s \/ 3.1 GB"}, {"starting_time": 1616270220613, "ending_time": 1616270221869, "color":c1(6)}]},
+{"label": "gsnap_quant (1-B10-B5_S28_L002_R1_001)", "times": [{"starting_time": 1616270088788, "ending_time": 1616270091840, "color":c1(6)}, {"starting_time": 1616270091840, "ending_time": 1616270182897, "color":c2(6), "label": "1m 38s \/ 5.2 GB"}, {"starting_time": 1616270182897, "ending_time": 1616270186889, "color":c1(6)}]},
+{"label": "gsnap_quant (1-E11-F9_S65_L002_R1_001)", "times": [{"starting_time": 1616270088887, "ending_time": 1616270091841, "color":c1(6)}, {"starting_time": 1616270091841, "ending_time": 1616270261735, "color":c2(6), "label": "2m 53s \/ 5.4 GB"}, {"starting_time": 1616270261735, "ending_time": 1616270261888, "color":c1(6)}]},
+{"label": "gsnap_quant (1-E01-E9_S55_L002_R1_001)", "times": [{"starting_time": 1616270088987, "ending_time": 1616270091842, "color":c1(6)}, {"starting_time": 1616270091842, "ending_time": 1616270151126, "color":c2(6), "label": "1m 3s \/ 4.3 GB"}, {"starting_time": 1616270151126, "ending_time": 1616270151937, "color":c1(6)}]},
+{"label": "gsnap_quant (1-D01-D5_S43_L002_R1_001)", "times": [{"starting_time": 1616270089087, "ending_time": 1616270091844, "color":c1(6)}, {"starting_time": 1616270091844, "ending_time": 1616270198939, "color":c2(6), "label": "1m 53s \/ 5.2 GB"}, {"starting_time": 1616270198939, "ending_time": 1616270202013, "color":c1(6)}]},
+{"label": "gsnap_quant (1-A06-A6_S12_L002_R1_001)", "times": [{"starting_time": 1616270089188, "ending_time": 1616270091845, "color":c1(6)}, {"starting_time": 1616270091845, "ending_time": 1616270174509, "color":c2(6), "label": "1m 28s \/ 4.6 GB"}, {"starting_time": 1616270174509, "ending_time": 1616270177018, "color":c1(6)}]},
+{"label": "gsnap_quant (1-E09-F7_S63_L002_R1_001)", "times": [{"starting_time": 1616270089287, "ending_time": 1616270091847, "color":c1(6)}, {"starting_time": 1616270091847, "ending_time": 1616270312644, "color":c2(6), "label": "3m 43s \/ 5.9 GB"}]},
+{"label": "gsnap_quant (1-D12-E8_S54_L002_R1_001)", "times": [{"starting_time": 1616270089390, "ending_time": 1616270091848, "color":c1(6)}, {"starting_time": 1616270091848, "ending_time": 1616270243050, "color":c2(6), "label": "2m 37s \/ 6 GB"}, {"starting_time": 1616270243050, "ending_time": 1616270246861, "color":c1(6)}]},
+{"label": "gsnap_quant (1-A03-A3_S9_L002_R1_001)", "times": [{"starting_time": 1616270089487, "ending_time": 1616270091850, "color":c1(6)}, {"starting_time": 1616270091850, "ending_time": 1616270149972, "color":c2(6), "label": "1m 2s \/ 4.5 GB"}, {"starting_time": 1616270149972, "ending_time": 1616270151962, "color":c1(6)}]},
+{"label": "gsnap_quant (1-A08-A8_S14_L002_R1_001)", "times": [{"starting_time": 1616270089588, "ending_time": 1616270091851, "color":c1(6)}, {"starting_time": 1616270091851, "ending_time": 1616270191232, "color":c2(6), "label": "1m 42s \/ 4.9 GB"}, {"starting_time": 1616270191232, "ending_time": 1616270191836, "color":c1(6)}]},
+{"label": "gsnap_quant (1-B04-A17_S22_L002_R1_001)", "times": [{"starting_time": 1616270089689, "ending_time": 1616270091853, "color":c1(6)}, {"starting_time": 1616270091853, "ending_time": 1616270251290, "color":c2(6), "label": "2m 42s \/ 4.9 GB"}, {"starting_time": 1616270251290, "ending_time": 1616270251850, "color":c1(6)}]},
+{"label": "gsnap_quant (1-A07-A7_S13_L002_R1_001)", "times": [{"starting_time": 1616270089788, "ending_time": 1616270091854, "color":c1(6)}, {"starting_time": 1616270091854, "ending_time": 1616270285741, "color":c2(6), "label": "3m 17s \/ 5.7 GB"}, {"starting_time": 1616270285741, "ending_time": 1616270286882, "color":c1(6)}]},
+{"label": "gsnap_quant (1-B07-B2_S25_L002_R1_001)", "times": [{"starting_time": 1616270089887, "ending_time": 1616270091855, "color":c1(6)}, {"starting_time": 1616270091855, "ending_time": 1616270302345, "color":c2(6), "label": "3m 32s \/ 6 GB"}]},
+{"label": "gsnap_quant (1-C06-C4_S36_L002_R1_001)", "times": [{"starting_time": 1616270089988, "ending_time": 1616270091857, "color":c1(6)}, {"starting_time": 1616270091857, "ending_time": 1616270168107, "color":c2(6), "label": "1m 22s \/ 4.7 GB"}, {"starting_time": 1616270168107, "ending_time": 1616270171922, "color":c1(6)}]},
+{"label": "gsnap_quant (1-E07-F5_S61_L002_R1_001)", "times": [{"starting_time": 1616270090089, "ending_time": 1616270091858, "color":c1(6)}, {"starting_time": 1616270091858, "ending_time": 1616270113992, "color":c2(6), "label": "26.7s \/ 1.9 GB"}, {"starting_time": 1616270113992, "ending_time": 1616270116829, "color":c1(6)}]},
+{"label": "gsnap_quant (1-A05-A5_S11_L002_R1_001)", "times": [{"starting_time": 1616270090191, "ending_time": 1616270091860, "color":c1(6)}, {"starting_time": 1616270091860, "ending_time": 1616270179340, "color":c2(6), "label": "1m 32s \/ 4.9 GB"}, {"starting_time": 1616270179340, "ending_time": 1616270181926, "color":c1(6)}]},
+{"label": "gsnap_quant (1-D02-D6_S44_L002_R1_001)", "times": [{"starting_time": 1616270090288, "ending_time": 1616270091861, "color":c1(6)}, {"starting_time": 1616270091861, "ending_time": 1616270156268, "color":c2(6), "label": "1m 7s \/ 5.7 GB"}, {"starting_time": 1616270156268, "ending_time": 1616270156858, "color":c1(6)}]},
+{"label": "gsnap_quant (1-B06-A19_S24_L002_R1_001)", "times": [{"starting_time": 1616270090387, "ending_time": 1616270091863, "color":c1(6)}, {"starting_time": 1616270091863, "ending_time": 1616270363181, "color":c2(6), "label": "4m 37s \/ 5 GB"}, {"starting_time": 1616270363181, "ending_time": 1616270366911, "color":c1(6)}]},
+{"label": "gsnap_quant (1-B12-B7_S30_L002_R1_001)", "times": [{"starting_time": 1616270090545, "ending_time": 1616270096801, "color":c1(6)}, {"starting_time": 1616270096801, "ending_time": 1616270267030, "color":c2(6), "label": "2m 56s \/ 5.8 GB"}]},
+{"label": "gsnap_quant (1-C10-C9_S40_L002_R1_001)", "times": [{"starting_time": 1616270090587, "ending_time": 1616270096802, "color":c1(6)}, {"starting_time": 1616270096802, "ending_time": 1616270499230, "color":c2(6), "label": "6m 46s \/ 5.7 GB"}]},
+{"label": "gsnap_quant (1-B01-A13_S19_L002_R1_001)", "times": [{"starting_time": 1616270090686, "ending_time": 1616270096804, "color":c1(6)}, {"starting_time": 1616270096804, "ending_time": 1616270302856, "color":c2(6), "label": "3m 31s \/ 6.1 GB"}]},
+{"label": "gsnap_quant (1-B09-B4_S27_L002_R1_001)", "times": [{"starting_time": 1616270116860, "ending_time": 1616270121809, "color":c1(6)}, {"starting_time": 1616270121809, "ending_time": 1616270184180, "color":c2(6), "label": "1m 5s \/ 4.5 GB"}]},
+{"label": "featureCounts_mRNA (1-E07-F5_S61_L002_R1_001)", "times": [{"starting_time": 1616270141988, "ending_time": 1616270146856, "color":c1(7)}, {"starting_time": 1616270146856, "ending_time": 1616270147967, "color":c2(7), "label": "4.9s \/ 1.5 MB"}]},
+{"label": "featureCounts_geneMult (1-C04-C2_S34_L002_R1_001)", "times": [{"starting_time": 1616270146896, "ending_time": 1616270152007, "color":c1(8)}, {"starting_time": 1616270152007, "ending_time": 1616270153141, "color":c2(8), "label": "5.1s \/ 1.5 MB"}]},
+{"label": "gsnap_quant (1-C02-B10_S32_L002_R1_001)", "times": [{"starting_time": 1616270146987, "ending_time": 1616270152061, "color":c1(6)}, {"starting_time": 1616270152061, "ending_time": 1616270313047, "color":c2(6), "label": "2m 45s \/ 5.1 GB"}]},
+{"label": "gsnap_quant (1-D09-E2_S51_L002_R1_001)", "times": [{"starting_time": 1616270151919, "ending_time": 1616270156885, "color":c1(6)}, {"starting_time": 1616270156885, "ending_time": 1616270227339, "color":c2(6), "label": "1m 15s \/ 4.9 GB"}]},
+{"label": "gsnap_quant (1-C03-C1_S33_L002_R1_001)", "times": [{"starting_time": 1616270151988, "ending_time": 1616270156886, "color":c1(6)}, {"starting_time": 1616270156886, "ending_time": 1616270227367, "color":c2(6), "label": "1m 15s \/ 5.1 GB"}]},
+{"label": "gsnap_quant (1-E05-F3_S59_L002_R1_001)", "times": [{"starting_time": 1616270152087, "ending_time": 1616270156887, "color":c1(6)}, {"starting_time": 1616270156887, "ending_time": 1616270204219, "color":c2(6), "label": "50s \/ 4.1 GB"}]},
+{"label": "gsnap_quant (1-B02-A14_S20_L002_R1_001)", "times": [{"starting_time": 1616270152200, "ending_time": 1616270156889, "color":c1(6)}, {"starting_time": 1616270156889, "ending_time": 1616270227137, "color":c2(6), "label": "1m 15s \/ 5 GB"}]},
+{"label": "gsnap_quant (1-D08-E1_S50_L002_R1_001)", "times": [{"starting_time": 1616270156892, "ending_time": 1616270161858, "color":c1(6)}, {"starting_time": 1616270161858, "ending_time": 1616270283352, "color":c2(6), "label": "2m 5s \/ 4.8 GB"}]},
+{"label": "gsnap_quant (1-B03-A16_S21_L002_R1_001)", "times": [{"starting_time": 1616270161864, "ending_time": 1616270166869, "color":c1(6)}, {"starting_time": 1616270166869, "ending_time": 1616270491794, "color":c2(6), "label": "5m 30s \/ 7.8 GB"}, {"starting_time": 1616270491794, "ending_time": 1616270491962, "color":c1(6)}]},
+{"label": "gsnap_quant (1-A09-A9_S15_L002_R1_001)", "times": [{"starting_time": 1616270166865, "ending_time": 1616270171940, "color":c1(6)}, {"starting_time": 1616270171940, "ending_time": 1616270286698, "color":c2(6), "label": "2m \/ 6.4 GB"}, {"starting_time": 1616270286698, "ending_time": 1616270286965, "color":c1(6)}]},
+{"label": "gsnap_quant (1-C05-C3_S35_L002_R1_001)", "times": [{"starting_time": 1616270171874, "ending_time": 1616270177061, "color":c1(6)}, {"starting_time": 1616270177061, "ending_time": 1616270237554, "color":c2(6), "label": "1m 5s \/ 5.1 GB"}]},
+{"label": "gsnap_quant (1-C12-D2_S42_L002_R1_001)", "times": [{"starting_time": 1616270171904, "ending_time": 1616270177063, "color":c1(6)}, {"starting_time": 1616270177063, "ending_time": 1616270380882, "color":c2(6), "label": "3m 30s \/ 5.2 GB"}, {"starting_time": 1616270380882, "ending_time": 1616270381943, "color":c1(6)}]},
+{"label": "featureCounts_gene (1-E07-F5_S61_L002_R1_001.bam)", "times": [{"starting_time": 1616270171988, "ending_time": 1616270177064, "color":c1(9)}, {"starting_time": 1616270177064, "ending_time": 1616270177970, "color":c2(9), "label": "5.1s \/ 1.5 MB"}]},
+{"label": "featureCounts_gene (1-D02-D6_S44_L002_R1_001.bam)", "times": [{"starting_time": 1616270176890, "ending_time": 1616270181991, "color":c1(9)}, {"starting_time": 1616270181991, "ending_time": 1616270183214, "color":c2(9), "label": "5.1s \/ 293.3 MB"}]},
+{"label": "featureCounts_geneMult (1-D02-D6_S44_L002_R1_001)", "times": [{"starting_time": 1616270176988, "ending_time": 1616270182010, "color":c1(8)}, {"starting_time": 1616270182010, "ending_time": 1616270183214, "color":c2(8), "label": "5s \/ 1.5 MB"}]},
+{"label": "featureCounts_mRNA (1-D02-D6_S44_L002_R1_001)", "times": [{"starting_time": 1616270177087, "ending_time": 1616270182028, "color":c1(7)}, {"starting_time": 1616270182028, "ending_time": 1616270183279, "color":c2(7), "label": "4.9s \/ 286.2 MB"}]},
+{"label": "featureCounts_geneMult (1-E06-F4_S60_L002_R1_001)", "times": [{"starting_time": 1616270177189, "ending_time": 1616270182049, "color":c1(8)}, {"starting_time": 1616270182049, "ending_time": 1616270183200, "color":c2(8), "label": "4.9s \/ 13 MB"}]},
+{"label": "featureCounts_mRNA (1-E06-F4_S60_L002_R1_001)", "times": [{"starting_time": 1616270177286, "ending_time": 1616270182074, "color":c1(7)}, {"starting_time": 1616270182074, "ending_time": 1616270183321, "color":c2(7), "label": "4.8s \/ 276.9 MB"}]},
+{"label": "featureCounts_gene (1-E06-F4_S60_L002_R1_001.bam)", "times": [{"starting_time": 1616270177387, "ending_time": 1616270182092, "color":c1(9)}, {"starting_time": 1616270182092, "ending_time": 1616270183101, "color":c2(9), "label": "4.7s \/ 1.5 MB"}]},
+{"label": "featureCounts_geneMult (1-A02-A2_S8_L002_R1_001)", "times": [{"starting_time": 1616270181891, "ending_time": 1616270186938, "color":c1(8)}, {"starting_time": 1616270186938, "ending_time": 1616270188139, "color":c2(8), "label": "5.1s \/ 13 MB"}]},
+{"label": "featureCounts_mRNA (1-C08-C7_S38_L002_R1_001)", "times": [{"starting_time": 1616270181988, "ending_time": 1616270186990, "color":c1(7)}, {"starting_time": 1616270186990, "ending_time": 1616270188422, "color":c2(7), "label": "5.1s \/ 315.6 MB"}]},
+{"label": "featureCounts_geneMult (1-C08-C7_S38_L002_R1_001)", "times": [{"starting_time": 1616270182089, "ending_time": 1616270187083, "color":c1(8)}, {"starting_time": 1616270187083, "ending_time": 1616270188374, "color":c2(8), "label": "5s \/ 336.3 MB"}]},
+{"label": "featureCounts_gene (1-C08-C7_S38_L002_R1_001.bam)", "times": [{"starting_time": 1616270182199, "ending_time": 1616270187119, "color":c1(9)}, {"starting_time": 1616270187119, "ending_time": 1616270188466, "color":c2(9), "label": "4.9s \/ 337.6 MB"}]},
+{"label": "featureCounts_geneMult (1-C07-C6_S37_L002_R1_001)", "times": [{"starting_time": 1616270182286, "ending_time": 1616270187142, "color":c1(8)}, {"starting_time": 1616270187142, "ending_time": 1616270188450, "color":c2(8), "label": "4.9s \/ 304 MB"}]},
+{"label": "featureCounts_mRNA (1-C07-C6_S37_L002_R1_001)", "times": [{"starting_time": 1616270182387, "ending_time": 1616270187162, "color":c1(7)}, {"starting_time": 1616270187162, "ending_time": 1616270188506, "color":c2(7), "label": "4.8s \/ 294.1 MB"}]},
+{"label": "featureCounts_gene (1-C07-C6_S37_L002_R1_001.bam)", "times": [{"starting_time": 1616270182487, "ending_time": 1616270187175, "color":c1(9)}, {"starting_time": 1616270187175, "ending_time": 1616270188422, "color":c2(9), "label": "4.7s \/ 13 MB"}]},
+{"label": "featureCounts_mRNA (1-C06-C4_S36_L002_R1_001)", "times": [{"starting_time": 1616270182588, "ending_time": 1616270187201, "color":c1(7)}, {"starting_time": 1616270187201, "ending_time": 1616270188564, "color":c2(7), "label": "4.6s \/ 339.4 MB"}]},
+{"label": "featureCounts_geneMult (1-C06-C4_S36_L002_R1_001)", "times": [{"starting_time": 1616270182687, "ending_time": 1616270187222, "color":c1(8)}, {"starting_time": 1616270187222, "ending_time": 1616270188553, "color":c2(8), "label": "4.5s \/ 322.1 MB"}]},
+{"label": "featureCounts_gene (1-C06-C4_S36_L002_R1_001.bam)", "times": [{"starting_time": 1616270182787, "ending_time": 1616270187245, "color":c1(9)}, {"starting_time": 1616270187245, "ending_time": 1616270188491, "color":c2(9), "label": "4.5s \/ 13 MB"}]},
+{"label": "featureCounts_geneMult (1-A03-A3_S9_L002_R1_001)", "times": [{"starting_time": 1616270186989, "ending_time": 1616270191866, "color":c1(8)}, {"starting_time": 1616270191866, "ending_time": 1616270193086, "color":c2(8), "label": "4.9s \/ 297.4 MB"}]},
+{"label": "featureCounts_gene (1-A02-A2_S8_L002_R1_001.bam)", "times": [{"starting_time": 1616270187088, "ending_time": 1616270191888, "color":c1(9)}, {"starting_time": 1616270191888, "ending_time": 1616270193067, "color":c2(9), "label": "4.8s \/ 1.5 MB"}]},
+{"label": "featureCounts_mRNA (1-A02-A2_S8_L002_R1_001)", "times": [{"starting_time": 1616270187187, "ending_time": 1616270191918, "color":c1(7)}, {"starting_time": 1616270191918, "ending_time": 1616270193211, "color":c2(7), "label": "4.7s \/ 284.8 MB"}]},
+{"label": "featureCounts_mRNA (1-D05-D9_S47_L002_R1_001)", "times": [{"starting_time": 1616270187286, "ending_time": 1616270191952, "color":c1(7)}, {"starting_time": 1616270191952, "ending_time": 1616270193219, "color":c2(7), "label": "4.7s \/ 309.9 MB"}]},
+{"label": "featureCounts_gene (1-D05-D9_S47_L002_R1_001.bam)", "times": [{"starting_time": 1616270187389, "ending_time": 1616270191991, "color":c1(9)}, {"starting_time": 1616270191991, "ending_time": 1616270193176, "color":c2(9), "label": "4.6s \/ 1.5 MB"}]},
+{"label": "featureCounts_geneMult (1-D05-D9_S47_L002_R1_001)", "times": [{"starting_time": 1616270187488, "ending_time": 1616270192049, "color":c1(8)}, {"starting_time": 1616270192049, "ending_time": 1616270193271, "color":c2(8), "label": "4.6s \/ 294.9 MB"}]},
+{"label": "featureCounts_gene (1-E03-F1_S57_L002_R1_001.bam)", "times": [{"starting_time": 1616270187589, "ending_time": 1616270192070, "color":c1(9)}, {"starting_time": 1616270192070, "ending_time": 1616270193370, "color":c2(9), "label": "4.5s \/ 333.8 MB"}]},
+{"label": "featureCounts_geneMult (1-E03-F1_S57_L002_R1_001)", "times": [{"starting_time": 1616270187687, "ending_time": 1616270192096, "color":c1(8)}, {"starting_time": 1616270192096, "ending_time": 1616270193382, "color":c2(8), "label": "4.4s \/ 322.5 MB"}]},
+{"label": "featureCounts_mRNA (1-E03-F1_S57_L002_R1_001)", "times": [{"starting_time": 1616270187787, "ending_time": 1616270192123, "color":c1(7)}, {"starting_time": 1616270192123, "ending_time": 1616270193495, "color":c2(7), "label": "4.3s \/ 325.3 MB"}]},
+{"label": "featureCounts_mRNA (1-E08-F6_S62_L002_R1_001)", "times": [{"starting_time": 1616270187888, "ending_time": 1616270192142, "color":c1(7)}, {"starting_time": 1616270192142, "ending_time": 1616270193498, "color":c2(7), "label": "4.3s \/ 338.2 MB"}]},
+{"label": "featureCounts_gene (1-E08-F6_S62_L002_R1_001.bam)", "times": [{"starting_time": 1616270187987, "ending_time": 1616270192165, "color":c1(9)}, {"starting_time": 1616270192165, "ending_time": 1616270193453, "color":c2(9), "label": "4.2s \/ 342.4 MB"}]},
+{"label": "featureCounts_mRNA (1-D04-D8_S46_L002_R1_001)", "times": [{"starting_time": 1616270191889, "ending_time": 1616270196887, "color":c1(7)}, {"starting_time": 1616270196887, "ending_time": 1616270198269, "color":c2(7), "label": "5s \/ 246.2 MB"}]},
+{"label": "featureCounts_geneMult (1-D04-D8_S46_L002_R1_001)", "times": [{"starting_time": 1616270191989, "ending_time": 1616270196913, "color":c1(8)}, {"starting_time": 1616270196913, "ending_time": 1616270198221, "color":c2(8), "label": "4.9s \/ 239.2 MB"}]},
+{"label": "featureCounts_gene (1-A06-A6_S12_L002_R1_001.bam)", "times": [{"starting_time": 1616270192087, "ending_time": 1616270196949, "color":c1(9)}, {"starting_time": 1616270196949, "ending_time": 1616270198215, "color":c2(9), "label": "4.9s \/ 320.5 MB"}]},
+{"label": "featureCounts_mRNA (1-A06-A6_S12_L002_R1_001)", "times": [{"starting_time": 1616270192186, "ending_time": 1616270197000, "color":c1(7)}, {"starting_time": 1616270197000, "ending_time": 1616270198379, "color":c2(7), "label": "4.8s \/ 333.6 MB"}]},
+{"label": "featureCounts_geneMult (1-A06-A6_S12_L002_R1_001)", "times": [{"starting_time": 1616270192287, "ending_time": 1616270197051, "color":c1(8)}, {"starting_time": 1616270197051, "ending_time": 1616270198325, "color":c2(8), "label": "4.8s \/ 338.5 MB"}]},
+{"label": "featureCounts_mRNA (1-B08-B3_S26_L002_R1_001)", "times": [{"starting_time": 1616270192387, "ending_time": 1616270197072, "color":c1(7)}, {"starting_time": 1616270197072, "ending_time": 1616270198699, "color":c2(7), "label": "4.7s \/ 341.3 MB"}]},
+{"label": "featureCounts_gene (1-B08-B3_S26_L002_R1_001.bam)", "times": [{"starting_time": 1616270192487, "ending_time": 1616270197106, "color":c1(9)}, {"starting_time": 1616270197106, "ending_time": 1616270198644, "color":c2(9), "label": "4.6s \/ 311.2 MB"}]},
+{"label": "featureCounts_geneMult (1-B08-B3_S26_L002_R1_001)", "times": [{"starting_time": 1616270192587, "ending_time": 1616270197131, "color":c1(8)}, {"starting_time": 1616270197131, "ending_time": 1616270198700, "color":c2(8), "label": "4.5s \/ 316 MB"}]},
+{"label": "featureCounts_geneMult (1-A10-A10_S16_L002_R1_001)", "times": [{"starting_time": 1616270192688, "ending_time": 1616270197155, "color":c1(8)}, {"starting_time": 1616270197155, "ending_time": 1616270198614, "color":c2(8), "label": "4.5s \/ 324.7 MB"}]},
+{"label": "featureCounts_gene (1-A10-A10_S16_L002_R1_001.bam)", "times": [{"starting_time": 1616270192786, "ending_time": 1616270197175, "color":c1(9)}, {"starting_time": 1616270197175, "ending_time": 1616270198681, "color":c2(9), "label": "4.4s \/ 318.2 MB"}]},
+{"label": "featureCounts_mRNA (1-A10-A10_S16_L002_R1_001)", "times": [{"starting_time": 1616270192888, "ending_time": 1616270197196, "color":c1(7)}, {"starting_time": 1616270197196, "ending_time": 1616270198780, "color":c2(7), "label": "4.3s \/ 342.7 MB"}]},
+{"label": "featureCounts_geneMult (1-A05-A5_S11_L002_R1_001)", "times": [{"starting_time": 1616270192987, "ending_time": 1616270197224, "color":c1(8)}, {"starting_time": 1616270197224, "ending_time": 1616270198451, "color":c2(8), "label": "4.2s \/ 272.3 MB"}]},
+{"label": "featureCounts_geneMult (1-E07-F5_S61_L002_R1_001)", "times": [{"starting_time": 1616270196891, "ending_time": 1616270202053, "color":c1(8)}, {"starting_time": 1616270202053, "ending_time": 1616270202912, "color":c2(8), "label": "5.2s \/ 13 MB"}]},
+{"label": "featureCounts_mRNA (1-C04-C2_S34_L002_R1_001)", "times": [{"starting_time": 1616270196988, "ending_time": 1616270202072, "color":c1(7)}, {"starting_time": 1616270202072, "ending_time": 1616270203251, "color":c2(7), "label": "5.1s \/ 13 MB"}]},
+{"label": "featureCounts_gene (1-C04-C2_S34_L002_R1_001.bam)", "times": [{"starting_time": 1616270197088, "ending_time": 1616270202094, "color":c1(9)}, {"starting_time": 1616270202094, "ending_time": 1616270203201, "color":c2(9), "label": "5s \/ 1.5 MB"}]},
+{"label": "featureCounts_geneMult (1-B05-A18_S23_L002_R1_001)", "times": [{"starting_time": 1616270197186, "ending_time": 1616270202148, "color":c1(8)}, {"starting_time": 1616270202148, "ending_time": 1616270203273, "color":c2(8), "label": "5s \/ 13 MB"}]},
+{"label": "featureCounts_gene (1-B05-A18_S23_L002_R1_001.bam)", "times": [{"starting_time": 1616270197286, "ending_time": 1616270202168, "color":c1(9)}, {"starting_time": 1616270202168, "ending_time": 1616270203289, "color":c2(9), "label": "4.9s \/ 1.5 MB"}]},
+{"label": "featureCounts_mRNA (1-B05-A18_S23_L002_R1_001)", "times": [{"starting_time": 1616270197387, "ending_time": 1616270202209, "color":c1(7)}, {"starting_time": 1616270202209, "ending_time": 1616270203405, "color":c2(7), "label": "4.8s \/ 13 MB"}]},
+{"label": "featureCounts_gene (1-D11-E7_S53_L002_R1_001.bam)", "times": [{"starting_time": 1616270197487, "ending_time": 1616270202230, "color":c1(9)}, {"starting_time": 1616270202230, "ending_time": 1616270203355, "color":c2(9), "label": "4.7s \/ 1.5 MB"}]},
+{"label": "featureCounts_geneMult (1-D11-E7_S53_L002_R1_001)", "times": [{"starting_time": 1616270197588, "ending_time": 1616270202249, "color":c1(8)}, {"starting_time": 1616270202249, "ending_time": 1616270203360, "color":c2(8), "label": "4.7s \/ 13 MB"}]},
+{"label": "featureCounts_mRNA (1-D11-E7_S53_L002_R1_001)", "times": [{"starting_time": 1616270197747, "ending_time": 1616270202270, "color":c1(7)}, {"starting_time": 1616270202270, "ending_time": 1616270203454, "color":c2(7), "label": "4.5s \/ 13 MB"}]},
+{"label": "featureCounts_gene (1-E01-E9_S55_L002_R1_001.bam)", "times": [{"starting_time": 1616270197787, "ending_time": 1616270202301, "color":c1(9)}, {"starting_time": 1616270202301, "ending_time": 1616270212547, "color":c2(9), "label": "14.1s \/ 232.5 MB"}]},
+{"label": "featureCounts_mRNA (1-E01-E9_S55_L002_R1_001)", "times": [{"starting_time": 1616270197899, "ending_time": 1616270202303, "color":c1(7)}, {"starting_time": 1616270202303, "ending_time": 1616270212540, "color":c2(7), "label": "14s \/ 241.6 MB"}]},
+{"label": "featureCounts_geneMult (1-E01-E9_S55_L002_R1_001)", "times": [{"starting_time": 1616270197987, "ending_time": 1616270202304, "color":c1(8)}, {"starting_time": 1616270202304, "ending_time": 1616270212519, "color":c2(8), "label": "13.9s \/ 254.2 MB"}]},
+{"label": "featureCounts_gene (1-A03-A3_S9_L002_R1_001.bam)", "times": [{"starting_time": 1616270198086, "ending_time": 1616270202305, "color":c1(9)}, {"starting_time": 1616270202305, "ending_time": 1616270203504, "color":c2(9), "label": "4.2s \/ 1.5 MB"}]},
+{"label": "featureCounts_mRNA (1-A03-A3_S9_L002_R1_001)", "times": [{"starting_time": 1616270201932, "ending_time": 1616270206894, "color":c1(7)}, {"starting_time": 1616270206894, "ending_time": 1616270208031, "color":c2(7), "label": "5s \/ 13.5 MB"}]},
+{"label": "featureCounts_geneMult (1-B09-B4_S27_L002_R1_001)", "times": [{"starting_time": 1616270202090, "ending_time": 1616270206919, "color":c1(8)}, {"starting_time": 1616270206919, "ending_time": 1616270208229, "color":c2(8), "label": "4.9s \/ 300.9 MB"}]},
+{"label": "featureCounts_gene (1-B09-B4_S27_L002_R1_001.bam)", "times": [{"starting_time": 1616270202185, "ending_time": 1616270206977, "color":c1(9)}, {"starting_time": 1616270206977, "ending_time": 1616270208372, "color":c2(9), "label": "4.8s \/ 324.2 MB"}]},
+{"label": "featureCounts_mRNA (1-B09-B4_S27_L002_R1_001)", "times": [{"starting_time": 1616270202283, "ending_time": 1616270207011, "color":c1(7)}, {"starting_time": 1616270207011, "ending_time": 1616270208425, "color":c2(7), "label": "4.7s \/ 305.7 MB"}]},
+{"label": "featureCounts_gene (1-B10-B5_S28_L002_R1_001.bam)", "times": [{"starting_time": 1616270202386, "ending_time": 1616270207029, "color":c1(9)}, {"starting_time": 1616270207029, "ending_time": 1616270208441, "color":c2(9), "label": "4.6s \/ 321.5 MB"}]},
+{"label": "featureCounts_mRNA (1-B10-B5_S28_L002_R1_001)", "times": [{"starting_time": 1616270202485, "ending_time": 1616270207048, "color":c1(7)}, {"starting_time": 1616270207048, "ending_time": 1616270208564, "color":c2(7), "label": "4.6s \/ 318.4 MB"}]},
+{"label": "featureCounts_geneMult (1-B10-B5_S28_L002_R1_001)", "times": [{"starting_time": 1616270202587, "ending_time": 1616270207077, "color":c1(8)}, {"starting_time": 1616270207077, "ending_time": 1616270208448, "color":c2(8), "label": "4.5s \/ 313.9 MB"}]},
+{"label": "featureCounts_geneMult (1-A08-A8_S14_L002_R1_001)", "times": [{"starting_time": 1616270202687, "ending_time": 1616270207099, "color":c1(8)}, {"starting_time": 1616270207099, "ending_time": 1616270208575, "color":c2(8), "label": "4.4s \/ 320.7 MB"}]},
+{"label": "featureCounts_mRNA (1-A08-A8_S14_L002_R1_001)", "times": [{"starting_time": 1616270202786, "ending_time": 1616270207118, "color":c1(7)}, {"starting_time": 1616270207118, "ending_time": 1616270208641, "color":c2(7), "label": "4.3s \/ 342 MB"}]},
+{"label": "featureCounts_gene (1-A08-A8_S14_L002_R1_001.bam)", "times": [{"starting_time": 1616270202886, "ending_time": 1616270207137, "color":c1(9)}, {"starting_time": 1616270207137, "ending_time": 1616270208635, "color":c2(9), "label": "4.3s \/ 338.2 MB"}]},
+{"label": "featureCounts_geneMult (1-D03-D7_S45_L002_R1_001)", "times": [{"starting_time": 1616270202986, "ending_time": 1616270207154, "color":c1(8)}, {"starting_time": 1616270207154, "ending_time": 1616270208511, "color":c2(8), "label": "4.2s \/ 320.6 MB"}]},
+{"label": "featureCounts_mRNA (1-D03-D7_S45_L002_R1_001)", "times": [{"starting_time": 1616270203086, "ending_time": 1616270207173, "color":c1(7)}, {"starting_time": 1616270207173, "ending_time": 1616270208683, "color":c2(7), "label": "4.1s \/ 323.9 MB"}]},
+{"label": "featureCounts_gene (1-D03-D7_S45_L002_R1_001.bam)", "times": [{"starting_time": 1616270203186, "ending_time": 1616270207233, "color":c1(9)}, {"starting_time": 1616270207233, "ending_time": 1616270208601, "color":c2(9), "label": "4.1s \/ 337.1 MB"}]},
+{"label": "featureCounts_geneMult (1-E02-E10_S56_L002_R1_001)", "times": [{"starting_time": 1616270203286, "ending_time": 1616270207257, "color":c1(8)}, {"starting_time": 1616270207257, "ending_time": 1616270208573, "color":c2(8), "label": "4s \/ 318.3 MB"}]},
+{"label": "featureCounts_mRNA (1-D01-D5_S43_L002_R1_001)", "times": [{"starting_time": 1616270206988, "ending_time": 1616270211934, "color":c1(7)}, {"starting_time": 1616270211934, "ending_time": 1616270213391, "color":c2(7), "label": "5s \/ 326.5 MB"}]},
+{"label": "featureCounts_geneMult (1-D01-D5_S43_L002_R1_001)", "times": [{"starting_time": 1616270207085, "ending_time": 1616270211976, "color":c1(8)}, {"starting_time": 1616270211976, "ending_time": 1616270213422, "color":c2(8), "label": "4.9s \/ 338.2 MB"}]},
+{"label": "featureCounts_mRNA (1-E05-F3_S59_L002_R1_001)", "times": [{"starting_time": 1616270207187, "ending_time": 1616270211994, "color":c1(7)}, {"starting_time": 1616270211994, "ending_time": 1616270213238, "color":c2(7), "label": "4.8s \/ 238.8 MB"}]},
+{"label": "featureCounts_gene (1-E05-F3_S59_L002_R1_001.bam)", "times": [{"starting_time": 1616270207287, "ending_time": 1616270212058, "color":c1(9)}, {"starting_time": 1616270212058, "ending_time": 1616270213229, "color":c2(9), "label": "4.8s \/ 1.5 MB"}]},
+{"label": "featureCounts_geneMult (1-E05-F3_S59_L002_R1_001)", "times": [{"starting_time": 1616270207388, "ending_time": 1616270212080, "color":c1(8)}, {"starting_time": 1616270212080, "ending_time": 1616270213250, "color":c2(8), "label": "4.7s \/ 1.5 MB"}]},
+{"label": "featureCounts_geneMult (1-E10-F8_S64_L002_R1_001)", "times": [{"starting_time": 1616270207487, "ending_time": 1616270212098, "color":c1(8)}, {"starting_time": 1616270212098, "ending_time": 1616270213363, "color":c2(8), "label": "4.6s \/ 306.5 MB"}]},
+{"label": "featureCounts_gene (1-E10-F8_S64_L002_R1_001.bam)", "times": [{"starting_time": 1616270207587, "ending_time": 1616270212115, "color":c1(9)}, {"starting_time": 1616270212115, "ending_time": 1616270213412, "color":c2(9), "label": "4.5s \/ 320 MB"}]},
+{"label": "featureCounts_mRNA (1-E10-F8_S64_L002_R1_001)", "times": [{"starting_time": 1616270207686, "ending_time": 1616270212135, "color":c1(7)}, {"starting_time": 1616270212135, "ending_time": 1616270213466, "color":c2(7), "label": "4.5s \/ 324.5 MB"}]},
+{"label": "featureCounts_geneMult (1-E08-F6_S62_L002_R1_001)", "times": [{"starting_time": 1616270207788, "ending_time": 1616270212154, "color":c1(8)}, {"starting_time": 1616270212154, "ending_time": 1616270213402, "color":c2(8), "label": "4.4s \/ 320.6 MB"}]},
+{"label": "featureCounts_gene (1-D04-D8_S46_L002_R1_001.bam)", "times": [{"starting_time": 1616270207887, "ending_time": 1616270212177, "color":c1(9)}, {"starting_time": 1616270212177, "ending_time": 1616270213163, "color":c2(9), "label": "4.3s \/ 1.5 MB"}]},
+{"label": "featureCounts_gene (1-A05-A5_S11_L002_R1_001.bam)", "times": [{"starting_time": 1616270207986, "ending_time": 1616270212194, "color":c1(9)}, {"starting_time": 1616270212194, "ending_time": 1616270213364, "color":c2(9), "label": "4.3s \/ 13 MB"}]},
+{"label": "featureCounts_mRNA (1-A05-A5_S11_L002_R1_001)", "times": [{"starting_time": 1616270208087, "ending_time": 1616270212273, "color":c1(7)}, {"starting_time": 1616270212273, "ending_time": 1616270213540, "color":c2(7), "label": "4.2s \/ 293.5 MB"}]},
+{"label": "featureCounts_gene (1-E02-E10_S56_L002_R1_001.bam)", "times": [{"starting_time": 1616270208187, "ending_time": 1616270212296, "color":c1(9)}, {"starting_time": 1616270212296, "ending_time": 1616270213633, "color":c2(9), "label": "4.1s \/ 327.8 MB"}]},
+{"label": "featureCounts_mRNA (1-E02-E10_S56_L002_R1_001)", "times": [{"starting_time": 1616270208287, "ending_time": 1616270212322, "color":c1(7)}, {"starting_time": 1616270212322, "ending_time": 1616270213732, "color":c2(7), "label": "4s \/ 342.9 MB"}]},
+{"label": "featureCounts_gene (1-A01-A1_S7_L002_R1_001.bam)", "times": [{"starting_time": 1616270208388, "ending_time": 1616270212345, "color":c1(9)}, {"starting_time": 1616270212345, "ending_time": 1616270213702, "color":c2(9), "label": "4s \/ 329.8 MB"}]},
+{"label": "featureCounts_geneMult (1-A01-A1_S7_L002_R1_001)", "times": [{"starting_time": 1616270211877, "ending_time": 1616270216900, "color":c1(8)}, {"starting_time": 1616270216900, "ending_time": 1616270218291, "color":c2(8), "label": "5.1s \/ 329.4 MB"}]},
+{"label": "featureCounts_mRNA (1-A01-A1_S7_L002_R1_001)", "times": [{"starting_time": 1616270211975, "ending_time": 1616270216946, "color":c1(7)}, {"starting_time": 1616270216946, "ending_time": 1616270218387, "color":c2(7), "label": "5s \/ 318.1 MB"}]},
+{"label": "featureCounts_gene (1-D01-D5_S43_L002_R1_001.bam)", "times": [{"starting_time": 1616270212075, "ending_time": 1616270216965, "color":c1(9)}, {"starting_time": 1616270216965, "ending_time": 1616270218316, "color":c2(9), "label": "4.9s \/ 336 MB"}]},
+{"label": "featureCounts_geneMult (1-D07-D11_S49_L002_R1_001)", "times": [{"starting_time": 1616270212176, "ending_time": 1616270216999, "color":c1(8)}, {"starting_time": 1616270216999, "ending_time": 1616270218555, "color":c2(8), "label": "4.8s \/ 317.8 MB"}]},
+{"label": "featureCounts_gene (1-D07-D11_S49_L002_R1_001.bam)", "times": [{"starting_time": 1616270212276, "ending_time": 1616270217026, "color":c1(9)}, {"starting_time": 1616270217026, "ending_time": 1616270218511, "color":c2(9), "label": "4.8s \/ 331.7 MB"}]},
+{"label": "featureCounts_mRNA (1-D07-D11_S49_L002_R1_001)", "times": [{"starting_time": 1616270212376, "ending_time": 1616270217051, "color":c1(7)}, {"starting_time": 1616270217051, "ending_time": 1616270218645, "color":c2(7), "label": "4.7s \/ 344.2 MB"}]},
+{"label": "featureCounts_geneMult (1-C01-B8_S31_L002_R1_001)", "times": [{"starting_time": 1616270216923, "ending_time": 1616270221893, "color":c1(8)}, {"starting_time": 1616270221893, "ending_time": 1616270223215, "color":c2(8), "label": "5s \/ 330.6 MB"}]},
+{"label": "featureCounts_gene (1-C01-B8_S31_L002_R1_001.bam)", "times": [{"starting_time": 1616270216953, "ending_time": 1616270221913, "color":c1(9)}, {"starting_time": 1616270221913, "ending_time": 1616270223223, "color":c2(9), "label": "5s \/ 326.4 MB"}]},
+{"label": "featureCounts_mRNA (1-C01-B8_S31_L002_R1_001)", "times": [{"starting_time": 1616270216994, "ending_time": 1616270221954, "color":c1(7)}, {"starting_time": 1616270221954, "ending_time": 1616270223414, "color":c2(7), "label": "5s \/ 316 MB"}]},
+{"label": "featureCounts_mRNA (1-B11-B6_S29_L002_R1_001)", "times": [{"starting_time": 1616270221920, "ending_time": 1616270227042, "color":c1(7)}, {"starting_time": 1616270227042, "ending_time": 1616270228194, "color":c2(7), "label": "5.1s \/ 13 MB"}]},
+{"label": "featureCounts_gene (1-B11-B6_S29_L002_R1_001.bam)", "times": [{"starting_time": 1616270221950, "ending_time": 1616270227065, "color":c1(9)}, {"starting_time": 1616270227065, "ending_time": 1616270228206, "color":c2(9), "label": "5.1s \/ 1.5 MB"}]},
+{"label": "featureCounts_geneMult (1-B11-B6_S29_L002_R1_001)", "times": [{"starting_time": 1616270221978, "ending_time": 1616270227093, "color":c1(8)}, {"starting_time": 1616270227093, "ending_time": 1616270228218, "color":c2(8), "label": "5.1s \/ 1.5 MB"}]},
+{"label": "featureCounts_gene (1-E12-F10_S66_L002_R1_001.bam)", "times": [{"starting_time": 1616270226930, "ending_time": 1616270231924, "color":c1(9)}, {"starting_time": 1616270231924, "ending_time": 1616270233235, "color":c2(9), "label": "5s \/ 318.5 MB"}]},
+{"label": "featureCounts_mRNA (1-E12-F10_S66_L002_R1_001)", "times": [{"starting_time": 1616270226959, "ending_time": 1616270231969, "color":c1(7)}, {"starting_time": 1616270231969, "ending_time": 1616270233291, "color":c2(7), "label": "5s \/ 316.5 MB"}]},
+{"label": "featureCounts_geneMult (1-E12-F10_S66_L002_R1_001)", "times": [{"starting_time": 1616270226987, "ending_time": 1616270231988, "color":c1(8)}, {"starting_time": 1616270231988, "ending_time": 1616270233252, "color":c2(8), "label": "5s \/ 336.4 MB"}]},
+{"label": "featureCounts_mRNA (1-C09-C8_S39_L002_R1_001)", "times": [{"starting_time": 1616270227015, "ending_time": 1616270232017, "color":c1(7)}, {"starting_time": 1616270232017, "ending_time": 1616270233410, "color":c2(7), "label": "5s \/ 327.4 MB"}]},
+{"label": "featureCounts_gene (1-C09-C8_S39_L002_R1_001.bam)", "times": [{"starting_time": 1616270227044, "ending_time": 1616270232064, "color":c1(9)}, {"starting_time": 1616270232064, "ending_time": 1616270233408, "color":c2(9), "label": "5s \/ 327.9 MB"}]},
+{"label": "featureCounts_geneMult (1-C09-C8_S39_L002_R1_001)", "times": [{"starting_time": 1616270227074, "ending_time": 1616270232101, "color":c1(8)}, {"starting_time": 1616270232101, "ending_time": 1616270233445, "color":c2(8), "label": "5s \/ 339.3 MB"}]},
+{"label": "featureCounts_gene (1-D09-E2_S51_L002_R1_001.bam)", "times": [{"starting_time": 1616270227101, "ending_time": 1616270232118, "color":c1(9)}, {"starting_time": 1616270232118, "ending_time": 1616270233488, "color":c2(9), "label": "5s \/ 345.4 MB"}]},
+{"label": "featureCounts_mRNA (1-D09-E2_S51_L002_R1_001)", "times": [{"starting_time": 1616270227161, "ending_time": 1616270232158, "color":c1(7)}, {"starting_time": 1616270232158, "ending_time": 1616270233646, "color":c2(7), "label": "5s \/ 342.6 MB"}]},
+{"label": "featureCounts_geneMult (1-D09-E2_S51_L002_R1_001)", "times": [{"starting_time": 1616270227189, "ending_time": 1616270232182, "color":c1(8)}, {"starting_time": 1616270232182, "ending_time": 1616270233474, "color":c2(8), "label": "5s \/ 322.3 MB"}]},
+{"label": "featureCounts_mRNA (1-C03-C1_S33_L002_R1_001)", "times": [{"starting_time": 1616270227217, "ending_time": 1616270232203, "color":c1(7)}, {"starting_time": 1616270232203, "ending_time": 1616270233571, "color":c2(7), "label": "5s \/ 303.6 MB"}]},
+{"label": "featureCounts_geneMult (1-C03-C1_S33_L002_R1_001)", "times": [{"starting_time": 1616270227245, "ending_time": 1616270232224, "color":c1(8)}, {"starting_time": 1616270232224, "ending_time": 1616270233490, "color":c2(8), "label": "5s \/ 322.1 MB"}]},
+{"label": "featureCounts_gene (1-C03-C1_S33_L002_R1_001.bam)", "times": [{"starting_time": 1616270227273, "ending_time": 1616270232247, "color":c1(9)}, {"starting_time": 1616270232247, "ending_time": 1616270233581, "color":c2(9), "label": "5s \/ 305.5 MB"}]},
+{"label": "featureCounts_gene (1-B02-A14_S20_L002_R1_001.bam)", "times": [{"starting_time": 1616270227302, "ending_time": 1616270232270, "color":c1(9)}, {"starting_time": 1616270232270, "ending_time": 1616270233459, "color":c2(9), "label": "5s \/ 13 MB"}]},
+{"label": "featureCounts_mRNA (1-B02-A14_S20_L002_R1_001)", "times": [{"starting_time": 1616270227330, "ending_time": 1616270232292, "color":c1(7)}, {"starting_time": 1616270232292, "ending_time": 1616270233572, "color":c2(7), "label": "5s \/ 291.6 MB"}]},
+{"label": "featureCounts_geneMult (1-B02-A14_S20_L002_R1_001)", "times": [{"starting_time": 1616270227358, "ending_time": 1616270232317, "color":c1(8)}, {"starting_time": 1616270232317, "ending_time": 1616270233496, "color":c2(8), "label": "5s \/ 13 MB"}]},
+{"label": "featureCounts_geneMult (1-A04-A4_S10_L002_R1_001)", "times": [{"starting_time": 1616270231919, "ending_time": 1616270236998, "color":c1(8)}, {"starting_time": 1616270236998, "ending_time": 1616270238281, "color":c2(8), "label": "5.1s \/ 334.2 MB"}]},
+{"label": "featureCounts_mRNA (1-A04-A4_S10_L002_R1_001)", "times": [{"starting_time": 1616270231949, "ending_time": 1616270237025, "color":c1(7)}, {"starting_time": 1616270237025, "ending_time": 1616270238406, "color":c2(7), "label": "5.1s \/ 326.2 MB"}]},
+{"label": "featureCounts_gene (1-A04-A4_S10_L002_R1_001.bam)", "times": [{"starting_time": 1616270231978, "ending_time": 1616270237060, "color":c1(9)}, {"starting_time": 1616270237060, "ending_time": 1616270238425, "color":c2(9), "label": "5.1s \/ 320.9 MB"}]},
+{"label": "featureCounts_gene (1-D06-D10_S48_L002_R1_001.bam)", "times": [{"starting_time": 1616270236937, "ending_time": 1616270241837, "color":c1(9)}, {"starting_time": 1616270241837, "ending_time": 1616270243130, "color":c2(9), "label": "4.9s \/ 316.9 MB"}]},
+{"label": "featureCounts_geneMult (1-D06-D10_S48_L002_R1_001)", "times": [{"starting_time": 1616270236967, "ending_time": 1616270241903, "color":c1(8)}, {"starting_time": 1616270241903, "ending_time": 1616270243146, "color":c2(8), "label": "4.9s \/ 13 MB"}]},
+{"label": "featureCounts_mRNA (1-D06-D10_S48_L002_R1_001)", "times": [{"starting_time": 1616270236995, "ending_time": 1616270241933, "color":c1(7)}, {"starting_time": 1616270241933, "ending_time": 1616270243158, "color":c2(7), "label": "5s \/ 307.7 MB"}]},
+{"label": "featureCounts_geneMult (1-C05-C3_S35_L002_R1_001)", "times": [{"starting_time": 1616270237023, "ending_time": 1616270242008, "color":c1(8)}, {"starting_time": 1616270242008, "ending_time": 1616270243265, "color":c2(8), "label": "5s \/ 316 MB"}]},
+{"label": "featureCounts_mRNA (1-C05-C3_S35_L002_R1_001)", "times": [{"starting_time": 1616270237051, "ending_time": 1616270242057, "color":c1(7)}, {"starting_time": 1616270242057, "ending_time": 1616270243350, "color":c2(7), "label": "5s \/ 325.9 MB"}]},
+{"label": "featureCounts_gene (1-C05-C3_S35_L002_R1_001.bam)", "times": [{"starting_time": 1616270237079, "ending_time": 1616270242095, "color":c1(9)}, {"starting_time": 1616270242095, "ending_time": 1616270243316, "color":c2(9), "label": "5s \/ 321.9 MB"}]},
+{"label": "featureCounts_mRNA (1-D12-E8_S54_L002_R1_001)", "times": [{"starting_time": 1616270246915, "ending_time": 1616270251935, "color":c1(7)}, {"starting_time": 1616270251935, "ending_time": 1616270253381, "color":c2(7), "label": "5.1s \/ 326.4 MB"}]},
+{"label": "featureCounts_geneMult (1-D12-E8_S54_L002_R1_001)", "times": [{"starting_time": 1616270246946, "ending_time": 1616270252030, "color":c1(8)}, {"starting_time": 1616270252030, "ending_time": 1616270253405, "color":c2(8), "label": "5.1s \/ 343 MB"}]},
+{"label": "featureCounts_gene (1-D12-E8_S54_L002_R1_001.bam)", "times": [{"starting_time": 1616270246976, "ending_time": 1616270252065, "color":c1(9)}, {"starting_time": 1616270252065, "ending_time": 1616270253436, "color":c2(9), "label": "5.1s \/ 342.9 MB"}]},
+{"label": "featureCounts_mRNA (1-B04-A17_S22_L002_R1_001)", "times": [{"starting_time": 1616270251903, "ending_time": 1616270256845, "color":c1(7)}, {"starting_time": 1616270256845, "ending_time": 1616270258122, "color":c2(7), "label": "5s \/ 290.1 MB"}]},
+{"label": "featureCounts_geneMult (1-B04-A17_S22_L002_R1_001)", "times": [{"starting_time": 1616270251933, "ending_time": 1616270256936, "color":c1(8)}, {"starting_time": 1616270256936, "ending_time": 1616270258115, "color":c2(8), "label": "5s \/ 1.5 MB"}]},
+{"label": "featureCounts_gene (1-B04-A17_S22_L002_R1_001.bam)", "times": [{"starting_time": 1616270251962, "ending_time": 1616270256980, "color":c1(9)}, {"starting_time": 1616270256980, "ending_time": 1616270258123, "color":c2(9), "label": "5s \/ 1.5 MB"}]},
+{"label": "featureCounts_mRNA (1-E11-F9_S65_L002_R1_001)", "times": [{"starting_time": 1616270261932, "ending_time": 1616270266910, "color":c1(7)}, {"starting_time": 1616270266910, "ending_time": 1616270268294, "color":c2(7), "label": "5s \/ 319.4 MB"}]},
+{"label": "featureCounts_gene (1-E11-F9_S65_L002_R1_001.bam)", "times": [{"starting_time": 1616270261960, "ending_time": 1616270266954, "color":c1(9)}, {"starting_time": 1616270266954, "ending_time": 1616270268274, "color":c2(9), "label": "5s \/ 325.8 MB"}]},
+{"label": "featureCounts_geneMult (1-E11-F9_S65_L002_R1_001)", "times": [{"starting_time": 1616270261989, "ending_time": 1616270267021, "color":c1(8)}, {"starting_time": 1616270267021, "ending_time": 1616270268242, "color":c2(8), "label": "5s \/ 334.5 MB"}]},
+{"label": "featureCounts_mRNA (1-B12-B7_S30_L002_R1_001)", "times": [{"starting_time": 1616270266920, "ending_time": 1616270271850, "color":c1(7)}, {"starting_time": 1616270271850, "ending_time": 1616270273434, "color":c2(7), "label": "5s \/ 315.5 MB"}]},
+{"label": "featureCounts_geneMult (1-B12-B7_S30_L002_R1_001)", "times": [{"starting_time": 1616270266949, "ending_time": 1616270271932, "color":c1(8)}, {"starting_time": 1616270271932, "ending_time": 1616270273489, "color":c2(8), "label": "5s \/ 325.8 MB"}]},
+{"label": "featureCounts_gene (1-B12-B7_S30_L002_R1_001.bam)", "times": [{"starting_time": 1616270266977, "ending_time": 1616270271976, "color":c1(9)}, {"starting_time": 1616270271976, "ending_time": 1616270273493, "color":c2(9), "label": "5s \/ 325.5 MB"}]},
+{"label": "featureCounts_gene (1-A11-A11_S17_L002_R1_001.bam)", "times": [{"starting_time": 1616270276900, "ending_time": 1616270281898, "color":c1(9)}, {"starting_time": 1616270281898, "ending_time": 1616270283272, "color":c2(9), "label": "5s \/ 335.6 MB"}]},
+{"label": "featureCounts_mRNA (1-A11-A11_S17_L002_R1_001)", "times": [{"starting_time": 1616270276928, "ending_time": 1616270281946, "color":c1(7)}, {"starting_time": 1616270281946, "ending_time": 1616270283348, "color":c2(7), "label": "5s \/ 345.6 MB"}]},
+{"label": "featureCounts_geneMult (1-A11-A11_S17_L002_R1_001)", "times": [{"starting_time": 1616270276958, "ending_time": 1616270281970, "color":c1(8)}, {"starting_time": 1616270281970, "ending_time": 1616270283358, "color":c2(8), "label": "5s \/ 316.8 MB"}]},
+{"label": "featureCounts_geneMult (1-C11-D1_S41_L002_R1_001)", "times": [{"starting_time": 1616270276987, "ending_time": 1616270282002, "color":c1(8)}, {"starting_time": 1616270282002, "ending_time": 1616270283320, "color":c2(8), "label": "5s \/ 346 MB"}]},
+{"label": "featureCounts_mRNA (1-C11-D1_S41_L002_R1_001)", "times": [{"starting_time": 1616270277015, "ending_time": 1616270282032, "color":c1(7)}, {"starting_time": 1616270282032, "ending_time": 1616270283375, "color":c2(7), "label": "5s \/ 347.5 MB"}]},
+{"label": "featureCounts_gene (1-C11-D1_S41_L002_R1_001.bam)", "times": [{"starting_time": 1616270277046, "ending_time": 1616270282056, "color":c1(9)}, {"starting_time": 1616270282056, "ending_time": 1616270283378, "color":c2(9), "label": "5s \/ 343.7 MB"}]},
+{"label": "featureCounts_mRNA (1-D08-E1_S50_L002_R1_001)", "times": [{"starting_time": 1616270281909, "ending_time": 1616270287005, "color":c1(7)}, {"starting_time": 1616270287005, "ending_time": 1616270288410, "color":c2(7), "label": "5.1s \/ 317.4 MB"}]},
+{"label": "featureCounts_gene (1-D08-E1_S50_L002_R1_001.bam)", "times": [{"starting_time": 1616270281938, "ending_time": 1616270287079, "color":c1(9)}, {"starting_time": 1616270287079, "ending_time": 1616270288344, "color":c2(9), "label": "5.1s \/ 323.8 MB"}]},
+{"label": "featureCounts_geneMult (1-D08-E1_S50_L002_R1_001)", "times": [{"starting_time": 1616270281966, "ending_time": 1616270287101, "color":c1(8)}, {"starting_time": 1616270287101, "ending_time": 1616270288439, "color":c2(8), "label": "5.1s \/ 325.6 MB"}]},
+{"label": "featureCounts_mRNA (1-A07-A7_S13_L002_R1_001)", "times": [{"starting_time": 1616270286933, "ending_time": 1616270291850, "color":c1(7)}, {"starting_time": 1616270291850, "ending_time": 1616270293254, "color":c2(7), "label": "5s \/ 318.9 MB"}]},
+{"label": "featureCounts_geneMult (1-A07-A7_S13_L002_R1_001)", "times": [{"starting_time": 1616270286963, "ending_time": 1616270291950, "color":c1(8)}, {"starting_time": 1616270291950, "ending_time": 1616270293304, "color":c2(8), "label": "5s \/ 326.9 MB"}]},
+{"label": "featureCounts_gene (1-A07-A7_S13_L002_R1_001.bam)", "times": [{"starting_time": 1616270286993, "ending_time": 1616270292003, "color":c1(9)}, {"starting_time": 1616270292003, "ending_time": 1616270293382, "color":c2(9), "label": "5s \/ 338.9 MB"}]},
+{"label": "featureCounts_geneMult (1-A09-A9_S15_L002_R1_001)", "times": [{"starting_time": 1616270287022, "ending_time": 1616270292038, "color":c1(8)}, {"starting_time": 1616270292038, "ending_time": 1616270293432, "color":c2(8), "label": "5s \/ 321.6 MB"}]},
+{"label": "featureCounts_mRNA (1-A09-A9_S15_L002_R1_001)", "times": [{"starting_time": 1616270287050, "ending_time": 1616270292056, "color":c1(7)}, {"starting_time": 1616270292056, "ending_time": 1616270293518, "color":c2(7), "label": "5s \/ 339.1 MB"}]},
+{"label": "featureCounts_gene (1-A09-A9_S15_L002_R1_001.bam)", "times": [{"starting_time": 1616270287079, "ending_time": 1616270292104, "color":c1(9)}, {"starting_time": 1616270292104, "ending_time": 1616270293881, "color":c2(9), "label": "5s \/ 301.3 MB"}]},
+{"label": "featureCounts_gene (1-B07-B2_S25_L002_R1_001.bam)", "times": [{"starting_time": 1616270301925, "ending_time": 1616270306851, "color":c1(9)}, {"starting_time": 1616270306851, "ending_time": 1616270308391, "color":c2(9), "label": "5s \/ 317.9 MB"}]},
+{"label": "featureCounts_geneMult (1-B07-B2_S25_L002_R1_001)", "times": [{"starting_time": 1616270301955, "ending_time": 1616270306921, "color":c1(8)}, {"starting_time": 1616270306921, "ending_time": 1616270308474, "color":c2(8), "label": "5s \/ 335.1 MB"}]},
+{"label": "featureCounts_mRNA (1-B07-B2_S25_L002_R1_001)", "times": [{"starting_time": 1616270301983, "ending_time": 1616270306967, "color":c1(7)}, {"starting_time": 1616270306967, "ending_time": 1616270308501, "color":c2(7), "label": "5s \/ 335.5 MB"}]},
+{"label": "featureCounts_geneMult (1-B01-A13_S19_L002_R1_001)", "times": [{"starting_time": 1616270302012, "ending_time": 1616270306990, "color":c1(8)}, {"starting_time": 1616270306990, "ending_time": 1616270308446, "color":c2(8), "label": "5s \/ 326.9 MB"}]},
+{"label": "featureCounts_mRNA (1-B01-A13_S19_L002_R1_001)", "times": [{"starting_time": 1616270302041, "ending_time": 1616270307009, "color":c1(7)}, {"starting_time": 1616270307009, "ending_time": 1616270308587, "color":c2(7), "label": "5s \/ 337.3 MB"}]},
+{"label": "featureCounts_gene (1-B01-A13_S19_L002_R1_001.bam)", "times": [{"starting_time": 1616270302089, "ending_time": 1616270307030, "color":c1(9)}, {"starting_time": 1616270307030, "ending_time": 1616270308869, "color":c2(9), "label": "5s \/ 291.5 MB"}]},
+{"label": "featureCounts_geneMult (1-E09-F7_S63_L002_R1_001)", "times": [{"starting_time": 1616270311901, "ending_time": 1616270316851, "color":c1(8)}, {"starting_time": 1616270316851, "ending_time": 1616270318114, "color":c2(8), "label": "5s \/ 316.9 MB"}]},
+{"label": "featureCounts_gene (1-E09-F7_S63_L002_R1_001.bam)", "times": [{"starting_time": 1616270311931, "ending_time": 1616270316934, "color":c1(9)}, {"starting_time": 1616270316934, "ending_time": 1616270318159, "color":c2(9), "label": "5s \/ 13 MB"}]},
+{"label": "featureCounts_mRNA (1-E09-F7_S63_L002_R1_001)", "times": [{"starting_time": 1616270311958, "ending_time": 1616270316991, "color":c1(7)}, {"starting_time": 1616270316991, "ending_time": 1616270318281, "color":c2(7), "label": "5s \/ 329.3 MB"}]},
+{"label": "featureCounts_mRNA (1-C02-B10_S32_L002_R1_001)", "times": [{"starting_time": 1616270311988, "ending_time": 1616270317012, "color":c1(7)}, {"starting_time": 1616270317012, "ending_time": 1616270318345, "color":c2(7), "label": "5s \/ 303.8 MB"}]},
+{"label": "featureCounts_gene (1-C02-B10_S32_L002_R1_001.bam)", "times": [{"starting_time": 1616270312017, "ending_time": 1616270317034, "color":c1(9)}, {"starting_time": 1616270317034, "ending_time": 1616270318238, "color":c2(9), "label": "5s \/ 13 MB"}]},
+{"label": "featureCounts_geneMult (1-C02-B10_S32_L002_R1_001)", "times": [{"starting_time": 1616270312046, "ending_time": 1616270317057, "color":c1(8)}, {"starting_time": 1616270317057, "ending_time": 1616270318314, "color":c2(8), "label": "5s \/ 314 MB"}]},
+{"label": "featureCounts_geneMult (1-D10-E5_S52_L002_R1_001)", "times": [{"starting_time": 1616270356985, "ending_time": 1616270361899, "color":c1(8)}, {"starting_time": 1616270361899, "ending_time": 1616270363185, "color":c2(8), "label": "4.9s \/ 325.1 MB"}]},
+{"label": "featureCounts_gene (1-D10-E5_S52_L002_R1_001.bam)", "times": [{"starting_time": 1616270357013, "ending_time": 1616270361952, "color":c1(9)}, {"starting_time": 1616270361952, "ending_time": 1616270363165, "color":c2(9), "label": "5s \/ 1.5 MB"}]},
+{"label": "featureCounts_mRNA (1-D10-E5_S52_L002_R1_001)", "times": [{"starting_time": 1616270357041, "ending_time": 1616270361994, "color":c1(7)}, {"starting_time": 1616270361994, "ending_time": 1616270363245, "color":c2(7), "label": "5s \/ 333.5 MB"}]},
+{"label": "featureCounts_gene (1-B06-A19_S24_L002_R1_001.bam)", "times": [{"starting_time": 1616270366954, "ending_time": 1616270371898, "color":c1(9)}, {"starting_time": 1616270371898, "ending_time": 1616270373211, "color":c2(9), "label": "5s \/ 317.3 MB"}]},
+{"label": "featureCounts_geneMult (1-B06-A19_S24_L002_R1_001)", "times": [{"starting_time": 1616270366983, "ending_time": 1616270371954, "color":c1(8)}, {"starting_time": 1616270371954, "ending_time": 1616270373358, "color":c2(8), "label": "5.1s \/ 316.5 MB"}]},
+{"label": "featureCounts_mRNA (1-B06-A19_S24_L002_R1_001)", "times": [{"starting_time": 1616270367012, "ending_time": 1616270372054, "color":c1(7)}, {"starting_time": 1616270372054, "ending_time": 1616270373426, "color":c2(7), "label": "5s \/ 346.2 MB"}]},
+{"label": "featureCounts_geneMult (1-C12-D2_S42_L002_R1_001)", "times": [{"starting_time": 1616270381985, "ending_time": 1616270386905, "color":c1(8)}, {"starting_time": 1616270386905, "ending_time": 1616270388182, "color":c2(8), "label": "4.9s \/ 315 MB"}]},
+{"label": "featureCounts_mRNA (1-C12-D2_S42_L002_R1_001)", "times": [{"starting_time": 1616270382016, "ending_time": 1616270386985, "color":c1(7)}, {"starting_time": 1616270386985, "ending_time": 1616270388273, "color":c2(7), "label": "5s \/ 327.7 MB"}]},
+{"label": "featureCounts_gene (1-C12-D2_S42_L002_R1_001.bam)", "times": [{"starting_time": 1616270382044, "ending_time": 1616270387035, "color":c1(9)}, {"starting_time": 1616270387035, "ending_time": 1616270388297, "color":c2(9), "label": "5s \/ 331.6 MB"}]},
+{"label": "featureCounts_geneMult (1-E04-F2_S58_L002_R1_001)", "times": [{"starting_time": 1616270447056, "ending_time": 1616270451942, "color":c1(8)}, {"starting_time": 1616270451942, "ending_time": 1616270453640, "color":c2(8), "label": "5s \/ 332.9 MB"}]},
+{"label": "featureCounts_gene (1-E04-F2_S58_L002_R1_001.bam)", "times": [{"starting_time": 1616270447087, "ending_time": 1616270452070, "color":c1(9)}, {"starting_time": 1616270452070, "ending_time": 1616270453908, "color":c2(9), "label": "5s \/ 327.1 MB"}]},
+{"label": "featureCounts_mRNA (1-E04-F2_S58_L002_R1_001)", "times": [{"starting_time": 1616270447116, "ending_time": 1616270452132, "color":c1(7)}, {"starting_time": 1616270452132, "ending_time": 1616270454001, "color":c2(7), "label": "5.1s \/ 325.2 MB"}]},
+{"label": "featureCounts_gene (1-A12-A12_S18_L002_R1_001.bam)", "times": [{"starting_time": 1616270467018, "ending_time": 1616270471945, "color":c1(9)}, {"starting_time": 1616270471945, "ending_time": 1616270473408, "color":c2(9), "label": "4.9s \/ 328.4 MB"}]},
+{"label": "featureCounts_mRNA (1-A12-A12_S18_L002_R1_001)", "times": [{"starting_time": 1616270467083, "ending_time": 1616270471983, "color":c1(7)}, {"starting_time": 1616270471983, "ending_time": 1616270473392, "color":c2(7), "label": "5s \/ 328.5 MB"}]},
+{"label": "featureCounts_geneMult (1-A12-A12_S18_L002_R1_001)", "times": [{"starting_time": 1616270467114, "ending_time": 1616270472092, "color":c1(8)}, {"starting_time": 1616270472092, "ending_time": 1616270473520, "color":c2(8), "label": "5s \/ 321.1 MB"}]},
+{"label": "featureCounts_mRNA (1-B03-A16_S21_L002_R1_001)", "times": [{"starting_time": 1616270492008, "ending_time": 1616270496989, "color":c1(7)}, {"starting_time": 1616270496989, "ending_time": 1616270501531, "color":c2(7), "label": "10s \/ 338.8 MB"}, {"starting_time": 1616270501531, "ending_time": 1616270502053, "color":c1(7)}]},
+{"label": "featureCounts_geneMult (1-B03-A16_S21_L002_R1_001)", "times": [{"starting_time": 1616270492055, "ending_time": 1616270496990, "color":c1(8)}, {"starting_time": 1616270496990, "ending_time": 1616270501215, "color":c2(8), "label": "10s \/ 318.5 MB"}, {"starting_time": 1616270501215, "ending_time": 1616270502081, "color":c1(8)}]},
+{"label": "featureCounts_gene (1-B03-A16_S21_L002_R1_001.bam)", "times": [{"starting_time": 1616270492084, "ending_time": 1616270496992, "color":c1(9)}, {"starting_time": 1616270496992, "ending_time": 1616270501205, "color":c2(9), "label": "10s \/ 338.6 MB"}, {"starting_time": 1616270501205, "ending_time": 1616270502103, "color":c1(9)}]},
+{"label": "featureCounts_mRNA (1-C10-C9_S40_L002_R1_001)", "times": [{"starting_time": 1616270497015, "ending_time": 1616270502117, "color":c1(7)}, {"starting_time": 1616270502117, "ending_time": 1616270503595, "color":c2(7), "label": "5.1s \/ 334 MB"}]},
+{"label": "featureCounts_gene (1-C10-C9_S40_L002_R1_001.bam)", "times": [{"starting_time": 1616270497044, "ending_time": 1616270502142, "color":c1(9)}, {"starting_time": 1616270502142, "ending_time": 1616270503524, "color":c2(9), "label": "5.1s \/ 315.4 MB"}]},
+{"label": "featureCounts_geneMult (1-C10-C9_S40_L002_R1_001)", "times": [{"starting_time": 1616270497075, "ending_time": 1616270502197, "color":c1(8)}, {"starting_time": 1616270502197, "ending_time": 1616270503656, "color":c2(8), "label": "5.1s \/ 336.2 MB"}]},
+{"label": "salmon_quant (1-D04-D8_S46_L002_R1_001)", "times": [{"starting_time": 1616270502059, "ending_time": 1616270506954, "color":c1(10)}, {"starting_time": 1616270506954, "ending_time": 1616271049929, "color":c2(10), "label": "9m 5s \/ 1.8 GB"}]},
+{"label": "salmon_quant (1-E08-F6_S62_L002_R1_001)", "times": [{"starting_time": 1616270502098, "ending_time": 1616270506987, "color":c1(10)}, {"starting_time": 1616270506987, "ending_time": 1616271025857, "color":c2(10), "label": "8m 40s \/ 1.9 GB"}]},
+{"label": "salmon_quant (1-A04-A4_S10_L002_R1_001)", "times": [{"starting_time": 1616270502127, "ending_time": 1616270506989, "color":c1(10)}, {"starting_time": 1616270506989, "ending_time": 1616271051230, "color":c2(10), "label": "9m 5s \/ 1.9 GB"}]},
+{"label": "salmon_quant (1-E02-E10_S56_L002_R1_001)", "times": [{"starting_time": 1616270502155, "ending_time": 1616270506990, "color":c1(10)}, {"starting_time": 1616270506990, "ending_time": 1616271050867, "color":c2(10), "label": "9m 5s \/ 1.9 GB"}]},
+{"label": "salmon_quant (1-E03-F1_S57_L002_R1_001)", "times": [{"starting_time": 1616270502184, "ending_time": 1616270506992, "color":c1(10)}, {"starting_time": 1616270506992, "ending_time": 1616271026351, "color":c2(10), "label": "8m 40s \/ 1.9 GB"}]},
+{"label": "salmon_quant (1-A11-A11_S17_L002_R1_001)", "times": [{"starting_time": 1616270502214, "ending_time": 1616270506993, "color":c1(10)}, {"starting_time": 1616270506993, "ending_time": 1616271050376, "color":c2(10), "label": "9m 5s \/ 1.9 GB"}]},
+{"label": "salmon_quant (1-E10-F8_S64_L002_R1_001)", "times": [{"starting_time": 1616270502242, "ending_time": 1616270506995, "color":c1(10)}, {"starting_time": 1616270506995, "ending_time": 1616271049615, "color":c2(10), "label": "9m 5s \/ 1.9 GB"}]},
+{"label": "salmon_quant (1-C08-C7_S38_L002_R1_001)", "times": [{"starting_time": 1616270502270, "ending_time": 1616270506996, "color":c1(10)}, {"starting_time": 1616270506996, "ending_time": 1616271050637, "color":c2(10), "label": "9m 5s \/ 1.9 GB"}]},
+{"label": "salmon_quant (1-D11-E7_S53_L002_R1_001)", "times": [{"starting_time": 1616270502300, "ending_time": 1616270506998, "color":c1(10)}, {"starting_time": 1616270506998, "ending_time": 1616271049101, "color":c2(10), "label": "9m 5s \/ 1.3 GB"}]},
+{"label": "salmon_quant (1-C11-D1_S41_L002_R1_001)", "times": [{"starting_time": 1616270502328, "ending_time": 1616270506999, "color":c1(10)}, {"starting_time": 1616270506999, "ending_time": 1616271050869, "color":c2(10), "label": "9m 5s \/ 1.9 GB"}]},
+{"label": "salmon_quant (1-B08-B3_S26_L002_R1_001)", "times": [{"starting_time": 1616270502432, "ending_time": 1616270507000, "color":c1(10)}, {"starting_time": 1616270507000, "ending_time": 1616271050655, "color":c2(10), "label": "9m 10s \/ 1.9 GB"}, {"starting_time": 1616271050655, "ending_time": 1616271052304, "color":c1(10)}]},
+{"label": "salmon_quant (1-E11-F9_S65_L002_R1_001)", "times": [{"starting_time": 1616270502461, "ending_time": 1616270507002, "color":c1(10)}, {"starting_time": 1616270507002, "ending_time": 1616271049063, "color":c2(10), "label": "9m 5s \/ 1.8 GB"}]},
+{"label": "salmon_quant (1-A08-A8_S14_L002_R1_001)", "times": [{"starting_time": 1616270502489, "ending_time": 1616270507003, "color":c1(10)}, {"starting_time": 1616270507003, "ending_time": 1616271050999, "color":c2(10), "label": "9m 10s \/ 1.9 GB"}, {"starting_time": 1616271050999, "ending_time": 1616271052331, "color":c1(10)}]},
+{"label": "salmon_quant (1-E04-F2_S58_L002_R1_001)", "times": [{"starting_time": 1616270502517, "ending_time": 1616270507004, "color":c1(10)}, {"starting_time": 1616270507004, "ending_time": 1616271055350, "color":c2(10), "label": "9m 15s \/ 1.9 GB"}, {"starting_time": 1616271055350, "ending_time": 1616271057305, "color":c1(10)}]},
+{"label": "salmon_quant (1-D10-E5_S52_L002_R1_001)", "times": [{"starting_time": 1616270502545, "ending_time": 1616270507006, "color":c1(10)}, {"starting_time": 1616270507006, "ending_time": 1616271050269, "color":c2(10), "label": "9m 5s \/ 1.8 GB"}]},
+{"label": "salmon_quant (1-A12-A12_S18_L002_R1_001)", "times": [{"starting_time": 1616270502573, "ending_time": 1616270507007, "color":c1(10)}, {"starting_time": 1616270507007, "ending_time": 1616271051662, "color":c2(10), "label": "9m 10s \/ 1.9 GB"}, {"starting_time": 1616271051662, "ending_time": 1616271052382, "color":c1(10)}]},
+{"label": "salmon_quant (1-D05-D9_S47_L002_R1_001)", "times": [{"starting_time": 1616270502652, "ending_time": 1616270507008, "color":c1(10)}, {"starting_time": 1616270507008, "ending_time": 1616271049156, "color":c2(10), "label": "9m 5s \/ 1.7 GB"}]},
+{"label": "salmon_quant (1-A02-A2_S8_L002_R1_001)", "times": [{"starting_time": 1616270502752, "ending_time": 1616270507010, "color":c1(10)}, {"starting_time": 1616270507010, "ending_time": 1616271048587, "color":c2(10), "label": "9m 5s \/ 1.8 GB"}]},
+{"label": "salmon_quant (1-E06-F4_S60_L002_R1_001)", "times": [{"starting_time": 1616270502853, "ending_time": 1616270507011, "color":c1(10)}, {"starting_time": 1616270507011, "ending_time": 1616271049774, "color":c2(10), "label": "9m 5s \/ 1.8 GB"}]},
+{"label": "salmon_quant (1-E01-E9_S55_L002_R1_001)", "times": [{"starting_time": 1616270502952, "ending_time": 1616270507012, "color":c1(10)}, {"starting_time": 1616270507012, "ending_time": 1616271048751, "color":c2(10), "label": "9m 5s \/ 1.8 GB"}]},
+{"label": "salmon_quant (1-A10-A10_S16_L002_R1_001)", "times": [{"starting_time": 1616270503052, "ending_time": 1616270507014, "color":c1(10)}, {"starting_time": 1616270507014, "ending_time": 1616271049757, "color":c2(10), "label": "9m 5s \/ 1.9 GB"}]},
+{"label": "salmon_quant (1-B05-A18_S23_L002_R1_001)", "times": [{"starting_time": 1616270503155, "ending_time": 1616270507015, "color":c1(10)}, {"starting_time": 1616270507015, "ending_time": 1616271048362, "color":c2(10), "label": "9m 5s \/ 1.4 GB"}]},
+{"label": "salmon_quant (1-E12-F10_S66_L002_R1_001)", "times": [{"starting_time": 1616270503253, "ending_time": 1616270507016, "color":c1(10)}, {"starting_time": 1616270507016, "ending_time": 1616271051279, "color":c2(10), "label": "9m 9s \/ 1.9 GB"}, {"starting_time": 1616271051279, "ending_time": 1616271052397, "color":c1(10)}]},
+{"label": "salmon_quant (1-D03-D7_S45_L002_R1_001)", "times": [{"starting_time": 1616270503353, "ending_time": 1616270507018, "color":c1(10)}, {"starting_time": 1616270507018, "ending_time": 1616271049795, "color":c2(10), "label": "9m 4s \/ 1.9 GB"}]},
+{"label": "salmon_quant (1-A03-A3_S9_L002_R1_001)", "times": [{"starting_time": 1616270503455, "ending_time": 1616270507019, "color":c1(10)}, {"starting_time": 1616270507019, "ending_time": 1616271048210, "color":c2(10), "label": "9m 4s \/ 1.8 GB"}]},
+{"label": "salmon_quant (1-B07-B2_S25_L002_R1_001)", "times": [{"starting_time": 1616270503561, "ending_time": 1616270507020, "color":c1(10)}, {"starting_time": 1616270507020, "ending_time": 1616271052077, "color":c2(10), "label": "9m 9s \/ 1.9 GB"}, {"starting_time": 1616271052077, "ending_time": 1616271052410, "color":c1(10)}]},
+{"label": "salmon_quant (1-A01-A1_S7_L002_R1_001)", "times": [{"starting_time": 1616270503653, "ending_time": 1616270507022, "color":c1(10)}, {"starting_time": 1616270507022, "ending_time": 1616271051030, "color":c2(10), "label": "9m 9s \/ 1.9 GB"}, {"starting_time": 1616271051030, "ending_time": 1616271052427, "color":c1(10)}]},
+{"label": "salmon_quant (1-C07-C6_S37_L002_R1_001)", "times": [{"starting_time": 1616270503753, "ending_time": 1616270507023, "color":c1(10)}, {"starting_time": 1616270507023, "ending_time": 1616271050287, "color":c2(10), "label": "9m 4s \/ 1.8 GB"}]},
+{"label": "salmon_quant (1-D07-D11_S49_L002_R1_001)", "times": [{"starting_time": 1616270503873, "ending_time": 1616270507024, "color":c1(10)}, {"starting_time": 1616270507024, "ending_time": 1616271052803, "color":c2(10), "label": "9m 9s \/ 1.9 GB"}]},
+{"label": "salmon_quant (1-C04-C2_S34_L002_R1_001)", "times": [{"starting_time": 1616270503953, "ending_time": 1616270507026, "color":c1(10)}, {"starting_time": 1616270507026, "ending_time": 1616271048428, "color":c2(10), "label": "9m 4s \/ 1.4 GB"}]},
+{"label": "salmon_quant (1-D12-E8_S54_L002_R1_001)", "times": [{"starting_time": 1616270504052, "ending_time": 1616270507027, "color":c1(10)}, {"starting_time": 1616270507027, "ending_time": 1616271026921, "color":c2(10), "label": "8m 43s \/ 1.9 GB"}, {"starting_time": 1616271026921, "ending_time": 1616271027293, "color":c1(10)}]},
+{"label": "salmon_quant (1-E09-F7_S63_L002_R1_001)", "times": [{"starting_time": 1616270504153, "ending_time": 1616270507028, "color":c1(10)}, {"starting_time": 1616270507028, "ending_time": 1616271049495, "color":c2(10), "label": "9m 8s \/ 1.7 GB"}, {"starting_time": 1616271049495, "ending_time": 1616271052470, "color":c1(10)}]},
+{"label": "salmon_quant (1-B11-B6_S29_L002_R1_001)", "times": [{"starting_time": 1616270504253, "ending_time": 1616270507031, "color":c1(10)}, {"starting_time": 1616270507031, "ending_time": 1616271047211, "color":c2(10), "label": "9m 4s \/ 1.8 GB"}, {"starting_time": 1616271047211, "ending_time": 1616271047865, "color":c1(10)}]},
+{"label": "salmon_quant (1-C01-B8_S31_L002_R1_001)", "times": [{"starting_time": 1616270504352, "ending_time": 1616270507032, "color":c1(10)}, {"starting_time": 1616270507032, "ending_time": 1616271025770, "color":c2(10), "label": "8m 43s \/ 1.9 GB"}, {"starting_time": 1616271025770, "ending_time": 1616271027345, "color":c1(10)}]},
+{"label": "salmon_quant (1-D06-D10_S48_L002_R1_001)", "times": [{"starting_time": 1616270504453, "ending_time": 1616270507034, "color":c1(10)}, {"starting_time": 1616270507034, "ending_time": 1616271049270, "color":c2(10), "label": "9m 8s \/ 1.7 GB"}, {"starting_time": 1616271049270, "ending_time": 1616271052490, "color":c1(10)}]},
+{"label": "salmon_quant (1-C09-C8_S39_L002_R1_001)", "times": [{"starting_time": 1616270504553, "ending_time": 1616270507035, "color":c1(10)}, {"starting_time": 1616270507035, "ending_time": 1616271048705, "color":c2(10), "label": "9m 3s \/ 1.8 GB"}]},
+{"label": "salmon_quant (1-A06-A6_S12_L002_R1_001)", "times": [{"starting_time": 1616270504653, "ending_time": 1616270507036, "color":c1(10)}, {"starting_time": 1616270507036, "ending_time": 1616271049122, "color":c2(10), "label": "9m 8s \/ 1.8 GB"}, {"starting_time": 1616271049122, "ending_time": 1616271052509, "color":c1(10)}]},
+{"label": "salmon_quant (1-D01-D5_S43_L002_R1_001)", "times": [{"starting_time": 1616270504754, "ending_time": 1616270507037, "color":c1(10)}, {"starting_time": 1616270507037, "ending_time": 1616271050623, "color":c2(10), "label": "9m 8s \/ 1.9 GB"}, {"starting_time": 1616271050623, "ending_time": 1616271052527, "color":c1(10)}]},
+{"label": "salmon_quant (1-A07-A7_S13_L002_R1_001)", "times": [{"starting_time": 1616270504856, "ending_time": 1616270507038, "color":c1(10)}, {"starting_time": 1616270507038, "ending_time": 1616271051874, "color":c2(10), "label": "9m 8s \/ 1.9 GB"}, {"starting_time": 1616271051874, "ending_time": 1616271052545, "color":c1(10)}]},
+{"label": "salmon_quant (1-A05-A5_S11_L002_R1_001)", "times": [{"starting_time": 1616270504956, "ending_time": 1616270507040, "color":c1(10)}, {"starting_time": 1616270507040, "ending_time": 1616271048749, "color":c2(10), "label": "9m 8s \/ 1.7 GB"}, {"starting_time": 1616271048749, "ending_time": 1616271052562, "color":c1(10)}]},
+{"label": "salmon_quant (1-B10-B5_S28_L002_R1_001)", "times": [{"starting_time": 1616270505053, "ending_time": 1616270507041, "color":c1(10)}, {"starting_time": 1616270507041, "ending_time": 1616271050908, "color":c2(10), "label": "9m 8s \/ 1.9 GB"}, {"starting_time": 1616271050908, "ending_time": 1616271052578, "color":c1(10)}]},
+{"label": "salmon_quant (1-D02-D6_S44_L002_R1_001)", "times": [{"starting_time": 1616270505155, "ending_time": 1616270507042, "color":c1(10)}, {"starting_time": 1616270507042, "ending_time": 1616271048631, "color":c2(10), "label": "9m 7s \/ 1.7 GB"}, {"starting_time": 1616271048631, "ending_time": 1616271052593, "color":c1(10)}]},
+{"label": "salmon_quant (1-C06-C4_S36_L002_R1_001)", "times": [{"starting_time": 1616270505251, "ending_time": 1616270507043, "color":c1(10)}, {"starting_time": 1616270507043, "ending_time": 1616271049714, "color":c2(10), "label": "9m 7s \/ 1.9 GB"}, {"starting_time": 1616271049714, "ending_time": 1616271052667, "color":c1(10)}]},
+{"label": "salmon_quant (1-E07-F5_S61_L002_R1_001)", "times": [{"starting_time": 1616270505352, "ending_time": 1616270507045, "color":c1(10)}, {"starting_time": 1616270507045, "ending_time": 1616271045713, "color":c2(10), "label": "9m 3s \/ 1.7 GB"}, {"starting_time": 1616271045713, "ending_time": 1616271047925, "color":c1(10)}]},
+{"label": "salmon_quant (1-B04-A17_S22_L002_R1_001)", "times": [{"starting_time": 1616270505452, "ending_time": 1616270507046, "color":c1(10)}, {"starting_time": 1616270507046, "ending_time": 1616271049423, "color":c2(10), "label": "9m 7s \/ 1.8 GB"}, {"starting_time": 1616271049423, "ending_time": 1616271052688, "color":c1(10)}]},
+{"label": "salmon_quant (1-C10-C9_S40_L002_R1_001)", "times": [{"starting_time": 1616270505558, "ending_time": 1616270511964, "color":c1(10)}, {"starting_time": 1616270511964, "ending_time": 1616271053714, "color":c2(10), "label": "9m 7s \/ 1.8 GB"}]},
+{"label": "salmon_quant (1-B09-B4_S27_L002_R1_001)", "times": [{"starting_time": 1616270505654, "ending_time": 1616270511965, "color":c1(10)}, {"starting_time": 1616270511965, "ending_time": 1616271054276, "color":c2(10), "label": "9m 7s \/ 1.7 GB"}]},
+{"label": "salmon_quant (1-B06-A19_S24_L002_R1_001)", "times": [{"starting_time": 1616270505753, "ending_time": 1616270511967, "color":c1(10)}, {"starting_time": 1616270511967, "ending_time": 1616271054158, "color":c2(10), "label": "9m 7s \/ 1.8 GB"}]},
+{"label": "salmon_quant (1-C02-B10_S32_L002_R1_001)", "times": [{"starting_time": 1616270505854, "ending_time": 1616270511968, "color":c1(10)}, {"starting_time": 1616270511968, "ending_time": 1616271053029, "color":c2(10), "label": "9m 7s \/ 1.8 GB"}]},
+{"label": "salmon_quant (1-A09-A9_S15_L002_R1_001)", "times": [{"starting_time": 1616270505952, "ending_time": 1616270511969, "color":c1(10)}, {"starting_time": 1616270511969, "ending_time": 1616271054764, "color":c2(10), "label": "9m 7s \/ 1.9 GB"}]},
+{"label": "salmon_quant (1-B12-B7_S30_L002_R1_001)", "times": [{"starting_time": 1616271022340, "ending_time": 1616271027371, "color":c1(10)}, {"starting_time": 1616271027371, "ending_time": 1616271546988, "color":c2(10), "label": "8m 45s \/ 1.9 GB"}, {"starting_time": 1616271546988, "ending_time": 1616271547684, "color":c1(10)}]},
+{"label": "salmon_quant (1-B02-A14_S20_L002_R1_001)", "times": [{"starting_time": 1616271022515, "ending_time": 1616271027372, "color":c1(10)}, {"starting_time": 1616271027372, "ending_time": 1616271578507, "color":c2(10), "label": "9m 15s \/ 1.8 GB"}]},
+{"label": "salmon_quant (1-E05-F3_S59_L002_R1_001)", "times": [{"starting_time": 1616271027381, "ending_time": 1616271032291, "color":c1(10)}, {"starting_time": 1616271032291, "ending_time": 1616271547851, "color":c2(10), "label": "8m 40s \/ 1.7 GB"}]},
+{"label": "salmon_quant (1-C03-C1_S33_L002_R1_001)", "times": [{"starting_time": 1616271027410, "ending_time": 1616271032292, "color":c1(10)}, {"starting_time": 1616271032292, "ending_time": 1616271548719, "color":c2(10), "label": "8m 40s \/ 1.7 GB"}]},
+{"label": "salmon_quant (1-D09-E2_S51_L002_R1_001)", "times": [{"starting_time": 1616271047334, "ending_time": 1616271052780, "color":c1(10)}, {"starting_time": 1616271052780, "ending_time": 1616271569676, "color":c2(10), "label": "8m 40s \/ 1.9 GB"}]},
+{"label": "salmon_quant (1-B03-A16_S21_L002_R1_001)", "times": [{"starting_time": 1616271047441, "ending_time": 1616271052782, "color":c1(10)}, {"starting_time": 1616271052782, "ending_time": 1616271584959, "color":c2(10), "label": "8m 55s \/ 2 GB"}]},
+{"label": "salmon_quant (1-D08-E1_S50_L002_R1_001)", "times": [{"starting_time": 1616271047531, "ending_time": 1616271052783, "color":c1(10)}, {"starting_time": 1616271052783, "ending_time": 1616271569759, "color":c2(10), "label": "8m 40s \/ 1.9 GB"}]},
+{"label": "salmon_quant (1-C05-C3_S35_L002_R1_001)", "times": [{"starting_time": 1616271047629, "ending_time": 1616271052784, "color":c1(10)}, {"starting_time": 1616271052784, "ending_time": 1616271569272, "color":c2(10), "label": "8m 40s \/ 1.7 GB"}]},
+{"label": "salmon_quant (1-C12-D2_S42_L002_R1_001)", "times": [{"starting_time": 1616271047726, "ending_time": 1616271052785, "color":c1(10)}, {"starting_time": 1616271052785, "ending_time": 1616271569969, "color":c2(10), "label": "8m 40s \/ 1.9 GB"}]},
+{"label": "salmon_quant (1-B01-A13_S19_L002_R1_001)", "times": [{"starting_time": 1616271047831, "ending_time": 1616271052786, "color":c1(10)}, {"starting_time": 1616271052786, "ending_time": 1616271571321, "color":c2(10), "label": "8m 40s \/ 1.9 GB"}]}
+]
+
+
+function getTickFormat() {
+  var MIN = 1000 * 60
+  var HOUR = MIN * 60
+  var DAY = HOUR * 24
+  var delta = (endingMillis - beginningMillis)
+
+  if( delta < 2 * MIN ) {
+    return {
+      format: d3.time.format("%S"),
+      tickTime: d3.time.seconds,
+      tickInterval: 5,
+      tickSize: 6
+    }
+  }
+
+  if( delta < 2 * HOUR ) {
+    return {
+      format: d3.time.format("%M"),
+      tickTime: d3.time.minutes,
+      tickInterval: 5,
+      tickSize: 6
+    }
+  }
+
+  if( delta < 2 * DAY ) {
+    return {
+      format: d3.time.format("%H:%M"),
+      tickTime: d3.time.hours,
+      tickInterval: 1,
+      tickSize: 6
+    }
+  }
+
+  if( delta <= 7 * DAY ) {
+    return {
+      format: d3.time.format("%b %e %H:%M"),
+      tickTime: d3.time.hours,
+      tickInterval: 6,
+      tickSize: 6
+    }
+  }
+
+  return {
+    format: d3.time.format("%b %e"),
+    tickTime: d3.time.days,
+    tickInterval: 1,
+    tickSize: 6
+  }
+}
+
+function getLabelMargin(scale) {
+    $('<span class="labelSpan" style="display: none"></span>').appendTo('body');
+
+    var labelMargin = 0
+    $.each(data, function (key, value) {
+      labelMargin = Math.max(labelMargin, $('.labelSpan').html(value.label).width());
+    });
+
+    $('.labelSpan').remove();
+
+    return (labelMargin * scale);
+}
+
+function render() {
+  handler=null;
+  $("#timeline").empty()
+  $('#label_elapsed').text(elapsed)
+  $('#label_launch').text( d3.time.format('%d %b %Y %H:%M')(new Date(beginningMillis)) )
+
+  var width = $(window).width();
+  var chart = d3.timeline()
+    .stack() // toggles graph stacking
+    .margin({left:getLabelMargin(0.85), right:100, top:0, bottom:0})
+    .tickFormat( getTickFormat() )
+    .rowSeperators('#f5f5f5')
+    .showTimeAxisTick()
+    ;
+  var svg = d3.select("#timeline").append("svg").attr("width", width).datum(data).call(chart);
+}
+
+function hrz() {
+if( handler != null ) clearTimeout(handler)
+  handler = setTimeout(render, 150);
+}
+
+$(document).ready(render)
+$(window).resize(hrz); // resize the applet on window resize
+</script>
+</head>
+
+<body>
+<div>
+  <h3>Processes execution timeline</h3>
+  <p>
+    Launch time: <span id='label_launch'> </span><br>
+    Elapsed time: <span id='label_elapsed'> </span><br>
+    Legend: job wall time / memory usage (RAM) <span id='label_legend'> </span>
+  </p>
+  <div id="timeline"></div>
+</div>
+
+<div id='footer'>
+  Created with Nextflow -- <a href='http://www.nextflow.io' target='_blank'>http://nextflow.io</a>
+</div>
+
+<script type="text/javascript">
+var prot = (("https:" == document.location.protocol) ? "https://" : "http://");
+document.write(unescape("%3Clink href='" + prot + "fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css' %3E%3C/link%3E"));
+</script>
+</body>
+</html>
