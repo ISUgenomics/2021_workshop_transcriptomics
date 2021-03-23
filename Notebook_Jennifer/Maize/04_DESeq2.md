@@ -45,7 +45,7 @@ dds <- DESeq(dds)
 
 # (3) Pull out results
 res <- results(dds)
-table(res$padj<0.05)      # DEGs: 338 genes, 157 mRNAs, 329 geneMult
+table(res$padj<0.05)      # DEGs: 3164 genes, 2250 mRNAs, 3052 geneMult
 
 # (4) Save to file
 res <- res[order(res$padj), ]
@@ -54,7 +54,7 @@ names(resdata)[1] <- "Gene"
 write_delim(resdata, file="gsnap_DESeq2results_gene.txt", delim = "\t")
 ```
 
-Repeat the above for `mRNA` and `geneMult` gsnap counts and combine in an excel file.
+Repeat the above for `mRNA` and `geneMult` gsnap counts and combine in an excel file [gsnap\_DESeq2\_results.xlsx](results/gsnap_DESeq2_results.xlsx).
 
 ![](results/assets/screenshot_DESeq2_results.png)
 
@@ -63,14 +63,20 @@ Repeat the above for `mRNA` and `geneMult` gsnap counts and combine in an excel 
 ```
 rld <- rlogTransformation(dds)
 summary(rld)
-(p <- plotPCA(rld, intgroup="condition") + theme_bw() + labs(x = "PC1", y="PC2") + labs(title="mRNA")) 
 
-ggsave("PCA_mRNA.png", plot=p)
+(p <- plotPCA(rld, intgroup="condition") + theme_bw() + labs(x = "PC1", y="PC2") + 
+  scale_color_manual(values=c("B"="#880000", "B_L1"="#FF0000",       # blade is shades of red
+                              "L"="#008800", "L_L1"="#00FF00",     # ligule is shades of green
+                              "S"="#0000AA", "S_L1"="#0000FF",     # sheath is shades of blue
+                              "wtL"="#222222", "Ig1"="#969696")))  # shades of gray
+
+ggsave("PCA_gene.png", plot=p)
 ```
 
-The PCA are mostly identical (mRNA is flipped across the x axis)
+From the PCA, there seems to be a difference between `B`, `S`, `L` and their `_L1` counterparts (view `dark red` vs `red`, `dark green` vs `green`, `dark blue` vs `blue`). In comparison, `wtL` and `Ig1` are near each other (black and gray).
 
-|gene | mRNA|
+|<b>gene</b> | <b>mRNA</b>|
 |:-:|:-:|
 |![](results/assets/PCA_gene.png) |![](results/assets/PCA_mRNA.png) |
+|<b>geneMult</b> | |
 |![](results/assets/PCA_geneMult.png)| |
