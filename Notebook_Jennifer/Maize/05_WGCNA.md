@@ -23,7 +23,12 @@ row.names(metadata)=metadata$sample
 dds <- DESeqDataSetFromMatrix(de_input, colData=metadata, design = ~condition)
 dds <- DESeq(dds)
 vsd <- varianceStabilizingTransformation(dds)
-expr_normalized <- getVarianceStabilizedData(dds)
+wpn_vsd <- getVarianceStabilizedData(dds)
+rv_wpn <- rowVars(wpn_vsd)
+q75_wpn <- quantile( rowVars(wpn_vsd), .75)  # <= original
+q95_wpn <- quantile( rowVars(wpn_vsd), .95)  # <= changed to 95 quantile to reduce dataset
+expr_normalized <- wpn_vsd[ rv_wpn > q75_wpn, ]
+dim(expr_normalized)
 ```
 
 (3) Pick soft-threshold for WGCNA
@@ -69,7 +74,7 @@ text(sft$fitIndices[, 1],
 (4) Run WGCNA
 
 ```
-picked_power = 6
+picked_power = 8
 temp_cor <- cor
 cor <- WGCNA::cor
 netwk <- blockwiseModules(wgcna_input, power = picked_power, networkType = "signed", 
@@ -131,6 +136,8 @@ mME %>% ggplot(., aes(x=treatment, y=name, fill=value)) +
 |![](results/assets/wgcna_m2c_geneMult.png)||
 
 **(7) Export network**
+
+This runs for a long time, so better to isolate a module of interest and export each module separately.
 
 ```
 TOM = TOMsimilarityFromExpr(wgcna_input, power = picked_power)
