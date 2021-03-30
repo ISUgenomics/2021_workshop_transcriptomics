@@ -1,6 +1,6 @@
-# Methods
+# Methods Notes
 
-Written summary of methods performed in this repo. A lot of the steps described here were copied from Jennifer's notebook - thanks Jennifer!! I added more details to help newbies like myself ^_^
+Detailed log of methods performed in this repo. A lot of the steps described here were copied from Jennifer's notebook - thanks Jennifer!! I added more details to help newbies like myself ^_^
 
 ## Raw data
 * **Maize data:** https://www.ebi.ac.uk/ena/browser/view/PRJNA260793
@@ -901,8 +901,8 @@ ANOVA stats to look at treatment, nest effects on variation (only genes with lar
 ![](results/Bee_AllGenes_PCA_Nest.png)<!-- -->
 
 7. To do next:
-* Need to run PCA with only list of differentially expressed genes at nest or treatment group level to see how they cluster.
-* Apply shrinkage estimator `lfcShrink(dds, coef="Trt_exposed_vs_ctrl", type = "apeglm")`
+* Subset differentially expressed genes and run PCA at nest or treatment group level to see how they cluster.
+* Apply shrinkage estimator `lfcShrink(dds, coef="Trt_exposed_vs_ctrl", type = "apeglm")`??
 * Apply count outlier detection with Cook's distance `res$stat`
 * Make heatmap of count matrix (`rld` dataset) and sample clustering
 
