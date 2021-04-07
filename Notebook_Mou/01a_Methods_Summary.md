@@ -746,14 +746,21 @@ ANOVA stats to look at treatment, nest effects on variation (only genes with lar
 ![](results/Bee_AllGenes_PCA_ExposedvsControl.png)<!-- -->
 
 5. Subset by nest `Bee_Nest_DESeq2.csv`, but list of genes and p-values do not appear to be different from `Bee_AllExposedvsAllControlGene.csv`.
+
 6. Made PCA of all genes, subset by nest. Didn't see any particular clustering by nest.
 ![](results/Bee_AllGenes_PCA_Nest.png)<!-- -->
 
-7. To do next:
-* Need to run PCA with only list of differentially expressed genes at nest or treatment group level to see how they cluster.
-* Apply shrinkage estimator `lfcShrink(dds, coef="Trt_exposed_vs_ctrl", type = "apeglm")`
+7. Made volcano plot of all genes to see a big picture of proportion of not differentially regulated genes vs up- or down-regulated genes
+![](results/Bee_AllGenes_VolcanoPlot.png)<!-- -->
+
+8. Made heatmap of bee count matrix
+![](results/Bee_HeatmapOfCountMatrix.png)<!-- -->
+
+9. Made heatmap of bee sample-to-sample distances
+![](results/Bee_HeatmapOfSampleToSampleDistances.png)<!-- -->
+
+10. Things to try
 * Apply count outlier detection with Cook's distance `res$stat`
-* Make heatmap of count matrix (`rld` dataset) and sample clustering
 
 ### Output files
 * `Bee_AllExposedvsAllControlGene.csv`
@@ -761,6 +768,7 @@ ANOVA stats to look at treatment, nest effects on variation (only genes with lar
 </details>
 
 <details><summary>Maize</summary>
+
 1. Ran `bee_maize_deseq2.Rmd` up to adding metadata csv file. Found maize metadata here: https://www.ebi.ac.uk/ena/browser/view/PRJNA260793. Downloaded report (tsv file). Most important columns are run_accession (sample IDs) and sample_title (groups). Saved as `maize_metadata_All_Info.csv`.
 2. Made a new metadata file `maize_metadata.csv` so that it only includes the columns `run_accession` and `Tissue`. `Tissue` derived from `sample_title`. I converted like the following:
 | sample_title | Tissue |
@@ -782,6 +790,9 @@ ANOVA stats to look at treatment, nest effects on variation (only genes with lar
 
 5. Made PCA of all genes, subset by Tissue type.
 ![](results/Maize_AllGenes_PCA_Tissue.png)<!-- -->
+
+6. Make volcano plot of all genes to see a big picture of proportion of not differentially regulated genes vs up- or down-regulated genes
+
 
 ### Output files
 * `Maize_Tissue_DeSeq2.csv`
