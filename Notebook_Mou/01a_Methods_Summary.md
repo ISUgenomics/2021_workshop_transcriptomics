@@ -753,7 +753,7 @@ ANOVA stats to look at treatment, nest effects on variation (only genes with lar
 7. Made volcano plot of all genes to see a big picture of proportion of not differentially regulated genes vs up- or down-regulated genes
 ![](results/Bee_AllGenes_VolcanoPlot.png)<!-- -->
 
-8. Made heatmap of bee count matrix
+8. Made heatmap of bee count matrix of first 20 genes with highest counts
 ![](results/Bee_HeatmapOfCountMatrix.png)<!-- -->
 
 9. Made heatmap of bee sample-to-sample distances

@@ -514,12 +514,34 @@ top20m2 %>% ggplot(., aes(x=as.factor(Gene), y=expression, fill=Tissue)) +
 
 Now plot heatmap of count matrix
 
-## Bee heatmap of count matrix
+## Bee heatmap of count matrix of first 20 genes
 ```{r bee_heatmap, fig.width=11, fig.height=16, eval=FALSE}
 # bee
 library("pheatmap")
-beeheatmap <- pheatmap(assay(rld)[select,], cluster_rows=FALSE, show_rownames=FALSE,
-         cluster_cols=FALSE, annotation_col=df)
+select <- order(rowMeans(counts(dds,normalized=TRUE)),
+                decreasing=TRUE)[1:20] #counts of each gene for each sample, take the rowMeans of those counts for each gene, order by decreasing level for the first 20 genes.
+
+select2 <- order(rowMeans(counts(dds,normalized=TRUE)))[1:20] #what happens when you take out decreasing=TRUE? When I run pheatmap, I get the error:
+# Error in cut.default(x, breaks = breaks, include.lowest = T) : 
+# breaks' are not unique
+
+select3 <- order(rowMeans(counts(dds,normalized=TRUE)),
+                increasing=TRUE)[1:20] #When I replaced decreasing=TRUE with increasing=TRUE, I get the following error:
+ #Error in order(...) : argument lengths differ
+
+#breaking down command for select value
+counts(dds,normalized=TRUE)
+rowMeans(counts(dds, normalized=TRUE))
+order(rowMeans(counts(dds,normalized=TRUE)))
+order(rowMeans(counts(dds,normalized=TRUE)), decreasing=TRUE)[1:20]
+
+# looking at dds colData dataframe
+colData(dds)
+
+#create heatmap
+df <- as.data.frame(colData(dds)[,c("Condition","group")])
+beeheatmap <- pheatmap(assay(rld)[select,], cluster_rows=FALSE,
+        annotation_col=df) #show rownames
 ggsave("Bee_HeatmapOfCountMatrix.png", plot=beeheatmap, width=13, height=16)
 # How to change colors?
 ```
@@ -528,7 +550,7 @@ ggsave("Bee_HeatmapOfCountMatrix.png", plot=beeheatmap, width=13, height=16)
 ```{r maize_heatmap, fig.width=11, fig.height=16, eval=FALSE}
 # bee
 library("pheatmap")
-maizeheatmap <- pheatmap(assay(rldm)[select,], cluster_rows=FALSE, show_rownames=FALSE,
+maizeheatmap <- pheatmap(assay(rldm)[select,], cluster_rows=FALSE, 
          cluster_cols=FALSE, annotation_col=df)
 ggsave("Maize_HeatmapOfCountMatrix.png", plot=maizeheatmap, width=13, height=16)
 # How to change colors?
@@ -544,7 +566,7 @@ vsd <- vst(dds, blind = FALSE) #shorter running times if use blind=FALSE
 sampleDists <- dist(t(assay(vsd)))
 sampleDistMatrix <- as.matrix(sampleDists)
 rownames(sampleDistMatrix) <- paste(vsd$Condition, vsd$group)
-colnames(sampleDistMatrix) <- NULL
+colnames(sampleDistMatrix) <- paste(vsd$Condition, vsd$group)
 beeheatmap2 <- pheatmap(sampleDistMatrix,
          clustering_distance_rows = sampleDists,
          clustering_distance_cols = sampleDists)
