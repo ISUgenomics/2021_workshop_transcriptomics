@@ -23,5 +23,6 @@
 | [08_Salmon](08_Salmon.md) | salmon pipeline (reads + cdna) -> (genecounts as quant folders) |
 | [09_Nextflow](09_Nextflow.md) | wrap steps 01, 03, 06, and 08 in a nextflow script |
 | [10_Biomart](10_Biomart.md) | Map IDs to biologically relevant gene names ... in progress|
+| [11_Annotation](11_Annotation.md) | Map IDs to biologically relevant gene names|
 
 
