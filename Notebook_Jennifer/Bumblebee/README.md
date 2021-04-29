@@ -7,6 +7,8 @@
 |Control| 18 | - | 8 | - | - |- |=26| 
 |Exposed| - | 8 | - | 9 | 7 | 10 |=34|
 
+Heavy Metal Exposure: barium, arsenic, lead, cadmium
+
 **Analysis**: RNASeq pipelines
 
 | File | Description |
