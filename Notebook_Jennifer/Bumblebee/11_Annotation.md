@@ -14,6 +14,7 @@ less rna_list.txt
 >XM_003484340.4 PREDICTED: Bombus impatiens PHD finger-like domain-containing protein 5A (LOC100740157), mRNA
 ```
 
+<!-- NCBI option, commented out because I didn't use this section
 Download gene_result.txt from NCBI
 
 * https://www.ncbi.nlm.nih.gov/gene/?term=txid132113[Organism:noexp]
@@ -31,6 +32,8 @@ tax_id Org_name GeneID CurrentID Status Symbol Aliases description other_designa
 ```
 
 Hmm... `gene_result.txt` only has 13171 rows, while `rna_list.txt` has 27810 rows. Maybe continue with `rna_list.txt`.
+
+-->
 
 <details><summary>reformat.pl</summary>
 
