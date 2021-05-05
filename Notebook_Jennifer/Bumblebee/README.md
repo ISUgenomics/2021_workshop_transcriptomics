@@ -22,6 +22,8 @@ Heavy Metal Exposure: barium, arsenic, lead, cadmium
 | [07_Sleuth](07_Sleuth.md) | identify DEGs (kallisto_quant folders) -> (siggenes.tsv) |
 | [08_Salmon](08_Salmon.md) | salmon pipeline (reads + cdna) -> (genecounts as quant folders) |
 | [09_Nextflow](09_Nextflow.md) | wrap steps 01, 03, 06, and 08 in a nextflow script |
-| [10_Biomart](10_Biomart.md) | Map IDs to biologically relevant gene names ... in progress|
+| [10_Biomart](10_Biomart.md) | Map IDs to biologically relevant gene names ... did not finish|
+| [11_Annotation](11_Annotation.md) | Map IDs to biologically relevant gene names, quick map via perl script|
+| [12_WGCNA](12_WGGCNA.md) | Rerun WGCNA with only DESeq2 genes|
 
 
