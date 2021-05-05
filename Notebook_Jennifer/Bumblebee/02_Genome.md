@@ -2,6 +2,8 @@
 
 Fetch bumblebee `Bombus impatiens` reference files from NCBI
 
+* https://www.ncbi.nlm.nih.gov/assembly/GCF_000188095.3
+
 ```
 mkdir 02_Genome; cd 02_Genome
 wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/188/095/GCF_000188095.3_BIMP_2.2/GCF_000188095.3_BIMP_2.2_genomic.fna.gz
