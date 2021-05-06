@@ -10,3 +10,16 @@ Yu-Lun Kuo, et al. ,**Evidence-Based Complementary and Alternative Medicine**, (
 
 * [Deep learning for inferring gene relationships from single-cell expression data](https://www.pnas.org/content/116/52/27151)
 Ye Yuan, Ziv Bar-Joseph , **PNAS** December 26, (2019)
+
+
+
+
+--------
+## Exploring network analysis tools for rnaseq
+
+
+#### LSTrAP
+
+[github page](https://github.molgen.mpg.de/proost/LSTrAP)
+
+[paper](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-017-1861-z)

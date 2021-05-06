@@ -1,4 +1,4 @@
-# Raw data for Maize and BeeDB
+# Raw data for Maize 
 
 * Feb 14, 2021
 * Nova:/work/gif/Maryam/projects/Transcriptomics/00-rawdata/

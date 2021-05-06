@@ -62,7 +62,7 @@ echo >> $filename
 echo "module load star"  >> $filename
 echo >> $filename
 
-echo "star --runThreadN 12 --readFilesIn /work/gif/Maryam/projects/Transcriptomics/00-rawdata/maize/$read1 /work/gif/Maryam/projects/Transcriptomics/00-rawdata/maize/$read2  --genomeDir /work/gif/Maryam/projects/Transcriptomics/02Maize-STAR/MaizeDB  --outFileNamePrefix Star" >> $filename
+echo "star --runThreadN 12 --readFilesIn $read1 $read2  --genomeDir /work/gif/Maryam/projects/Transcriptomics/02Maize-STAR/MaizeDB  --outFileNamePrefix Star" >> $filename
 echo "scontrol show job \$SLURM_JOB_ID" >> $filename
 ```
 
