@@ -2,6 +2,8 @@
 
 Fetch bumblebee `Bombus impatiens` reference files from NCBI
 
+* https://www.ncbi.nlm.nih.gov/assembly/GCF_000188095.3
+
 ```
 mkdir 02_Genome; cd 02_Genome
 wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/188/095/GCF_000188095.3_BIMP_2.2/GCF_000188095.3_BIMP_2.2_genomic.fna.gz
@@ -9,9 +11,11 @@ wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/188/095/GCF_000188095.3_BIMP
 wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/188/095/GCF_000188095.3_BIMP_2.2/GCF_000188095.3_BIMP_2.2_genomic.gff.gz
 ```
 
-Notes: Should be using reference files from the hymenoptera site
+Notes: Should be using reference files from the hymenoptera site, will need to redo with the Hymenoptera reference (not done yet).
 
 * https://hymenoptera.elsiklab.missouri.edu/genome_fasta
+
+<!-- commentted out to avoid confusion
 
 but where are the gff and transcriptome files?
 
@@ -53,3 +57,5 @@ NT_178602.1	bimp_OGSv1.0	gene	651	764	0.999936	+	.	ID=BIMP10002;Name=BIMP10002;s
 NT_178602.1	bimp_OGSv1.0	mRNA	651	764	0.999936	+	.	ID=BIMP10002-RA;Name=BIMP10002-RA;Parent=BIMP10002;score=0.999936;source_info=Official Gene Set;
 ...
 ```
+
+-->

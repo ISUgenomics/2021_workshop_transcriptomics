@@ -296,3 +296,10 @@ t_data.ctab
 There are a total of 24 folders within the `04_Ballgown` directory; total of 2G. I copied the entire directory to my local machine for working on differential expression using Ballgown R package.
 
 See the [R script](/Notebook_Siva/Maize_ligule.R) for initial steps in Differential Expression analysis with this dataset.
+
+FeatureCounts:
+```
+module load subread
+
+parallel "featureCounts -T 2 --primary -t gene -g gene_id  -a /work/gif/Siva/Transcriptomic_Worshop/Genome/Ver4_release50/Zea_mays.B73_RefGen_v4.50.gtf -o 04a_Featurecounts/{/.}.transcripts.txt {}" ::: 02_align/ver4/sorted_bam/SRR15735*bam >& count.log&
+```
